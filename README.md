@@ -13,8 +13,9 @@
 
 [:one:​ Specification](#one-specification)<br>
 [:two:​ Package Structure](#two-package-structure)<br>
-[:three:​ 핵심 기능 구현 방법 설명](#three-핵심-기능-구현-방법-설명)<br>
-[:four:​ Contributor](#four-contributor)<br>
+[:three:​ Git & Naming Rule](#three-package-structure)<br>
+[:four:​ 핵심 기능 구현 방법 설명](#four-핵심-기능-구현-방법-설명)<br>
+[:five:​ Contributor](#five-contributor)<br>
 
 
 
@@ -100,8 +101,51 @@
 
 <br>
 
+## :three:​ Git & Naming Rule
+### [Git Rules]
+- **전체 개요**
+   - **Title** :  은 **"[타입] 설명"** 형식으로 작성
+   - **Content** : 추가적인 설명이 필요할 경우 작성
+- **타입 작성 방법**
+: 타입은 괄호 내에 작성하며, 대문자로 표기
+  - **PROJECT** : 프로젝트 리소스 관련 커밋 (Ex. src, gradle)
+  - **README** : 리드미 관련 커밋
+  - **FEATURE** : 개발 기능 구현 관련 커밋
+  - **FIX** : 버그, 에러 관련 커밋
+- **설명 작성 방법**
+: 설명은 괄호 뒤에 작성하며, 스칼라 표기법으로 표기.
+  - **README 타입** : Update + (내용)으로 커밋
+  - **Feature 타입** :  패키지명 - 세부 기능명
 
-## :three:​ 핵심 기능 구현 방법 설명
+### [Naming Rules]
+- **Java/Kotlin**
+  - **file 네이밍**
+     - 표기법 : 파스칼 표기
+     - 표기 형식 : 패키지명 + (____) + 컴포넌트명
+     - Ex. MainFragment, MainNaviFragment
+  - **함수 네이밍**
+     - 표기법  : 카멜 표기
+     - 표기 형식 : 타입/행위명(REST Rule) + (_____)
+     - Ex. getUser, deleteUser
+  - **변수 네이밍**
+     - 표기법 : 카멜 표기
+     - 표기 형식 : (_____) + 타입/클래스명
+     - Ex. userList, userDto
+- **XML**
+  - **file 네이밍**
+     - 표기법 : 스네이크 
+     - 표기 형식 : 컴포넌트명 + 패키지명 + (____)
+     - Ex. fragment_main, fragment_main_navi
+  - **변수 네이밍**
+     - 표기법 : 스네이크
+     - 표기 형식 : 타입/클래스약자명 + (______)
+     - Ex. tv_user_name, btn_sumbit, rv_user
+
+
+<br>
+
+
+## :four:​ 핵심 기능 구현 방법 설명
 
 ```
 👉 WIKI에 핵심 기능 구현 코드 및 방법 정리
@@ -130,7 +174,7 @@
 
 <br>
 
-## :four:​ Contributor
+## :five:​ Contributor
 
 ```
 👉 팀원 소개와 역할 분담
