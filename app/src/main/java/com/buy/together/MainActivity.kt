@@ -2,10 +2,13 @@ package com.buy.together
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.buy.together.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var mainActivityBinding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mainActivityBinding.root)
     }
 }
