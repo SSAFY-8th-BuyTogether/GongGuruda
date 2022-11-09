@@ -2,13 +2,13 @@
     <string name="app_name">GongGurumi</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    
+
     <!-- Category -->
     <string name="category_all">전체</string>
     <string name="category_food">식품</string>
     <string name="category_stationery">문구</string>
     <string name="category_daily_neccessity">생활용품</string>
     <string name="category_etc">기타</string>
-    
-    
+
+
 </resources>

@@ -2,6 +2,7 @@ package com.buy.together
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.buy.together.ui.view.board.BoardWritingFragment
 import com.buy.together.ui.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
@@ -11,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: nav 연결하기
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_layout_main, MainFragment())
+            .replace(R.id.fl_layout_main, BoardWritingFragment())
             .commit()
     }
 }

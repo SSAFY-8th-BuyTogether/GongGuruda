@@ -35,7 +35,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/ib_chatting"
+                android:id="@+id/ib_camera"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
@@ -55,13 +55,13 @@
                 android:src="@drawable/ic_notification"
                 android:layout_marginRight="6dp"
 
-                app:layout_constraintBottom_toBottomOf="@+id/ib_chatting"
+                app:layout_constraintBottom_toBottomOf="@+id/ib_camera"
                 app:layout_constraintDimensionRatio="1"
-                app:layout_constraintEnd_toStartOf="@+id/ib_account"
-                app:layout_constraintTop_toTopOf="@+id/ib_chatting" />
+                app:layout_constraintEnd_toStartOf="@+id/ib_gallery"
+                app:layout_constraintTop_toTopOf="@+id/ib_camera" />
 
             <ImageButton
-                android:id="@+id/ib_account"
+                android:id="@+id/ib_gallery"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
@@ -114,6 +114,7 @@
         android:layout_height="0dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
