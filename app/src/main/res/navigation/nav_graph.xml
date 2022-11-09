@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.buy.together.ui.view.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.buy.together.ui.view.user.LoginFragment"
+        tools:layout="@layout/fragment_login"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_joinGraph"
+            app:destination="@id/joinGraph"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <navigation
+        android:id="@+id/joinGraph"
+        app:startDestination="@id/joinBasicInfoFragment">
+        <fragment
+            android:id="@+id/joinBasicInfoFragment"
+            android:name="com.buy.together.ui.view.user.JoinBasicInfoFragment"
+            tools:layout="@layout/fragment_join_basic_info"
+            android:label="JoinBasicInfoFragment" >
+            <action
+                android:id="@+id/action_joinBasicInfoFragment_to_joinUserInfoFragment"
+                app:destination="@id/joinUserInfoFragment"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"/>
+        </fragment>
+        <fragment
+            android:id="@+id/joinUserInfoFragment"
+            android:name="com.buy.together.ui.view.user.JoinUserInfoFragment"
+            tools:layout="@layout/fragment_join_user_info"
+            android:label="JoinUserInfoFragment" />
+    </navigation>
+</navigation>
