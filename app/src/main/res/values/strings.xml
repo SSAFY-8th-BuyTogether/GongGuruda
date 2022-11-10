@@ -10,5 +10,20 @@
     <string name="category_daily_neccessity">생활용품</string>
     <string name="category_etc">기타</string>
 
+    <!-- BoardWriting  -->
+    <string name="label_title">제목</string>
+    <string name="label_category">카테고리</string>
+    <string name="label_deadline">마감일</string>
+    <string name="label_price">가격</string>
+    <string name="label_max_people">최대 인원</string>
+    <string name="people">명</string>
+
+    <string-array name="categories">
+        <item>@string/category_all</item>
+        <item>@string/category_food</item>
+        <item>@string/category_stationery</item>
+        <item>@string/category_daily_neccessity</item>
+        <item>@string/category_etc</item>
+    </string-array>
 
 </resources>
