@@ -17,9 +17,13 @@
     <string name="label_price">가격</string>
     <string name="label_max_people">최대 인원</string>
     <string name="people">명</string>
+    <string name="label_meet_point">만날장소</string>
+    <string name="label_buy_point">구매장소</string>
+    <string name="write_option">선택사항</string>
+    <string name="ok_button">확인</string>
+    <string name="label_contet">내용</string>
 
     <string-array name="categories">
-        <item>@string/category_all</item>
         <item>@string/category_food</item>
         <item>@string/category_stationery</item>
         <item>@string/category_daily_neccessity</item>

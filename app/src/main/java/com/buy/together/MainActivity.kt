@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: nav 연결하기
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_layout_main, BoardWritingFragment())
+            .replace(R.id.fl_layout_main, MainFragment())
             .commit()
     }
 }

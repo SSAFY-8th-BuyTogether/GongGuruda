@@ -7,8 +7,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import java.sql.Timestamp
-import java.util.Objects
 
 private const val TAG = "BoardService_싸피"
 class BoardService {

@@ -10,7 +10,6 @@ import com.buy.together.R
 import com.buy.together.data.model.Board
 import com.buy.together.databinding.ItemBoardBinding
 import com.buy.together.util.CommonUtils
-import com.google.android.gms.common.internal.service.Common
 
 private const val TAG = "CategoryAdapter_싸피"
 class BoardAdapter(var boardList : ArrayList<Board>) : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
@@ -40,7 +39,7 @@ class BoardAdapter(var boardList : ArrayList<Board>) : RecyclerView.Adapter<Boar
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardHolder {
-        binding = ItemBoardBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        binding = com.buy.together.databinding.ItemBoardBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return BoardHolder(binding.root)
     }
 

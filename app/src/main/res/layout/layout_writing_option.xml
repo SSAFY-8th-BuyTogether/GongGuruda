@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_option_body"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:visibility="gone">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_max_people"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/label_max_people"
-        android:paddingRight="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,6 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:paddingRight="30dp"
+            android:singleLine="true"
             android:textSize="16sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -32,6 +38,75 @@
         app:layout_constraintBottom_toBottomOf="@+id/et_max_people"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/et_deadline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:enabled="false"
+        android:hint="@string/label_meet_point"
+        app:layout_constraintEnd_toStartOf="@+id/ib_meet_point_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_max_people">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grayForBackground"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/ib_meet_point_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/shape_base_button"
+        android:backgroundTint="@color/colorPrimary"
+        android:padding="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_location"
+        app:layout_constraintBottom_toBottomOf="@+id/et_deadline"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/et_deadline" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/et_buy_point"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:enabled="false"
+        android:hint="@string/label_buy_point"
+        app:layout_constraintEnd_toStartOf="@+id/ib_buy_point_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_deadline">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grayForBackground"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/ib_buy_point_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/shape_base_button"
+        android:backgroundTint="@color/colorPrimary"
+        android:padding="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_location"
+        app:layout_constraintBottom_toBottomOf="@+id/et_buy_point"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="@+id/ib_meet_point_button"
+        app:layout_constraintTop_toTopOf="@+id/et_buy_point" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

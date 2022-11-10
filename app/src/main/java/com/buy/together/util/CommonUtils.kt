@@ -22,7 +22,7 @@ object CommonUtils {
         val diff = now - time
         var date : String
         if(diff >= 60*60*1000){
-            date = SDformat.format(now).toString()
+            date = SDformat.format(time).toString()
         }else{
             date = "${diff/(60*1000)} 분"
         }
