@@ -16,7 +16,9 @@ abstract class BaseFragment<B : ViewBinding>(private val bind: (View) -> B, @Lay
     private var _binding: B? = null
     lateinit var mLoadingDialog: CustomDialog
 
+
     val binding get() = _binding!!
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = bind(super.onCreateView(inflater, container, savedInstanceState)!!)

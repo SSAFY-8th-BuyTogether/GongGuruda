@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'  //firebase implementation
     implementation 'com.google.firebase:firebase-messaging:17.3.4' //firebase 푸시알람 라이브러리
 
+
     // Jetpack Navigation Kotlin
     def nav_version = "2.4.2"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
