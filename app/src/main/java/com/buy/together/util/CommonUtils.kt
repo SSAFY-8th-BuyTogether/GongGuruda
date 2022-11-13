@@ -13,4 +13,5 @@ object CommonUtils {
 
     fun makeToast(context: Context, msg : String) = Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     fun makeLongToast(context: Context, msg: String) = Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+
 }

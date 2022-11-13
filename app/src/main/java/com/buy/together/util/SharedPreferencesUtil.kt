@@ -1,11 +1,10 @@
-package com.ssafy.smartstoredb.util
+package com.buy.together.util
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
-import com.google.firebase.firestore.auth.User
+import com.buy.together.Application
 
 
 class SharedPreferencesUtil (context: Context) {
@@ -15,17 +14,17 @@ class SharedPreferencesUtil (context: Context) {
         private const val FCM_TOKEN = "FCMToken"
     }
 
-    var preferences: SharedPreferences =
-        context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    var preferences: SharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     fun putAuthToken(authToken: String) {
         preferences.edit {
             putString(AUTH_TOKEN, authToken)
             apply()
         }
+        Log.d("체크", "initSharedPreference: ${getAuthToken()}")
     }
 
-    fun getAuthToken(): String? = preferences.getString(AUTH_TOKEN, "")
+    fun getAuthToken(): String? = preferences.getString(AUTH_TOKEN, null)
     fun deleteAuthToken() {
         preferences.edit {
             remove(AUTH_TOKEN)
@@ -39,7 +38,7 @@ class SharedPreferencesUtil (context: Context) {
         }
     }
 
-    fun getFCMToken(): String? = preferences.getString(FCM_TOKEN, "")
+    fun getFCMToken(): String? = preferences.getString(FCM_TOKEN, null)
 
     fun deleteFCMToken() {
         preferences.edit {

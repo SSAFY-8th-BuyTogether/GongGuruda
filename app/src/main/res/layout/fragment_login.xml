@@ -59,29 +59,59 @@
             android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/btn_join"
-        android:text="@string/et_ask_join"
-        android:textColor="@color/black_50"
+    <LinearLayout
+        android:id="@+id/layout_btn_find_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/layout_et_login"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_et_login" />
-    <androidx.appcompat.widget.AppCompatButton
+        app:layout_constraintEnd_toEndOf="parent">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn_find_id"
+            android:text="@string/et_find_id"
+            android:textColor="@color/black_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="1dp"
+            android:background="@color/black_20"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn_find_pwd"
+            android:text="@string/et_find_pwd"
+            android:textColor="@color/black_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button"
+        app:cornerRadius="5dp"
         android:layout_marginTop="10dp"
-        android:paddingHorizontal="50dp"
+        android:paddingHorizontal="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_join"
+        app:layout_constraintTop_toBottomOf="@id/layout_btn_find_info"
         android:text="로그인"
         android:textSize="16sp"
         android:textColor="@color/white"
         android:fontFamily="@font/notosanskr_bold_hestia"
-        android:background="@drawable/btn_rectangle_5dp_maincolor" />
+        android:background="@color/mainColor" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/btn_join"
+        android:text="@string/et_ask_join"
+        android:textColor="@color/black_50"
+        android:textSize="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_login" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

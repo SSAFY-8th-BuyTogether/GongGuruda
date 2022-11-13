@@ -1,13 +1,14 @@
-package com.buy.together.data.local
+package com.buy.together.data.dto
 
-data class User(
+
+data class UserDto(
     val id : String,
     val birthday : String,
     val phone : String,
     val nickName : String,
     val password : String,
     val profile : String,
-    val devices : ArrayList<String>
+    val devices : ArrayList<String>?
 ){
-    constructor() : this("","","","","", "", arrayListOf())
+    constructor() : this("","","","","", "", null)
 }

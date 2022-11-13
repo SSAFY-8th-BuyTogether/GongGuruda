@@ -1,9 +1,11 @@
 package com.buy.together
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
 import com.buy.together.databinding.ActivityMainBinding
-
+import com.buy.together.ui.base.BaseFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,9 +17,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun restartActivity() {
-        val intent = intent
         finish()
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
+}
 
+fun <B : ViewBinding> BaseFragment<B>.restartActivity() {
+    val activity = this.activity as MainActivity
+    activity.restartActivity()
 }

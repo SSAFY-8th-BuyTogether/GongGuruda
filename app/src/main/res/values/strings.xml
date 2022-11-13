@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">GongGurumi</string>
     <!-- custom Texts -->
+    <string name="et_find_id">아이디 찾기</string>
+    <string name="et_find_pwd">비밀번호 찾기</string>
     <string name="et_ask_join"><u>아직 회원이 아니신가요?</u></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
