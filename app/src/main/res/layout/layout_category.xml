@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_category_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/ib_img_all"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_category_button"
+            android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_category_all" />
+
+        <TextView
+            android:id="@+id/tv_name_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/category_all"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/ib_img_all"
+            app:layout_constraintStart_toStartOf="@+id/ib_img_all"
+            app:layout_constraintTop_toBottomOf="@+id/ib_img_all" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_category_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/ib_img_food"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_category_button"
+            android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_category_carrot" />
+
+        <TextView
+            android:id="@+id/tv_name_food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/black"
+            android:text="@string/category_food"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/ib_img_food"
+            app:layout_constraintStart_toStartOf="@+id/ib_img_food"
+            app:layout_constraintTop_toBottomOf="@+id/ib_img_food" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_category_stationery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/ib_img_stationery"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_category_button"
+            android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_category_notebook" />
+
+        <TextView
+            android:id="@+id/tv_name_stationery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/category_stationery"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/ib_img_stationery"
+            app:layout_constraintStart_toStartOf="@+id/ib_img_stationery"
+            app:layout_constraintTop_toBottomOf="@+id/ib_img_stationery" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_category_daily_neccessity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/ib_img_daily_neccessity"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_category_button"
+            android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_category_tissue"/>
+
+        <TextView
+            android:id="@+id/tv_name_daily_neccessity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/category_daily_neccessity"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/ib_img_daily_neccessity"
+            app:layout_constraintStart_toStartOf="@+id/ib_img_daily_neccessity"
+            app:layout_constraintTop_toBottomOf="@+id/ib_img_daily_neccessity" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_category_etc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/ib_img_etc"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_category_button"
+            android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_category_etc" />
+
+        <TextView
+            android:id="@+id/tv_name_etc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/category_etc"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/ib_img_etc"
+            app:layout_constraintStart_toStartOf="@+id/ib_img_etc"
+            app:layout_constraintTop_toBottomOf="@+id/ib_img_etc" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
