@@ -10,9 +10,10 @@
     <color name="colorPrimary">#5EBEBB</color>
     <color name="colorPrimaryDark">#FF018786</color>
     <color name="colorAccent">#FF03DAC5</color>
-
     <color name="blackForText">#4a4a4a</color>
     <color name="redForText">#d9534f</color>
+    <!--  MainPage  -->
+    <color name="grayForBackground">#F5F5F5</color>
 
     <!-- custom Colors -->
     <color name="mainColor">#5EBEBB</color>
