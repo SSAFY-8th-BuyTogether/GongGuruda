@@ -1,19 +1,29 @@
 package com.buy.together
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import com.buy.together.ui.view.board.BoardFragment
-import com.buy.together.ui.view.board.BoardWritingFragment
-import com.buy.together.ui.view.main.MainFragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
+import com.buy.together.databinding.ActivityMainBinding
+import com.buy.together.ui.base.BaseFragment
+
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var mainActivityBinding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // TODO: nav 연결하기
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_layout_main, MainFragment())
-            .commit()
+        mainActivityBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mainActivityBinding.root)
     }
+
+    fun restartActivity() {
+        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+}
+
+fun <B : ViewBinding> BaseFragment<B>.restartActivity() {
+    val activity = this.activity as MainActivity
+    activity.restartActivity()
 }

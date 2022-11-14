@@ -1,5 +1,7 @@
 package com.buy.together.util
 
+import android.content.Context
+import android.widget.Toast
 import android.location.Geocoder
 import android.os.Build.VERSION_CODES.P
 import android.util.Log
@@ -8,12 +10,15 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 object CommonUtils {
-
     //천단위 콤마
     fun makeComma(num:Int):String{
-        var comma = DecimalFormat("#,###")
+        val comma = DecimalFormat("#,###")
         return "${comma.format(num)} 원"
     }
+
+    fun makeToast(context: Context, msg : String) = Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+    fun makeLongToast(context: Context, msg: String) = Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+
     
     //시간차 구하기
     fun getDiffTime(time : Long):String{

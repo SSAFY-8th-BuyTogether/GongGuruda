@@ -2,35 +2,48 @@ package com.buy.together.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import androidx.core.content.edit
+import com.buy.together.Application
+
 
 class SharedPreferencesUtil (context: Context) {
-    val SHARED_PREFERENCES_NAME = "smartstore_preference"
+    companion object {
+        private const val SHARED_PREFERENCES_NAME = "Application_Preferences"
+        private const val AUTH_TOKEN = "AuthToken"
+        private const val FCM_TOKEN = "FCMToken"
+    }
 
-    var preferences: SharedPreferences =
-        context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    var preferences: SharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
-    //사용자 정보 저장
-//    fun putUser(user:User){
-//        val editor = preferences.edit()
-//        editor.putString("id", user.id)
-//        editor.putString("name", user.name)
-//        editor.apply()
-//    }
-//
-//    fun getUser(): User{
-//        val id = preferences.getString("id", "")
-//        if (id != ""){
-//            val name = preferences.getString("name", "")
-//            return User(id!!, name!!, "",0)
-//        }else{
-//            return User()
-//        }
-//    }
-//
-//    fun deleteUser(){
-//        //preference 지우기
-//        val editor = preferences.edit()
-//        editor.clear()
-//        editor.apply()
-//    }
+    fun putAuthToken(authToken: String) {
+        preferences.edit {
+            putString(AUTH_TOKEN, authToken)
+            apply()
+        }
+        Log.d("체크", "initSharedPreference: ${getAuthToken()}")
+    }
+
+    fun getAuthToken(): String? = preferences.getString(AUTH_TOKEN, null)
+    fun deleteAuthToken() {
+        preferences.edit {
+            remove(AUTH_TOKEN)
+        }
+    }
+
+    fun putFCMToken(fcmToken: String) {
+        preferences.edit {
+            putString(FCM_TOKEN, fcmToken)
+            apply()
+        }
+    }
+
+    fun getFCMToken(): String? = preferences.getString(FCM_TOKEN, null)
+
+    fun deleteFCMToken() {
+        preferences.edit {
+            remove(FCM_TOKEN)
+        }
+    }
+
 }
