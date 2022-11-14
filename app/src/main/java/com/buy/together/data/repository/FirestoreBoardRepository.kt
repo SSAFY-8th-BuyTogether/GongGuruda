@@ -1,7 +1,7 @@
 package com.buy.together.data.repository
 
 import android.util.Log
-import com.buy.together.data.model.Board
+import com.buy.together.data.dto.Board
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -27,7 +27,7 @@ class FirestoreBoardRepository {
             .document(id)
             .get()
             .addOnFailureListener{
-                Log.d(TAG, "getUserToken: Fail..ㅠㅠㅠㅠㅠㅠ")
+                Log.d(TAG, "getSavedBoard : Error getting field ${it}")
             }
     }
 

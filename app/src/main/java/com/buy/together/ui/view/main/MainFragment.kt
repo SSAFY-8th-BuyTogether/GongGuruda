@@ -1,51 +1,72 @@
 package com.buy.together.ui.view.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.buy.together.R
 import com.buy.together.databinding.FragmentMainBinding
 import com.buy.together.ui.adapter.BoardAdapter
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 
+private const val TAG = "MainFragment_싸피"
 class MainFragment : BaseFragment<FragmentMainBinding>(
     FragmentMainBinding::bind, R.layout.fragment_main
 ) {
     private val viewModel : BoardViewModel by activityViewModels()
     private lateinit var boardAdapter : BoardAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
+        initListener()
     }
 
     fun initAdapter(){
-//        service.getBoard("food","1")
         boardAdapter = BoardAdapter()
         binding.rvMainBoard.adapter = boardAdapter
-//        viewModel.boardLiveData = service.getBoardList("food")
-        viewModel.getSavedBoard("food").observe(viewLifecycleOwner, Observer { it->
+        val random = (1..4).random()
+        Log.d(TAG, "initAdapter: $random")
+        viewModel.getSavedBoard(random)
+        viewModel.boardListLiveData.observe(viewLifecycleOwner){
             boardAdapter.boardList = it
             boardAdapter.notifyDataSetChanged()
-        })
+        }
     }
 
-//    fun setNoneData(){
-//        boardList.add(Board(
-//            0,"num1","food",System.currentTimeMillis()+(24*60*60*1000),50000,"test",System.currentTimeMillis()-(1000*60),"아름"
-//        ))
-//        boardList.add(Board(
-//            0,"num2","test",System.currentTimeMillis()+(24*60*60*2000),50000,"test",System.currentTimeMillis()-(1000*60*3),"아름"
-//        ))
-//        boardList.add(Board(
-//            0,"num3","food",System.currentTimeMillis(),50000,"test",System.currentTimeMillis()-(1000*60*60+60*1000),"아름"
-//        ))
-//    }
-
-    override fun onResume() {
-        super.onResume()
-        //새로 가져오기
+    fun initListener(){
+        binding.apply {
+            fabWriteBoard.setOnClickListener{
+                showBoardWritingFragment()
+            }
+            llCategoryLayout.apply{
+                ibImgAll.setOnClickListener{
+                    onclickCategory(0)
+                }
+                ibImgFood.setOnClickListener{
+                    onclickCategory(1)
+                }
+                ibImgStationery.setOnClickListener{
+                    onclickCategory(2)
+                }
+                ibImgDailyNeccessity.setOnClickListener{
+                    onclickCategory(3)
+                }
+                ibImgEtc.setOnClickListener{
+                    onclickCategory(4)
+                }
+            }
+        }
     }
+
+    fun onclickCategory(type : Int){
+        viewModel.categoryIdx = type
+        showBoardFragment()
+    }
+
+    private fun showBoardWritingFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardWritingFragment) }
+    private fun showBoardFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardFragment)}
 }

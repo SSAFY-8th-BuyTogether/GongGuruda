@@ -29,11 +29,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
             }else -> connectionManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         }
 
+        //ToDO : test 용으로 사용 해당 부분 다 빼도 됨
         binding.apply {
             fragmentRootLayout.setOnClickListener {view ->  hideKeyboard(view) }
             btnLogin.setOnClickListener {
-                if (checkServiceState()) viewModel.sendLoginInfo(getIdInfo(), getPwdInfo())
-                else makeToast(requireContext(), "인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.")
+                showMainFragment()
+//                if (checkServiceState()) viewModel.sendLoginInfo(getIdInfo(), getPwdInfo())
+//                else makeToast(requireContext(), "인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.")
             }
             btnFindId.setOnClickListener { showFindInfoFragment(FireStore.USER_ID) }
             btnFindPwd.setOnClickListener { showFindInfoFragment(FireStore.USER_PWD) }

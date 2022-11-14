@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.buy.together.data.model.Board
 import com.buy.together.databinding.ItemImageBinding
 
 class ImageAdpater (var ImageList : ArrayList<String>) : RecyclerView.Adapter<ImageAdpater.ImageHolder>() {

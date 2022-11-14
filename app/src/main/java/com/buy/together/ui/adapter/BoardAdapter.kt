@@ -4,11 +4,10 @@ import android.location.Geocoder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.buy.together.R
-import com.buy.together.data.model.Board
+import com.buy.together.data.dto.Board
 import com.buy.together.databinding.ItemBoardBinding
 import com.buy.together.util.CommonUtils
 

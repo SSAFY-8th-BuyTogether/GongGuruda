@@ -1,4 +1,4 @@
-package com.buy.together.data.model
+package com.buy.together.data.dto
 
 import com.google.android.gms.maps.model.LatLng
 

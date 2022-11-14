@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.navigation.fragment.findNavController
 import com.buy.together.R
 import com.buy.together.databinding.FragmentBoardBinding
 import com.buy.together.databinding.FragmentBoardWritingBinding
@@ -53,6 +54,9 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                     includeWritingOption.clOptionBody.visibility = View.VISIBLE
                     ivDownImg.animate().setDuration(200).rotation(180f)
                 }
+            }
+            ibBackButton.setOnClickListener{
+                findNavController().popBackStack()
             }
         }
     }
