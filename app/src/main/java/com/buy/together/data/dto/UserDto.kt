@@ -2,13 +2,14 @@ package com.buy.together.data.dto
 
 
 data class UserDto(
-    val id : String,
-    val birthday : String,
-    val phone : String,
-    val nickName : String,
-    val password : String,
+    var name : String,
+    var birthday : String,
+    var phone : String,
+    var id : String,
+    var nickName : String,
+    var password : String,
     val profile : String,
-    val devices : ArrayList<String>?
+    val devices : ArrayList<String>
 ){
-    constructor() : this("","","","","", "", null)
+    constructor() : this("", "","","","","", "", arrayListOf()) //TODO : profile 디폴트 값 결정 : @drawable/img_profile_default.png
 }

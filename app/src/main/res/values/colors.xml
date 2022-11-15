@@ -17,6 +17,7 @@
 
     <!-- custom Colors -->
     <color name="mainColor">#5EBEBB</color>
+    <color name="blue_green">#116761</color>
     <color name="transparent">#00000000</color>
     <color name="black">#FF000000</color>
     <color name="black_87">#de000000</color>

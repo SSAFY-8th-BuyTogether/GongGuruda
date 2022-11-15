@@ -25,7 +25,7 @@ object CommonUtils {
         val SDformat = SimpleDateFormat("HH:mm")
         val now = System.currentTimeMillis()
         val diff = now - time
-        var date : String
+        val date : String
         if(diff >= 60*60*1000){
             date = SDformat.format(time).toString()
         }else{
