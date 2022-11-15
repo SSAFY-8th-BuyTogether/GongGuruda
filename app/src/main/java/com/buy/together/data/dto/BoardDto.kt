@@ -1,9 +1,9 @@
-package com.buy.together.data.model
+package com.buy.together.data.dto
 
 import com.google.android.gms.maps.model.LatLng
 
-data class Board (
-    var id: Int,
+data class BoardDto (
+    var id: String,
     var title : String,
     var category : String,
     var deadLine : Long,

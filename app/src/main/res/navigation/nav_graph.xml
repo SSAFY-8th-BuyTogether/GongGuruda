@@ -204,5 +204,30 @@
         android:id="@+id/mainFragment"
         android:name="com.buy.together.ui.view.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_boardWritingFragment"
+            app:destination="@id/boardWritingFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" />
+        <action
+            android:id="@+id/action_mainFragment_to_boardFragment"
+            app:destination="@id/boardFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/boardWritingFragment"
+        android:name="com.buy.together.ui.view.board.BoardWritingFragment"
+        android:label="fragment_board_writing"
+        tools:layout="@layout/fragment_board_writing" />
+    <fragment
+        android:id="@+id/boardFragment"
+        android:name="com.buy.together.ui.view.board.BoardFragment"
+        android:label="fragment_board"
+        tools:layout="@layout/fragment_board" />
 </navigation>

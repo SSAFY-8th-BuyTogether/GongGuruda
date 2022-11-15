@@ -121,6 +121,7 @@
         app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_write_board"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"

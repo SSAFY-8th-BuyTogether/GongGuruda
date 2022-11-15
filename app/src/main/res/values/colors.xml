@@ -14,6 +14,7 @@
     <color name="redForText">#d9534f</color>
     <!--  MainPage  -->
     <color name="grayForBackground">#F5F5F5</color>
+    <color name="red">#FF0100</color>
 
     <!-- custom Colors -->
     <color name="mainColor">#5EBEBB</color>

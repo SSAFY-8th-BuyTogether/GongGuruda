@@ -1,9 +1,8 @@
 package com.buy.together.data.repository
 
 import android.util.Log
-import com.buy.together.data.model.Board
+import com.buy.together.data.dto.BoardDto
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -14,7 +13,7 @@ class FirestoreBoardRepository {
 
     fun getSavedBoardList(category: String) : Task<QuerySnapshot>{
        return db.document(category)
-            .collection("1") // category로 바꾸기
+            .collection(category)
             .get()
            .addOnFailureListener{
                Log.d(TAG, "getBoardList: onFail")
@@ -27,14 +26,15 @@ class FirestoreBoardRepository {
             .document(id)
             .get()
             .addOnFailureListener{
-                Log.d(TAG, "getUserToken: Fail..ㅠㅠㅠㅠㅠㅠ")
+                Log.d(TAG, "getSavedBoard : Error getting field ${it}")
             }
     }
 
-    fun saveBoardItem(board : Board) : Task<DocumentReference>{
-        return db.document(board.category)
-            .collection(board.category)
-            .add(board)
+    fun saveBoardItem(boardDto : BoardDto) : Task<Void> {
+        return db.document(boardDto.category)
+            .collection(boardDto.category)
+            .document(boardDto.id)
+            .set(boardDto)
             .addOnFailureListener{ exception ->
                 Log.e(TAG, "saveBoardItem: Error getting doccumment ${exception}")
             }
