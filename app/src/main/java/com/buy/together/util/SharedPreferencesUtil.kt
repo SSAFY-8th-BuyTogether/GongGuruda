@@ -20,6 +20,7 @@ class SharedPreferencesUtil (context: Context) {
         preferences.edit {
             putString(AUTH_TOKEN, authToken)
             apply()
+            Log.d("체크", "icdddcdd!!!e: $authToken")
         }
         Log.d("체크", "initSharedPreference: ${getAuthToken()}")
     }

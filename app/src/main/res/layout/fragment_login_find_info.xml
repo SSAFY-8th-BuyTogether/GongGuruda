@@ -8,45 +8,38 @@
     android:layout_height="match_parent"
     android:padding="20dp">
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="10dp"
-        android:text="--- 찾기"
+        android:text="아이디 찾기"
         android:textSize="24sp"
         android:textColor="@color/mainColor"
         android:fontFamily="@font/notosanskr_bold_hestia" />
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/id_layout"
+        android:id="@+id/layout_find_id"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintBottom_toTopOf="@id/findInfo_btn"
+        android:layout_marginTop="35dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintBottom_toTopOf="@id/btn_findInfo"
         android:clipToPadding="false">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:text="이름"
-                android:textSize="14sp"
-                android:textColor="@color/black_gray"
-                android:fontFamily="@font/notosanskr_regular_hestia" />
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_et_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:errorEnabled="true"
                 app:counterEnabled="false"
                 app:counterMaxLength="10">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_name"
+                    android:id="@+id/et_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -58,33 +51,15 @@
                     android:hint="이름"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/tv_name_warning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:paddingLeft="8dp"
-                android:textColor="@color/pinkish_orange"
-                android:fontFamily="@font/notosanskr_regular_hestia"
-                android:text="" />
-            <TextView
-                android:id="@+id/tv_BirthInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:paddingLeft="8dp"
-                android:text="생년월일(8자리)"
-                android:textSize="14sp"
-                android:textColor="@color/black_gray"
-                android:fontFamily="@font/notosanskr_regular_hestia" />
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_et_user_birth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:errorEnabled="true"
                 app:counterEnabled="false"
                 app:counterMaxLength="8">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_BirthInfo"
+                    android:id="@+id/et_user_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -93,36 +68,18 @@
                     android:maxLines="1"
                     android:maxLength="8"
                     android:imeOptions="actionNext"
-                    android:hint="생년월일을 입력해주세요. (ex.20000101)"
+                    android:hint="생년월일(8자리)"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/tv_BirthInfo_warning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:paddingLeft="8dp"
-                android:textColor="@color/pinkish_orange"
-                android:fontFamily="@font/notosanskr_regular_hestia"
-                android:text=""/>
-            <TextView
-                android:id="@+id/tv_SmsInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:paddingLeft="8dp"
-                android:text="휴대폰 번호"
-                android:textSize="14sp"
-                android:textColor="@color/black_gray"
-                android:fontFamily="@font/notosanskr_regular_hestia" />
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_et_user_sms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:errorEnabled="true"
                 app:counterEnabled="false"
                 app:counterMaxLength="11">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_smsInfo"
+                    android:id="@+id/et_user_sms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -131,51 +88,34 @@
                     android:maxLines="1"
                     android:maxLength="11"
                     android:imeOptions="actionDone"
-                    android:hint="'-'없이 휴대폰번호를 입력해주세요."
+                    android:hint="휴대폰 번호"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/tv_smsInfo_warning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:paddingLeft="8dp"
-                android:textColor="@color/pinkish_orange"
-                android:fontFamily="@font/notosanskr_regular_hestia"
-                android:text=""/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/pwd_layout"
+        android:id="@+id/layout_find_pwd"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintBottom_toTopOf="@id/findInfo_btn"
+        android:layout_marginTop="35dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintBottom_toTopOf="@id/btn_findInfo"
         android:clipToPadding="false"
         android:visibility="gone">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_name2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:text="이름"
-                android:textSize="14sp"
-                android:textColor="@color/black_gray"
-                android:fontFamily="@font/notosanskr_regular_hestia" />
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_et_user_name_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:errorEnabled="true"
                 app:counterEnabled="false"
                 app:counterMaxLength="10">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_name2"
+                    android:id="@+id/et_user_name_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -187,33 +127,15 @@
                     android:hint="이름"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/tv_name_warning2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:paddingLeft="8dp"
-                android:textColor="@color/pinkish_orange"
-                android:fontFamily="@font/notosanskr_regular_hestia"
-                android:text="" />
-            <TextView
-                android:id="@+id/tv_Id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:paddingLeft="8dp"
-                android:text="아이디"
-                android:textSize="14sp"
-                android:textColor="@color/black_gray"
-                android:fontFamily="@font/notosanskr_regular_hestia" />
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_et_user_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:errorEnabled="true"
                 app:counterEnabled="false"
                 app:counterMaxLength="11">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_id"
+                    android:id="@+id/et_user_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -222,23 +144,13 @@
                     android:maxLines="1"
                     android:imeOptions="actionNext"
                     android:maxLength="11"
-                    android:hint="아이디를 입력해주세요."
+                    android:hint="아이디"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/tv_Id_warning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:paddingLeft="8dp"
-                android:textColor="@color/pinkish_orange"
-                android:fontFamily="@font/notosanskr_regular_hestia"
-                android:text=""/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/findInfo_btn"
+        android:id="@+id/btn_findInfo"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         app:layout_constraintBottom_toBottomOf="parent"

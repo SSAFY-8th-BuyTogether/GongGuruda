@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class User(
+    //val name : String= "",
     @PrimaryKey
     var id : String = "",
     var birthday : String = "",
