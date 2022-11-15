@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     // 로딩화면 https://github.com/ybq/Android-SpinKit
-    //implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //material design
@@ -78,6 +78,8 @@ dependencies {
 
     //viewmodel dependency 추가
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    //liveData dependency 추가
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
     //framework ktx dependency 추가
     implementation "androidx.fragment:fragment-ktx:1.4.1"
 
@@ -92,7 +94,10 @@ dependencies {
     //firestore
     implementation 'com.google.firebase:firebase-firestore-ktx:24.4.0'
     implementation 'com.google.firebase:firebase-storage:20.1.0'
+    implementation platform('com.google.firebase:firebase-bom:30.1.0')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 
     //permission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+
 }

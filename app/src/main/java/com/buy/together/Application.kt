@@ -25,7 +25,6 @@ class Application : Application() {
     private fun initSharedPreference(){
         sharedPreferences = SharedPreferencesUtil(this)
         authToken = sharedPreferences.getAuthToken()
-        Log.d("체크", "initSharedPreference: $authToken")
         fcmToken = sharedPreferences.getFCMToken()
     }
 
