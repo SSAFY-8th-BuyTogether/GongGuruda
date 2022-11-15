@@ -2,12 +2,9 @@ package com.buy.together.util
 
 import android.content.Context
 import android.widget.Toast
-import android.location.Geocoder
-import android.os.Build.VERSION_CODES.P
-import android.util.Log
-import com.google.android.gms.maps.model.LatLng
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.util.Calendar
 
 object CommonUtils {
     //천단위 콤마
@@ -23,25 +20,38 @@ object CommonUtils {
     //시간차 구하기
     fun getDiffTime(time : Long):String{
         val SDformat = SimpleDateFormat("HH:mm")
+        val dateFormat = SimpleDateFormat("MM.dd HH:mm")
         val now = System.currentTimeMillis()
         val diff = now - time
-        var date : String
-        if(diff >= 60*60*1000){
+        val date : String
+        if(diff >= 24*60*60*1000){ //하루가 넘을 때
+            date = dateFormat.format(time).toString()
+        }
+        else if(diff >= 60*60*1000){ //한 시간 넘을 때
             date = SDformat.format(time).toString()
-        }else{
-            date = "${diff/(60*1000)} 분"
+        }else{ //한 시간 전
+            date = "${diff/(60*1000)} 분전"
         }
         return date
     }
 
     fun getDday(time : Long): String{
-        val now = System.currentTimeMillis()
-        val diff = time - now
-        val day = (diff/(24*60*60*1000 - 1000)).toInt()
-        if(day == 0){
+        val now = System.currentTimeMillis() / (24*60*60*1000)
+        val time_day = time / (24*60*60*1000)
+        val day = (time_day - now).toInt()
+        if(day < 0){
+            return "기한지남"
+        }else if(day == 0){
             return "D-day"
         }else{
             return "D-$day"
         }
+    }
+
+    fun getDateString(cal : Calendar): String{
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val date = cal.get(Calendar.DATE)
+        return "${String.format("%04d", year)}.${String.format("%02d",month + 1)}.${String.format("%02d", date)}" //버튼 text 변경
     }
 }

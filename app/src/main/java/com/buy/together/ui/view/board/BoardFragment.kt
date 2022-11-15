@@ -17,18 +17,18 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
     private lateinit var boardAdapter : BoardAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvCategory.text = viewModel.getCategoryNameKr()
+        binding.tvCategory.text = viewModel.category
         initAdapter()
         initListener()
 
     }
 
     fun initAdapter(){
-        boardAdapter = BoardAdapter()
+        boardAdapter = BoardAdapter(viewModel)
         binding.rvBoard.adapter = boardAdapter
-        viewModel.getSavedBoard(viewModel.categoryIdx)
-        viewModel.boardListLiveData.observe(viewLifecycleOwner){
-            boardAdapter.boardList = it
+        viewModel.getSavedBoard(viewModel.category)
+        viewModel.boardDtoListLiveData.observe(viewLifecycleOwner){
+            boardAdapter.boardDtoList = it
             boardAdapter.notifyDataSetChanged()
         }
     }

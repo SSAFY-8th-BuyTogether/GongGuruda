@@ -26,15 +26,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
     }
 
     fun initAdapter(){
-        boardAdapter = BoardAdapter()
+        boardAdapter = BoardAdapter(viewModel)
         binding.rvMainBoard.adapter = boardAdapter
         val random = (1..4).random()
         Log.d(TAG, "initAdapter: $random")
-        viewModel.getSavedBoard(random)
-        viewModel.boardListLiveData.observe(viewLifecycleOwner){
-            boardAdapter.boardList = it
-            boardAdapter.notifyDataSetChanged()
-        }
+//        viewModel.getSavedBoard(random)
+//        viewModel.boardListLiveData.observe(viewLifecycleOwner){
+//            boardAdapter.boardList = it
+//            boardAdapter.notifyDataSetChanged()
+//        }
     }
 
     fun initListener(){
@@ -44,26 +44,26 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
             }
             llCategoryLayout.apply{
                 ibImgAll.setOnClickListener{
-                    onclickCategory(0)
+                    onclickCategory("전체")
                 }
                 ibImgFood.setOnClickListener{
-                    onclickCategory(1)
+                    onclickCategory("식품")
                 }
                 ibImgStationery.setOnClickListener{
-                    onclickCategory(2)
+                    onclickCategory("문구")
                 }
                 ibImgDailyNeccessity.setOnClickListener{
-                    onclickCategory(3)
+                    onclickCategory("생활용품")
                 }
                 ibImgEtc.setOnClickListener{
-                    onclickCategory(4)
+                    onclickCategory("기타")
                 }
             }
         }
     }
 
-    fun onclickCategory(type : Int){
-        viewModel.categoryIdx = type
+    fun onclickCategory(type : String){
+        viewModel.category = type
         showBoardFragment()
     }
 

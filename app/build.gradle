@@ -91,4 +91,8 @@ dependencies {
 
     //firestore
     implementation 'com.google.firebase:firebase-firestore-ktx:24.4.0'
+    implementation 'com.google.firebase:firebase-storage:20.1.0'
+
+    //permission
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
 }
