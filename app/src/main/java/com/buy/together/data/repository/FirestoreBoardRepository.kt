@@ -15,9 +15,6 @@ class FirestoreBoardRepository {
        return db.document(category)
             .collection(category)
             .get()
-           .addOnFailureListener{
-               Log.d(TAG, "getBoardList: onFail")
-           }
     }
 
     fun getSavedBoard(category : String, id : String):Task<DocumentSnapshot>{

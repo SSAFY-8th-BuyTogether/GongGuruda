@@ -27,9 +27,13 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
         boardAdapter = BoardAdapter(viewModel)
         binding.rvBoard.adapter = boardAdapter
         viewModel.getSavedBoard(viewModel.category)
+        showLoadingDialog(requireContext())
         viewModel.boardDtoListLiveData.observe(viewLifecycleOwner){
             boardAdapter.boardDtoList = it
             boardAdapter.notifyDataSetChanged()
+            if(!viewModel.isLoading){
+                dismissLoadingDialog()
+            }
         }
     }
 

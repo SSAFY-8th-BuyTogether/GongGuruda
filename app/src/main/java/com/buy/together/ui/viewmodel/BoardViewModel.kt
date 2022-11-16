@@ -16,15 +16,17 @@ import com.google.firebase.storage.FirebaseStorage
 private const val TAG = "BoardViewModel_싸피"
 class BoardViewModel : ViewModel() {
     private var repository = RepositoryUtils.firestoreBoardRepository
-    private val categoryListKr = arrayListOf("전체","식품","문구","생활용품","기타")
+    val categoryListKr = arrayListOf("전체","식품","문구","생활용품","기타")
     private val fbStore = FirebaseStorage.getInstance().reference.child("images")
     var category : String = ""
 
     val boardDtoListLiveData: LiveData<List<BoardDto>> get() = _boardDtoListLiveData
     private var _boardDtoListLiveData : MutableLiveData<List<BoardDto>> = MutableLiveData()
+    var isLoading = false
 
     // 카테고리별 데이터 가져오기
     fun getSavedBoard(category : String){
+        isLoading = true
         _boardDtoListLiveData.postValue(mutableListOf())
         if(category == "전체"){
             getAllSavedBoard()
@@ -37,14 +39,20 @@ class BoardViewModel : ViewModel() {
                         val dto = makeBoard(doc)
                         savedBoardListDto.add(dto)
                         Log.d(TAG, "가져오기 성공 | dto : $dto==========")
+                        isLoading = false
                     }
                     _boardDtoListLiveData.postValue(savedBoardListDto)
+                }
+                .addOnFailureListener{
+                    Log.d(TAG, "통신 오류")
+                    isLoading = false
                 }
         }
     }
 
     //모든 데이터 가져오기
     fun getAllSavedBoard(){
+        isLoading = true
         val savedBoardListDto : MutableList<BoardDto> = mutableListOf()
         for(i in 1..4){
             repository.getSavedBoardList(categoryListKr[i])
@@ -53,9 +61,12 @@ class BoardViewModel : ViewModel() {
                         val dto = makeBoard(doc)
                         savedBoardListDto.add(dto)
                     }
+                    if(i == 4){
+                        _boardDtoListLiveData.postValue(savedBoardListDto)
+                        isLoading = false
+                    }
                 }
         }
-        _boardDtoListLiveData.postValue(savedBoardListDto)
     }
 
     var boardDtoLiveData : MutableLiveData<BoardDto> = MutableLiveData()

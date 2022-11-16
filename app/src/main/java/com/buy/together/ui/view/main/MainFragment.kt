@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.buy.together.Application.Companion.fcmToken
 import com.buy.together.R
+import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentMainBinding
 import com.buy.together.ui.adapter.BoardAdapter
 import com.buy.together.ui.base.BaseFragment
@@ -30,11 +32,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
         binding.rvMainBoard.adapter = boardAdapter
         val random = (1..4).random()
         Log.d(TAG, "initAdapter: $random")
-//        viewModel.getSavedBoard(random)
-//        viewModel.boardListLiveData.observe(viewLifecycleOwner){
-//            boardAdapter.boardList = it
-//            boardAdapter.notifyDataSetChanged()
-//        }
+        viewModel.getSavedBoard(viewModel.categoryListKr[random])
+        showLoadingDialog(requireContext())
+        viewModel.boardDtoListLiveData.observe(viewLifecycleOwner){ response ->
+            boardAdapter.boardDtoList = response
+            boardAdapter.notifyDataSetChanged()
+            if(!viewModel.isLoading){
+                dismissLoadingDialog()
+            }
+        }
     }
 
     fun initListener(){
