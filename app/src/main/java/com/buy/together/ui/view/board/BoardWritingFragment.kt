@@ -11,17 +11,17 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
-import com.buy.together.util.GalleryUtil
 import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import java.util.*
 
 private const val TAG = "BoardWritingFragment_싸피"
@@ -126,12 +126,30 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             calendar.timeInMillis,
             "test",
         )
-        viewModel.saveBoardToFirebase(board,imageAdapter.ImageList)
-        findNavController().popBackStack()
+        showLoadingDialog(requireContext())
+        viewModel.saveImage(board,imageAdapter.ImageList)
+        viewModel.ImgLiveData.observe(viewLifecycleOwner){
+            board.images = it
+            dismissLoadingDialog()
+            viewModel.saveBoard(board).observe(viewLifecycleOwner){ response ->
+                when(response){
+                    is FireStoreResponse.Loading ->{ showLoadingDialog(requireContext())}
+                    is FireStoreResponse.Success -> {
+                        showCustomDialogBasicOneButton("성공적으로 저장되었습니다.")
+                        dismissLoadingDialog()
+                        findNavController().popBackStack()
+                    }
+                    is FireStoreResponse.Failure -> {
+                        showCustomDialogBasicOneButton(response.errorMessage)
+                        dismissLoadingDialog()
+                    }
+                }
+            }
+        }
     }
 
     fun getGallery() {
-        GalleryUtil.getPermission(object : PermissionListener {
+        getPermission(object : PermissionListener {
             override fun onPermissionGranted() {
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
@@ -145,6 +163,14 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 Toast.makeText(requireContext(), "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    fun getPermission(listener: PermissionListener){
+        TedPermission.create()
+            .setPermissionListener(listener)
+            .setDeniedMessage("권한을 허용해주세요")
+            .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            .check()
     }
 
     private val imageLauncher = registerForActivityResult(

@@ -54,4 +54,10 @@ object CommonUtils {
         val date = cal.get(Calendar.DATE)
         return "${String.format("%04d", year)}.${String.format("%02d",month + 1)}.${String.format("%02d", date)}" //버튼 text 변경
     }
+
+    fun getDateString(time : Long): String{
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = time
+        return getDateString(cal)
+    }
 }

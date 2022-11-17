@@ -1,5 +1,6 @@
 package com.buy.together.ui.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import com.buy.together.databinding.ItemBoardBinding
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.util.CommonUtils
 
-private const val TAG = "CategoryAdapter_싸피"
 class BoardAdapter(val viewModel: BoardViewModel) : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
     private lateinit var binding : ItemBoardBinding
     var boardDtoList : List<BoardDto> = mutableListOf()
@@ -22,24 +22,25 @@ class BoardAdapter(val viewModel: BoardViewModel) : RecyclerView.Adapter<BoardAd
                 if(dto.images.isEmpty()){
                     binding.ivBoardImg.setImageResource(R.drawable.img_category_carrot)
                 }else{
-                    viewModel.getImage(dto.images[0]){
-                        Glide.with(itemView)
-                            .load(it)
-                            .into(binding.ivBoardImg)
-                    }
+                    Glide.with(itemView)
+                        .load(Uri.parse(dto.images[0]))
+                        .into(binding.ivBoardImg)
                 }
                 tvBoardTitle.text = dto.title
                 tvBoardMoney.text = CommonUtils.makeComma(dto.price)
                 tvBoardTime.text = CommonUtils.getDiffTime(dto.writeTime)
                 tvBoardDday.text = CommonUtils.getDday(dto.deadLine)
-                if(dto.meetPoint != null){
-//                    val geocoder = Geocoder(binding.root.context)
-//                    val address = geocoder.getFromLocation(dto.meetPoint?.latitude?:126.59,dto.meetPoint?.longitude?:37.33,1)
-//                    tvBoardAddress.text = address[0].subLocality
+                binding.clBoardLayout.setOnClickListener{
+                    itemClickListener.onClick(it,boardDtoList[position])
                 }
             }
         }
     }
+
+    interface ItemClickListener{
+        fun onClick(view: View, dto : BoardDto)
+    }
+    lateinit var itemClickListener: ItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardHolder {
         binding = ItemBoardBinding.inflate(LayoutInflater.from(parent.context),parent,false)

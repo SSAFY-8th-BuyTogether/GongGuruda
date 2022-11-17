@@ -5,27 +5,31 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.util.RepositoryUtils
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.*
 
 private const val TAG = "BoardViewModel_싸피"
 class BoardViewModel : ViewModel() {
     private var repository = RepositoryUtils.firestoreBoardRepository
     val categoryListKr = arrayListOf("전체","식품","문구","생활용품","기타")
     private val fbStore = FirebaseStorage.getInstance().reference.child("images")
-    var category : String = ""
 
+    var category : String = "" //main -> boardCategory
+
+    //boardlist
     val boardDtoListLiveData: LiveData<List<BoardDto>> get() = _boardDtoListLiveData
     private var _boardDtoListLiveData : MutableLiveData<List<BoardDto>> = MutableLiveData()
     var isLoading = false
 
+    var dto : BoardDto? = null //main, boardCategory -> board
+
     // 카테고리별 데이터 가져오기
-    fun getSavedBoard(category : String){
+    fun getSavedBoard(category : String){ //TODO : 코루틴, 지역 내에 게시글만 가져오기, 정렬
         isLoading = true
         _boardDtoListLiveData.postValue(mutableListOf())
         if(category == "전체"){
@@ -69,50 +73,40 @@ class BoardViewModel : ViewModel() {
         }
     }
 
-    var boardDtoLiveData : MutableLiveData<BoardDto> = MutableLiveData()
-
     //해당 id의 데이터 가져오기
-    fun getBoard(category : String, id : String) : LiveData<BoardDto> {
-        repository.getSavedBoard(category,id)
-            .addOnSuccessListener { documents ->
-                Log.d(TAG, "getUserToken: total - ${documents["title"]}")
-                val dto = makeBoard(documents)
-                Log.d(TAG, "getBoard: dto : $dto")
-                // 비동기라서 리턴 안됨 -> liveDat에 Post해서 받기 필요
-                boardDtoLiveData.postValue(dto)
-            }
-        return boardDtoLiveData
+    fun getEachBoard(category : String, id : String) = liveData(Dispatchers.IO){
+        Log.d(TAG, "getBoard: category : ${category}, id : $id")
+        repository.getEachBoard(category,id).collect{emit(it)}
     }
 
-    //게시글 저장
-    fun saveBoardToFirebase(boardDto : BoardDto, imgs : ArrayList<Uri>){ //TODO : board 넣기, 자동 id 가져오기
-        if(imgs.isNotEmpty()){
-            val list = arrayListOf<String>()
-            for(i in 0..imgs.size-1){ //이미지 저장
-                    fbStore.child("IMAGE_${boardDto.id}_${i}.png").putFile(imgs[i])
-                        .addOnSuccessListener{
-                            list.add("IMAGE_${boardDto.id}_${i}.png")
+    //imagelist
+    val ImgLiveData: LiveData<List<String>> get() = _ImgLiveData
+    private var _ImgLiveData : MutableLiveData<List<String>> = MutableLiveData()
+
+    fun saveImage(boardDto : BoardDto, imgs : ArrayList<Uri>){
+        if(imgs.isEmpty()){
+            _ImgLiveData.postValue(listOf())
+            return
+        }
+        val list = arrayListOf<String>()
+        for(i in 0..imgs.size-1){ //이미지 저장
+            fbStore.child("IMAGE_${boardDto.id}_${i}.png").putFile(imgs[i])
+                .addOnSuccessListener{
+                    CoroutineScope(Dispatchers.IO).launch {
+                        getImage("IMAGE_${boardDto.id}_${i}.png"){
+                            list.add(it.toString())
                             Log.d(TAG, "이미지 저장 성공~~~~~~~~~~$i\n image : ${list}")
-                            if(i == imgs.size-1){
+                            if (list.size == imgs.size) {
                                 Log.d(TAG, "모든 이미지 완료 ${list}")
                                 boardDto.images = list
-                                insertBoardData(boardDto)
+                                _ImgLiveData.postValue(list)
                             }
                         }
-            }
-        }else{
-            insertBoardData(boardDto)
+                    }
+                }
         }
     }
 
-    //게시글 넣기
-    private fun insertBoardData(boardDto: BoardDto){
-        repository.saveBoardItem(boardDto).addOnSuccessListener {
-            Log.v(TAG,"데이터 넣기 성공!!")
-            getSavedBoard(boardDto.category)
-        }
-    }
-    
     //이미지 가져오기
     fun getImage(url : String, listener : OnSuccessListener<Uri>){
         fbStore.child(url).downloadUrl
@@ -122,14 +116,26 @@ class BoardViewModel : ViewModel() {
             }
     }
 
-    private fun makeBoard(document : DocumentSnapshot) : BoardDto {
-        val meetPoint: LatLng? =
-            if(document["meetPoint"] as GeoPoint? == null) null
-            else LatLng((document["meetPoint"] as GeoPoint?)?.latitude!!,(document["meetPoint"] as GeoPoint?)?.longitude!!)
-        val buyPoint: LatLng? =
-            if(document["buyPoint"] as GeoPoint? == null) null
-            else LatLng((document["buyPoint"] as GeoPoint?)?.latitude!!,(document["buyPoint"] as GeoPoint?)?.longitude!!)
+    //게시글 저장
+    fun saveBoard(boardDto : BoardDto) = liveData(Dispatchers.IO){ //TODO : user에 넣기
+        repository.saveBoard(boardDto).collect{emit(it)}
+    }
 
+//    //이미지 가져오기
+//    suspend fun getImage(url : String) : String{
+//        var _uri : String = ""
+//        fbStore.child(url).downloadUrl
+//            .addOnSuccessListener{
+//                _uri = it.toString()
+//            }
+//            .addOnFailureListener{
+//                Log.d(TAG, "getImage: Fail ${it.message}")
+//            }
+//            .await()
+//        return _uri
+//    }
+
+    fun makeBoard(document : DocumentSnapshot) : BoardDto {
         val dto = BoardDto(
             document.id,
             document["title"] as String,
@@ -142,9 +148,9 @@ class BoardViewModel : ViewModel() {
 
             document["images"] as List<String>,
             (document["maxPeople"] as Long?)?.toInt(),
-            meetPoint,
+            document["meetPoint"] as String?,
             document["meetTime"] as Long?,
-            buyPoint,
+            document["buyPoint"] as String?,
         )
         return dto
     }
