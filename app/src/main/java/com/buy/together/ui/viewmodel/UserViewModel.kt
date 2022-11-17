@@ -171,7 +171,7 @@ class UserViewModel : BaseViewModel() {
     }
 
     fun logIn(userId : String, userPwd : String, fcmToken:String) = liveData(Dispatchers.IO){
-        userRepository.logIn(userId, userPwd, fcmToken).collect(){ emit(it) }
+        if (userId.isNotBlank() && userPwd.isNotBlank()) userRepository.logIn(userId, userPwd, fcmToken).collect(){ emit(it) }
     }
 
 }

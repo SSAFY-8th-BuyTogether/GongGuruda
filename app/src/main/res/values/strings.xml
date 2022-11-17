@@ -13,6 +13,9 @@
     <string name="tv_error_msg_pwd_check_1">비밀번호를 먼저 입력해주세요.</string>
     <string name="tv_error_msg_pwd_check_2">비밀번호를 한번 더 입력해주세요.</string>
 
+    <!-- Address -->
+    <string name="tv_address_search_query">지번, 도로명, 건물명으로 검색</string>
+
     <!-- Category -->
     <string name="category_all">전체</string>
     <string name="category_food">식품</string>
@@ -39,5 +42,7 @@
         <item>@string/category_daily_neccessity</item>
         <item>@string/category_etc</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

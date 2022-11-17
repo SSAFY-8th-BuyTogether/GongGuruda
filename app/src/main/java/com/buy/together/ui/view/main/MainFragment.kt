@@ -59,6 +59,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
                     onclickCategory("기타")
                 }
             }
+            tvAddress.setOnClickListener { showAddressFragment() }
         }
     }
 
@@ -67,6 +68,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
         showBoardFragment()
     }
 
+    private fun showAddressFragment(){ findNavController().navigate(R.id.action_mainFragment_to_addressGraph) }
     private fun showBoardWritingFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardWritingFragment) }
     private fun showBoardFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardFragment)}
 }

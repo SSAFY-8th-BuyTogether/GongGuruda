@@ -49,7 +49,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         binding.apply {
             fragmentRootLayout.setOnClickListener {view ->  hideKeyboard(view) }
             btnLogin.setOnClickListener {
-                checkServiceState { viewModel.getFCMToken() }
+                checkServiceState {
+                    if (getIdInfo().isBlank()) showCustomDialogBasicOneButton("아이디를 입력해주세요.")
+                    else if (getPwdInfo().isBlank()) showCustomDialogBasicOneButton("비밀번호를 입력해주세요.")
+                    else viewModel.getFCMToken()
+                }
             }
             btnFindId.setOnClickListener {
                 checkServiceState{ showFindInfoFragment(FireStoreInfo.USER_ID) }
@@ -70,6 +74,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
 
     private fun getIdInfo() : String = binding.etLoginId.text.toString().trim()
     private fun getPwdInfo() : String = binding.etLoginPwd.text.toString().trim()
+
     private fun saveUserInfo(fcmToken : String) {
         sharedPreferences.putAuthToken(getIdInfo())
         sharedPreferences.putFCMToken(fcmToken)

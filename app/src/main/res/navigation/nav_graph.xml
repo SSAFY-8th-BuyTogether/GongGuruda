@@ -219,7 +219,53 @@
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_addressGraph"
+            app:destination="@id/addressGraph" />
     </fragment>
+    <navigation
+        android:id="@+id/addressGraph"
+        app:startDestination="@id/addressFragment">
+        <dialog
+            android:id="@+id/addressFragment"
+            android:name="com.buy.together.ui.view.address.AddressFragment"
+            android:label="AddressFragment"
+            tools:layout="@layout/fragment_address">
+            <action
+                android:id="@+id/action_addressFragment_to_addressSearchFragment"
+                app:destination="@id/addressSearchFragment" />
+            <action
+                android:id="@+id/action_addressFragment_pop"
+                app:popUpTo="@id/addressFragment"
+                app:popUpToInclusive="true" />
+            <action
+                android:id="@+id/action_addressFragment_to_addressMapFragment"
+                app:destination="@id/addressMapFragment" />
+        </dialog>
+        <dialog
+            android:id="@+id/addressSearchFragment"
+            android:name="com.buy.together.ui.view.address.AddressSearchFragment"
+            android:label="AddressSearchFragment"
+            tools:layout="@layout/fragment_address_search">
+            <action
+                android:id="@+id/action_addressSearchFragment_to_addressMapFragment"
+                app:destination="@id/addressMapFragment" />
+            <action
+                android:id="@+id/action_addressSearchFragment_to_addressFragment"
+                app:destination="@id/addressFragment"
+                app:popUpTo="@id/addressFragment" />
+        </dialog>
+        <dialog
+            android:id="@+id/addressMapFragment"
+            android:name="com.buy.together.ui.view.address.AddressMapFragment"
+            android:label="fragment_address_map"
+            tools:layout="@layout/fragment_address_map" >
+            <action
+                android:id="@+id/action_addressMapFragment_to_addressFragment"
+                app:destination="@id/addressFragment"
+                app:popUpTo="@id/addressFragment"/>
+        </dialog>
+    </navigation>
     <fragment
         android:id="@+id/boardWritingFragment"
         android:name="com.buy.together.ui.view.board.BoardWritingFragment"
