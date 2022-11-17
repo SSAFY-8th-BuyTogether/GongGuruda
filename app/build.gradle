@@ -68,6 +68,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     // https://github.com/square/retrofit/tree/master/retrofit-converters/gson
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    // okhttp3
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
     // 로딩화면 https://github.com/ybq/Android-SpinKit
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
@@ -86,6 +89,9 @@ dependencies {
     //구글 map api 사용
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.0'
+    //naver map api 사용
+    implementation 'com.naver.maps:map-sdk:3.10.2' //Naver map sdk
+    implementation("com.google.android.gms:play-services-location:16.0.0") //Naver 현재위치추적
 
     //glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'

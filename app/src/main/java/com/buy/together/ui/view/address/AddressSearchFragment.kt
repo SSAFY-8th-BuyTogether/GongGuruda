@@ -12,7 +12,11 @@ class AddressSearchFragment() : BaseBottomSheetDialogFragment<FragmentAddressSea
         dialog?.window?.attributes?.windowAnimations = R.style.DialogAnimation;
     }
 
-    override fun initView() { }
+    override fun initView() {
+        binding.apply {
+            
+        }
+    }
 
     override fun setEvent() { }
 
