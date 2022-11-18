@@ -5,11 +5,9 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.buy.together.R
-import com.buy.together.data.model.network.firestore.FireStoreInfo
 import com.buy.together.databinding.FragmentJoinBasicInfoBinding
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.UserViewModel
-import com.buy.together.util.CommonUtils.makeToast
 import com.buy.together.util.RegularExpression
 
 

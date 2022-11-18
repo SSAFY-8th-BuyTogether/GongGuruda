@@ -1,7 +1,5 @@
 package com.buy.together.data.dto
 
-import com.google.android.gms.maps.model.LatLng
-
 data class BoardDto (
     var id: String,
     var title : String,
@@ -12,9 +10,11 @@ data class BoardDto (
     var writeTime : Long,
     var writer : String,
 
+    var writerProfile : String? = null,
+    var participator : List<String> = listOf(),
     var images : List<String> = listOf(),
     var maxPeople : Int? = null,
-    var meetPoint : LatLng? = null,
+    var meetPoint : String? = null,
     var meetTime : Long? = null,
-    var buyPoint : LatLng? = null,
+    var buyPoint : String? = null,
 ) : java.io.Serializable

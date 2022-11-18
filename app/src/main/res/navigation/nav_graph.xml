@@ -213,8 +213,8 @@
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit" />
         <action
-            android:id="@+id/action_mainFragment_to_boardFragment"
-            app:destination="@id/boardFragment"
+            android:id="@+id/action_mainFragment_to_boardCategoryFragment"
+            app:destination="@id/boardCategoryFragment"
             app:enterAnim="@anim/slide_enter"
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
@@ -222,6 +222,9 @@
         <action
             android:id="@+id/action_mainFragment_to_addressGraph"
             app:destination="@id/addressGraph" />
+        <action
+            android:id="@+id/action_mainFragment_to_boardFragment"
+            app:destination="@id/boardFragment" />
     </fragment>
     <navigation
         android:id="@+id/addressGraph"
@@ -265,8 +268,26 @@
         android:label="fragment_board_writing"
         tools:layout="@layout/fragment_board_writing" />
     <fragment
+        android:id="@+id/boardCategoryFragment"
+        android:name="com.buy.together.ui.view.board.BoardCategoryFragment"
+        android:label="fragment_category_board"
+        tools:layout="@layout/fragment_board_category" >
+        <action
+            android:id="@+id/action_boardCategoryFragment_to_boardFragment"
+            app:destination="@id/boardFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/boardFragment"
-        android:name="com.buy.together.ui.view.board.BoardFragment"
+        android:name="com.buy.together.ui.view.board.eachboard.BoardFragment"
         android:label="fragment_board"
-        tools:layout="@layout/fragment_board" />
+        tools:layout="@layout/fragment_board" >
+        <action
+            android:id="@+id/action_boardFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/commentFragment"
+        android:name="com.buy.together.ui.view.board.eachboard.CommentFragment"
+        android:label="fragment_comment"
+        tools:layout="@layout/fragment_comment" />
 </navigation>

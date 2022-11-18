@@ -3,9 +3,12 @@ package com.buy.together.ui.view.main
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.R
+import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentMainBinding
 import com.buy.together.ui.adapter.BoardAdapter
 import com.buy.together.ui.base.BaseFragment
@@ -27,15 +30,28 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
     }
 
     fun initAdapter(){
-        boardAdapter = BoardAdapter(viewModel)
+        boardAdapter = BoardAdapter()
         binding.rvMainBoard.adapter = boardAdapter
         val random = (1..4).random()
         Log.d(TAG, "initAdapter: $random")
-//        viewModel.getSavedBoard(random)
-//        viewModel.boardListLiveData.observe(viewLifecycleOwner){
-//            boardAdapter.boardList = it
-//            boardAdapter.notifyDataSetChanged()
-//        }
+        viewModel.getBoardList(viewModel.categoryListKr[random]).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Success -> {
+                    val list = mutableListOf<BoardDto>()
+                    response.data.forEach{
+                        list.add(viewModel.makeBoard(it))
+                    }
+                    boardAdapter.boardDtoList = list
+                    boardAdapter.notifyDataSetChanged()
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
+                }
+            }
+        }
     }
 
     fun initListener(){
@@ -60,16 +76,25 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
                     onclickCategory("기타")
                 }
             }
+
             tvAddress.setOnClickListener { showAddressFragment() }
+            
+            boardAdapter.itemClickListener = object : BoardAdapter.ItemClickListener {
+                override fun onClick(view: View, dto : BoardDto) {
+                    viewModel.boardDto = dto
+                    showBoardFragment()
+                }
+            }
         }
     }
 
     fun onclickCategory(type : String){
         viewModel.category = type
-        showBoardFragment()
+        showBoardCategoryFragment()
     }
 
     private fun showAddressFragment(){ findNavController().navigate(R.id.action_mainFragment_to_addressGraph) }
     private fun showBoardWritingFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardWritingFragment) }
-    private fun showBoardFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardFragment)}
+    private fun showBoardCategoryFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardCategoryFragment)}
+    private fun showBoardFragment() {findNavController().navigate(R.id.action_mainFragment_to_boardFragment)}
 }
