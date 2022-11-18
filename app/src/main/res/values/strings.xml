@@ -20,7 +20,7 @@
     <string name="category_daily_neccessity">생활용품</string>
     <string name="category_etc">기타</string>
 
-    <!-- BoardWriting  -->
+    <!-- BoardCategoryWriting  -->
     <string name="label_title">제목</string>
     <string name="label_category">카테고리</string>
     <string name="label_deadline">마감일</string>
@@ -39,7 +39,9 @@
         <item>@string/category_daily_neccessity</item>
         <item>@string/category_etc</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--  BoardFragment  -->
+    <string name="btn_participate">참여하기</string>
+    <string name="btn_cancel">취소하기</string>
 
 </resources>

@@ -180,10 +180,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
                         tools:text="내용입니다. 토마토 3개 공구하실 분 구해요 개당 천원에 공구합니다. 만날장소 및 구매 장소는 아래를 확인해주세요"
                         android:textSize="16sp" />
 
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_participator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        tools:text="참여자 : 아름, 지윤"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -284,13 +297,14 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_participate"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="4"
             android:layout_margin="6dp"
             android:textSize="16sp"
             android:backgroundTint="@color/colorAccent"
             android:gravity="center"
-            android:text="참여하기"
+            android:text="@string/btn_participate"
             />
     </LinearLayout>
 

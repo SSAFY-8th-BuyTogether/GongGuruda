@@ -38,4 +38,14 @@ class BoardRepository {
     }.catch {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }
+    
+    fun updateBoard(boardDto: BoardDto) = flow {
+        val query = db.document(boardDto.category)
+            .collection(boardDto.category)
+            .document(boardDto.id)
+        emit(FireStoreResponse.Loading())
+        emit(FireStoreResponse.Success(query.set(boardDto).await()))
+    }.catch{
+        emit(FireStoreResponse.Failure("데이터를 수정하는데 실패했습니다."))
+    }
 }

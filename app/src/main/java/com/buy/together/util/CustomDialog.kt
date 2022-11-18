@@ -77,7 +77,10 @@ class CustomDialogBasicTwoButton (context: Context, content: String, closeBtnTex
             dialogCloseBtn.text = closeBtnText
             dialogCustomBtn.text = customBtnText
             dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
-            dialogCustomBtn.setOnClickListener { clickListener?.dialogCustomClickListener() }
+            dialogCustomBtn.setOnClickListener {
+                clickListener?.dialogCustomClickListener()
+                dismiss()
+            }
         }
     }
 }

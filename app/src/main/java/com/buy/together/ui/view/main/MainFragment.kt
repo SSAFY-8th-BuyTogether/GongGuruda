@@ -33,7 +33,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
         binding.rvMainBoard.adapter = boardAdapter
         val random = (1..4).random()
         Log.d(TAG, "initAdapter: $random")
-        viewModel.getSavedBoard(viewModel.categoryListKr[random]).observe(viewLifecycleOwner){ response ->
+        viewModel.getBoardList(viewModel.categoryListKr[random]).observe(viewLifecycleOwner){ response ->
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
@@ -77,7 +77,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
             }
             boardAdapter.itemClickListener = object : BoardAdapter.ItemClickListener {
                 override fun onClick(view: View, dto : BoardDto) {
-                    viewModel.dto = dto
+                    viewModel.boardDto = dto
                     showBoardFragment()
                 }
             }

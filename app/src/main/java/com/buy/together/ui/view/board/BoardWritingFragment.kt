@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.buy.together.Application.Companion.sharedPreferences
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.dto.firestore.FireStoreResponse
@@ -20,6 +21,7 @@ import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
+import com.buy.together.util.SharedPreferencesUtil
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import java.util.*
@@ -114,17 +116,31 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         return true
     }
 
-    fun sendBoardData(){ //TODO : boardid = userid + 현재시각
+    fun sendBoardData(){
         val calendar = Calendar.getInstance()
+        var userId = sharedPreferences.getAuthToken()
+        if(userId == null){
+            Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+            Log.e(TAG, "userId is null====================")
+            return
+        }
+        val maxPeople = binding.includeWritingOption.etMaxPeople.editText?.text.toString()
+        val meetPoint = binding.includeWritingOption.etMeetPoint.editText?.text.toString()
+        val buyPoint = binding.includeWritingOption.etBuyPoint.editText?.text.toString()
         val board = BoardDto(
-            "${calendar.timeInMillis}_${"test"}",
-            binding.etTitle.editText?.text.toString(),
-            binding.spinnerCategory.selectedItem.toString(),
-            selectedTime?:0,
-            binding.etPrice.editText?.text.toString().toInt(),
-            binding.etContent.editText?.text.toString(),
-            calendar.timeInMillis,
-            "test",
+            id = "${calendar.timeInMillis}_${userId}",
+            title= binding.etTitle.editText?.text.toString(),
+            category= binding.spinnerCategory.selectedItem.toString(),
+            deadLine =  selectedTime?:0,
+            price= binding.etPrice.editText?.text.toString().toInt(),
+            content= binding.etContent.editText?.text.toString(),
+            writeTime= calendar.timeInMillis,
+            writer= userId,
+            participator = arrayListOf(userId),
+            images= listOf(),
+            maxPeople = if(maxPeople.isEmpty()) null else maxPeople.toInt(),
+            meetPoint= if(meetPoint.isEmpty()) null else meetPoint,
+            buyPoint = if(meetPoint.isEmpty()) null else buyPoint
         )
         showLoadingDialog(requireContext())
         viewModel.saveImage(board,imageAdapter.ImageList)
@@ -154,9 +170,6 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
                 imageLauncher.launch(intent)
-//                val intent = Intent(Intent.ACTION_GET_CONTENT)
-//                intent.setType("image/*")
-//                imageLauncher.launch(intent)
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {

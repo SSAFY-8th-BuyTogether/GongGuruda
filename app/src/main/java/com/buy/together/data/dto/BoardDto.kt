@@ -10,6 +10,7 @@ data class BoardDto (
     var writeTime : Long,
     var writer : String,
 
+    var participator : List<String> = listOf(),
     var images : List<String> = listOf(),
     var maxPeople : Int? = null,
     var meetPoint : String? = null,

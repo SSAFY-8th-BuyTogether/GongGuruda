@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.buy.together.data.dto.BoardDto
-import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.util.RepositoryUtils
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.DocumentSnapshot
@@ -21,15 +20,10 @@ class BoardViewModel : ViewModel() {
     private val fbStore = FirebaseStorage.getInstance().reference.child("images")
 
     var category : String = "" //main -> boardCategory
-
-    //boardlist
-    val boardDtoListLiveData: LiveData<List<BoardDto>> get() = _boardDtoListLiveData
-    private var _boardDtoListLiveData : MutableLiveData<List<BoardDto>> = MutableLiveData()
-
-    var dto : BoardDto? = null //main, boardCategory -> board
+    var boardDto : BoardDto? = null //main, boardCategory -> board
 
     // 카테고리별 데이터 가져오기
-    fun getSavedBoard(category : String) = liveData(Dispatchers.IO){ //TODO : 코루틴, 지역 내에 게시글만 가져오기, 정렬
+    fun getBoardList(category : String) = liveData(Dispatchers.IO){ //TODO : 코루틴, 지역 내에 게시글만 가져오기, 정렬
         Log.d(TAG, "가져오기 시작 =========================")
         if(category == "전체"){
             for(i in 1..4){
@@ -82,25 +76,23 @@ class BoardViewModel : ViewModel() {
                 Log.d(TAG, "getImage: Fail ${it.message}")
             }
     }
-
+    
     //게시글 저장
     fun saveBoard(boardDto : BoardDto) = liveData(Dispatchers.IO){ //TODO : user에 넣기
         repository.saveBoard(boardDto).collect{emit(it)}
     }
 
-//    //이미지 가져오기
-//    suspend fun getImage(url : String) : String{
-//        var _uri : String = ""
-//        fbStore.child(url).downloadUrl
-//            .addOnSuccessListener{
-//                _uri = it.toString()
-//            }
-//            .addOnFailureListener{
-//                Log.d(TAG, "getImage: Fail ${it.message}")
-//            }
-//            .await()
-//        return _uri
-//    }
+    //참여자 추가 true / 참여자 삭제 false
+    fun insertParticipator(boardDto: BoardDto, userId : String, flag : Boolean) = liveData(Dispatchers.IO){
+        val arrayList : ArrayList<String> = ArrayList(boardDto.participator)
+        if(flag){
+            arrayList.add(userId)
+        }else{
+            arrayList.remove(userId)
+        }
+        boardDto.participator = arrayList
+        repository.saveBoard(boardDto).collect{emit(it)}
+    }
 
     fun makeBoard(document : DocumentSnapshot) : BoardDto {
         val dto = BoardDto(
@@ -113,6 +105,7 @@ class BoardViewModel : ViewModel() {
             document["writeTime"] as Long,
             document["writer"] as String,
 
+            document["participator"] as List<String>,
             document["images"] as List<String>,
             (document["maxPeople"] as Long?)?.toInt(),
             document["meetPoint"] as String?,

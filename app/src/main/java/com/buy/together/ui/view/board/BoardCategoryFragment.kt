@@ -37,14 +37,14 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
 
         boardAdapter.itemClickListener = object : BoardAdapter.ItemClickListener {
             override fun onClick(view: View, dto : BoardDto) {
-                viewModel.dto = dto
+                viewModel.boardDto = dto
                 showBoardFragment()
             }
         }
     }
 
     fun getData(){
-        viewModel.getSavedBoard(viewModel.category).observe(viewLifecycleOwner){ response ->
+        viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
@@ -67,7 +67,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
     fun getDataAll(){
         val list = mutableListOf<BoardDto>()
         var count = 0
-        viewModel.getSavedBoard(viewModel.category).observe(viewLifecycleOwner){ response ->
+        viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
