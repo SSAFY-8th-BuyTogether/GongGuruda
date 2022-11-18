@@ -1,32 +1,26 @@
 package com.buy.together.ui.base
 
-import android.app.Activity
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.InsetDrawable
+import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.inflate
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
-import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.buy.together.R
-import com.buy.together.databinding.DialogBasicTwoButtonBinding
+import com.buy.together.util.CustomDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlin.system.exitProcess
 
 abstract class BaseBottomSheetDialogFragment<B : ViewBinding>(private val bindingInflater: (layoutInflater:LayoutInflater) -> B) : BottomSheetDialogFragment() {
     private var _binding: B? = null
     val binding get() = _binding?: throw IllegalStateException("binding fail")
+
+    lateinit var mLoadingDialog: CustomDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +57,18 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding>(private val bindin
         super.onDestroyView()
     }
 
-    fun showCustomToast(message: String) { Toast.makeText(activity, message, Toast.LENGTH_SHORT).show() }
+    fun showToast(message: String) { Toast.makeText(activity, message, Toast.LENGTH_SHORT).show() }
+
+    fun showLoadingDialog(context: Context) {
+        mLoadingDialog = CustomDialog(context)
+        mLoadingDialog.show()
+    }
+
+    fun dismissLoadingDialog() {
+        if (mLoadingDialog.isShowing) {
+            mLoadingDialog.dismiss()
+        }
+    }
 
     private fun setupRatio(view : View){
         val layoutParams = view.layoutParams

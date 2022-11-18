@@ -37,6 +37,9 @@ android {
     viewBinding{
         enabled = true
     }
+    dataBinding{
+        enabled = true
+    }
 }
 
 dependencies {
@@ -86,12 +89,9 @@ dependencies {
     //framework ktx dependency 추가
     implementation "androidx.fragment:fragment-ktx:1.4.1"
 
-    //구글 map api 사용
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    implementation 'com.google.android.gms:play-services-location:21.0.0'
-    //naver map api 사용
-    implementation 'com.naver.maps:map-sdk:3.10.2' //Naver map sdk
-    implementation("com.google.android.gms:play-services-location:16.0.0") //Naver 현재위치추적
+    // 구글 map api 사용
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
 
     //glide
     implementation 'com.github.bumptech.glide:glide:4.12.0'

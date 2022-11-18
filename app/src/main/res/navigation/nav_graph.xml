@@ -246,24 +246,17 @@
             android:id="@+id/addressSearchFragment"
             android:name="com.buy.together.ui.view.address.AddressSearchFragment"
             android:label="AddressSearchFragment"
-            tools:layout="@layout/fragment_address_search">
-            <action
-                android:id="@+id/action_addressSearchFragment_to_addressMapFragment"
-                app:destination="@id/addressMapFragment" />
-            <action
-                android:id="@+id/action_addressSearchFragment_to_addressFragment"
-                app:destination="@id/addressFragment"
-                app:popUpTo="@id/addressFragment" />
-        </dialog>
+            tools:layout="@layout/fragment_address_search"/>
         <dialog
             android:id="@+id/addressMapFragment"
             android:name="com.buy.together.ui.view.address.AddressMapFragment"
             android:label="fragment_address_map"
             tools:layout="@layout/fragment_address_map" >
             <action
-                android:id="@+id/action_addressMapFragment_to_addressFragment"
-                app:destination="@id/addressFragment"
-                app:popUpTo="@id/addressFragment"/>
+                android:id="@+id/action_addressMapFragment_pop"
+                app:popUpTo="@id/addressMapFragment"
+                app:popUpToInclusive="true" >
+            </action>
         </dialog>
     </navigation>
     <fragment

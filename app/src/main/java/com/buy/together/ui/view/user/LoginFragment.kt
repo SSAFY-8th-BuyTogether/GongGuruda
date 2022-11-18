@@ -8,8 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.Application.Companion.sharedPreferences
 import com.buy.together.R
-import com.buy.together.data.dto.firestore.FireStoreInfo
-import com.buy.together.data.dto.firestore.FireStoreResponse
+import com.buy.together.data.model.network.firestore.FireStoreInfo
+import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentLoginBinding
 import com.buy.together.restartActivity
 import com.buy.together.ui.base.BaseFragment

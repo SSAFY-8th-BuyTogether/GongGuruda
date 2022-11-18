@@ -1,12 +1,11 @@
 package com.buy.together.data.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Room
 import com.buy.together.AppDatabase
-import com.buy.together.data.dto.UserDto
-import com.buy.together.data.dto.firestore.FireStoreInfo
-import com.buy.together.data.dto.firestore.FireStoreResponse
+import com.buy.together.data.model.domain.UserDto
+import com.buy.together.data.model.network.firestore.FireStoreInfo
+import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -101,7 +100,7 @@ class UserRepository private constructor(context: Context){
     }
 
 
-    fun join(user:UserDto) = flow{
+    fun join(user: UserDto) = flow{
         val query = fireStore.collection(FireStoreInfo.USER).document(user.id)
         emit(FireStoreResponse.Loading())
         emit(FireStoreResponse.Success(query.set(user).await()))
@@ -116,7 +115,8 @@ class UserRepository private constructor(context: Context){
         val userInfo = loginQuery.get().await().documents[0]
         val fcmTokenList : ArrayList<String> = userInfo.data?.get(FireStoreInfo.USER_FCM_TOKENS) as ArrayList<String>
         fcmTokenList.add(fcmToken)
-        val saveFCMQuery = fireStore.collection(FireStoreInfo.USER).document(userId).update(FireStoreInfo.USER_FCM_TOKENS, fcmTokenList)
+        val saveFCMQuery = fireStore.collection(FireStoreInfo.USER).document(userId).update(
+            FireStoreInfo.USER_FCM_TOKENS, fcmTokenList)
         emit(FireStoreResponse.Success(saveFCMQuery.await()))
     }. catch { error ->
         error.message?.let { errorMessage ->

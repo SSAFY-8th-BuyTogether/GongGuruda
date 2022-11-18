@@ -5,7 +5,7 @@ import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.buy.together.R
-import com.buy.together.data.dto.firestore.FireStoreInfo
+import com.buy.together.data.model.network.firestore.FireStoreInfo
 import com.buy.together.databinding.FragmentLoginFindInfoResultBinding
 import com.buy.together.ui.base.BaseFragment
 
@@ -42,7 +42,7 @@ class LoginFindInfoResultFragment : BaseFragment<FragmentLoginFindInfoResultBind
     }
 
     private fun showFindInfoFragment(type : String) {
-        val findInfoType = if (type==FireStoreInfo.USER_ID) FireStoreInfo.USER_PWD else FireStoreInfo.USER_ID
+        val findInfoType = if (type== FireStoreInfo.USER_ID) FireStoreInfo.USER_PWD else FireStoreInfo.USER_ID
         findNavController().navigate(LoginFindInfoResultFragmentDirections.actionLoginFindInfoResultFragmentToLoginFindInfoFragment(findInfoType))
     }
     private fun showLoginFragment(){ findNavController().navigate(R.id.action_loginFindInfoResultFragment_pop) }

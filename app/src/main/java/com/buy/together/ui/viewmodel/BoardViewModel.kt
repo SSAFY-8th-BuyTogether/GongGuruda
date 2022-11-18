@@ -38,7 +38,7 @@ class BoardViewModel : ViewModel() {
                         savedBoardListDto.add(dto)
                         Log.d(TAG, "가져오기 성공 | dto : $dto==========")
                     }
-                    _boardDtoListLiveData.postValue(savedBoardListDto)
+                     _boardDtoListLiveData.postValue(savedBoardListDto)
                 }
         }
     }

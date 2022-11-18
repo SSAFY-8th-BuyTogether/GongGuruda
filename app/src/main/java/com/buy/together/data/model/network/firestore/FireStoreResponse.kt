@@ -1,4 +1,4 @@
-package com.buy.together.data.dto.firestore
+package com.buy.together.data.model.network.firestore
 
 sealed class FireStoreResponse<out T> {
     class Loading<out T>: FireStoreResponse<T>()

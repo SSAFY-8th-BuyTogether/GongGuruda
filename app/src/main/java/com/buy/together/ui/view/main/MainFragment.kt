@@ -11,6 +11,7 @@ import com.buy.together.ui.adapter.BoardAdapter
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 
+// TODO : 인터넷 연결 여부 체크 필요.
 private const val TAG = "MainFragment_싸피"
 class MainFragment : BaseFragment<FragmentMainBinding>(
     FragmentMainBinding::bind, R.layout.fragment_main
