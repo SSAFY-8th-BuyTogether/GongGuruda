@@ -1,6 +1,7 @@
 package com.buy.together.ui.view.address
 
 
+import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,7 +20,9 @@ class AddressFragment() : BaseBottomSheetDialogFragment<FragmentAddressBinding>(
         rvAdapter = AddressAdapter().apply {
             setItemClickListener(object : AddressAdapter.ItemClickListener{
                 override fun onClickItem(view: View, position: Int, addressDto: AddressDto) {
-                    // TODO : 해당 값 전달 main에 넣는거
+                    val bundle = Bundle()
+                    bundle.putSerializable("address",addressDto)
+                    requireActivity().supportFragmentManager.setFragmentResult("getAddress",bundle)
                     this@AddressFragment.dismiss()
                 }
                 override fun onClickRemove(view: View, position: Int, addressDto: AddressDto) {

@@ -11,6 +11,6 @@ data class AddressDto(
     var lat : Double = 0.0,
     var lng : Double = 0.0,
     var selected : Boolean = false
-){
+):java.io.Serializable{
     fun makeToAddress() = Address(id = addressDetail, address = address, dateTime = Timestamp.now(), point = GeoPoint(lat, lng), selected = selected)
 }

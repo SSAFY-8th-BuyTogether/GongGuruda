@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentMainBinding
 import com.buy.together.ui.adapter.BoardAdapter
@@ -29,6 +30,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
         initAdapter()
         initListener()
         initData()
+        requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
+            if(requestKey == "getAddress" && result["address"] != null){
+                val addressDto : AddressDto = result["address"] as AddressDto
+                binding.tvAddress.text = "${addressDto.address} ▾"
+                initData()
+            }
+        }
     }
 
     fun initAdapter(){

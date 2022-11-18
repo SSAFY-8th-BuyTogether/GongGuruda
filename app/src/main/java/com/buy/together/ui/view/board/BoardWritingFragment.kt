@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.buy.together.Application.Companion.sharedPreferences
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
@@ -35,11 +36,25 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     private lateinit var imageAdapter: ImageAdpater
     private var selectedTime: Long? = null
 
+    private var clickedAddress = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
         setListener()
+        requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
+            if(requestKey == "getAddress" && result["address"] != null){
+                val addressDto : AddressDto = result["address"] as AddressDto
+                if(clickedAddress == 1){
+                    binding.includeWritingOption.etBuyPoint.editText?.setText(addressDto.addressDetail)
+                }else if(clickedAddress == 2){
+                    binding.includeWritingOption.etMeetPoint.editText?.setText(addressDto.addressDetail)
+                }else{
+                    Toast.makeText(requireContext(), "오류가 발생했습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     fun setAdapter() {
@@ -85,6 +100,15 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 if(checkAllWritten()){
                     sendBoardData()
                 }
+            }
+            includeWritingOption.ibBuyPointButton.setOnClickListener {
+                clickedAddress = 1
+                showAddressFragment()
+            }
+
+            includeWritingOption.ibMeetPoint.setOnClickListener {
+                clickedAddress = 2
+                showAddressFragment()
             }
         }
     }
@@ -263,4 +287,6 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         dialog.datePicker.minDate = cal.timeInMillis
         dialog.show()
     }
+
+    private fun showAddressFragment(){ findNavController().navigate(R.id.action_boardWritingFragment_to_addressGraph) }
 }
