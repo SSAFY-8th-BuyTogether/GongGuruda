@@ -19,7 +19,7 @@ class AddressFragment() : BaseBottomSheetDialogFragment<FragmentAddressBinding>(
         rvAdapter = AddressAdapter().apply {
             setItemClickListener(object : AddressAdapter.ItemClickListener{
                 override fun onClickItem(view: View, position: Int, addressDto: AddressDto) {
-                    // TODO : 해당 값 전달
+                    // TODO : 해당 값 전달 main에 넣는거
                     this@AddressFragment.dismiss()
                 }
                 override fun onClickRemove(view: View, position: Int, addressDto: AddressDto) {

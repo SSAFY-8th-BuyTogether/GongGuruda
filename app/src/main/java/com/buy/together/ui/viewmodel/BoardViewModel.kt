@@ -33,7 +33,7 @@ class BoardViewModel : ViewModel() {
             for(i in 1..4){
                 repository.getBoardList(categoryListKr[i]).collect { emit(it) }
             }
-        }else {
+        }else{
             repository.getBoardList(category).collect { emit(it) }
         }
     }
@@ -81,7 +81,7 @@ class BoardViewModel : ViewModel() {
     }
 
     //게시글 저장
-    fun saveBoard(boardDto : BoardDto) = liveData(Dispatchers.IO){ //TODO : user에 넣기
+    fun saveBoard(boardDto : BoardDto) = liveData(Dispatchers.IO){
         repository.saveBoard(boardDto).collect{emit(it)}
     }
 
@@ -93,6 +93,20 @@ class BoardViewModel : ViewModel() {
             content= boardDto.content
         )
         repository.insertBoardToUser(userId,userBoard).collect{emit(it)}
+    }
+
+    fun removeBoardFromUser(userId: String,boardDto: BoardDto) = liveData(Dispatchers.IO) {
+        val userBoard = UserBoard(
+            id= boardDto.id,
+            title= boardDto.title,
+            category= boardDto.category,
+            content= boardDto.content
+        )
+        repository.deleteBoardFromUser(userId,userBoard).collect{emit(it)}
+    }
+
+    fun removeBoard(boardDto: BoardDto) = liveData(Dispatchers.IO) {
+        repository.deleteBoard(boardDto).collect{emit(it)}
     }
 
     //참여자 추가 true / 참여자 삭제 false
@@ -127,6 +141,10 @@ class BoardViewModel : ViewModel() {
         repository.insertComment(category,comment).collect{emit(it)}
     }
 
+    fun removeComment(category: String, comment: CommentDto) = liveData(Dispatchers.IO) {
+        repository.deleteComment(category,comment).collect{emit(it)}
+    }
+
     fun saveCommentToUser(userId: String, category: String, commentDto: CommentDto) = liveData(Dispatchers.IO) {
         val userComment = UserComment(
             id= commentDto.id,
@@ -135,6 +153,16 @@ class BoardViewModel : ViewModel() {
             content= commentDto.content
         )
         repository.insertCommentToUser(userId, userComment).collect{emit(it)}
+    }
+
+    fun removeCommentFromUser(userId: String, category: String, commentDto: CommentDto) = liveData(Dispatchers.IO) {
+        val userComment = UserComment(
+            id= commentDto.id,
+            boardId = commentDto.boardId,
+            category= category,
+            content= commentDto.content
+        )
+        repository.deleteCommentFromUser(userId, userComment).collect{emit(it)}
     }
 
     fun makeBoard(document : DocumentSnapshot) : BoardDto { //TODO : Board내로 옮기기
