@@ -20,7 +20,7 @@
     <string name="category_daily_neccessity">생활용품</string>
     <string name="category_etc">기타</string>
 
-    <!-- BoardWriting  -->
+    <!-- BoardCategoryWriting  -->
     <string name="label_title">제목</string>
     <string name="label_category">카테고리</string>
     <string name="label_deadline">마감일</string>
@@ -39,5 +39,12 @@
         <item>@string/category_daily_neccessity</item>
         <item>@string/category_etc</item>
     </string-array>
+
+    <!--  BoardFragment  -->
+    <string name="btn_participate">참여하기</string>
+    <string name="btn_cancel">취소하기</string>
+
+    <string name="label_meet_place">만날장소</string>
+    <string name="label_buy_place">구매장소</string>
 
 </resources>

@@ -40,7 +40,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_deadline"
+        android:id="@+id/et_meet_point"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -69,10 +69,10 @@
         android:padding="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_location"
-        app:layout_constraintBottom_toBottomOf="@+id/et_deadline"
+        app:layout_constraintBottom_toBottomOf="@id/et_meet_point"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/et_deadline" />
+        app:layout_constraintTop_toTopOf="@id/et_meet_point" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_buy_point"
@@ -82,9 +82,9 @@
         android:layout_marginEnd="10dp"
         android:enabled="false"
         android:hint="@string/label_buy_point"
-        app:layout_constraintEnd_toStartOf="@+id/ib_buy_point_button"
+        app:layout_constraintEnd_toStartOf="@id/ib_buy_point_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_deadline">
+        app:layout_constraintTop_toBottomOf="@id/et_meet_point">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -103,10 +103,10 @@
         android:padding="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_location"
-        app:layout_constraintBottom_toBottomOf="@+id/et_buy_point"
+        app:layout_constraintBottom_toBottomOf="@id/et_buy_point"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="@+id/ib_deadline_date"
-        app:layout_constraintTop_toTopOf="@+id/et_buy_point" />
+        app:layout_constraintEnd_toEndOf="@id/ib_deadline_date"
+        app:layout_constraintTop_toTopOf="@id/et_buy_point" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

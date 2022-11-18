@@ -1,12 +1,8 @@
 package com.buy.together
 
 import android.app.Application
-import android.util.Log
-import androidx.viewbinding.ViewBinding
 import com.buy.together.data.repository.UserRepository
-import com.buy.together.ui.base.BaseFragment
 import com.buy.together.util.SharedPreferencesUtil
-import com.google.firebase.firestore.FirebaseFirestore
 
 class Application : Application() {
 
