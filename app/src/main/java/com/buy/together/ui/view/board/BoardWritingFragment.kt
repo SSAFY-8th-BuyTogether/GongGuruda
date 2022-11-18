@@ -21,7 +21,6 @@ import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
-import com.buy.together.util.SharedPreferencesUtil
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import java.util.*
@@ -118,7 +117,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
 
     fun sendBoardData(){
         val calendar = Calendar.getInstance()
-        var userId = sharedPreferences.getAuthToken()
+        val userId = sharedPreferences.getAuthToken()
         if(userId == null){
             Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
             Log.e(TAG, "userId is null====================")

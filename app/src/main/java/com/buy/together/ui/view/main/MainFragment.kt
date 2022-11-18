@@ -29,7 +29,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
     }
 
     fun initAdapter(){
-        boardAdapter = BoardAdapter(viewModel)
+        boardAdapter = BoardAdapter()
         binding.rvMainBoard.adapter = boardAdapter
         val random = (1..4).random()
         Log.d(TAG, "initAdapter: $random")

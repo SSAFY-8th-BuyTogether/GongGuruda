@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.dto.CommentDto
 import com.buy.together.util.RepositoryUtils
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.DocumentSnapshot
@@ -36,7 +37,6 @@ class BoardViewModel : ViewModel() {
 
     //해당 id의 데이터 가져오기
     fun getEachBoard(category : String, id : String) = liveData(Dispatchers.IO){
-        Log.d(TAG, "getBoard: category : ${category}, id : $id")
         repository.getEachBoard(category,id).collect{emit(it)}
     }
 
@@ -94,23 +94,32 @@ class BoardViewModel : ViewModel() {
         repository.saveBoard(boardDto).collect{emit(it)}
     }
 
-    fun makeBoard(document : DocumentSnapshot) : BoardDto {
-        val dto = BoardDto(
-            document.id,
-            document["title"] as String,
-            document["category"] as String,
-            document["deadLine"] as Long,
-            (document["price"] as Long).toInt(),
-            document["content"] as String,
-            document["writeTime"] as Long,
-            document["writer"] as String,
+    fun getComments(category: String, boardId : String) = liveData(Dispatchers.IO) {
+        repository.getCommentList(category,boardId).collect{emit(it)}
+    }
 
-            document["participator"] as List<String>,
-            document["images"] as List<String>,
-            (document["maxPeople"] as Long?)?.toInt(),
-            document["meetPoint"] as String?,
-            document["meetTime"] as Long?,
-            document["buyPoint"] as String?,
+    fun insertComment(category: String, comment: CommentDto) = liveData(Dispatchers.IO) {
+        repository.insertComment(category,comment).collect{emit(it)}
+    }
+
+    fun makeBoard(document : DocumentSnapshot) : BoardDto { //TODO : Board내로 옮기기
+        val dto = BoardDto(
+            id= document.id,
+            title=  document["title"] as String,
+            category= document["category"] as String,
+            deadLine= document["deadLine"] as Long,
+            price= (document["price"] as Long).toInt(),
+            content=  document["content"] as String,
+            writeTime=  document["writeTime"] as Long,
+            writer = document["writer"] as String,
+
+            writerProfile = document["writerProfile"] as String?,
+            participator = document["participator"] as List<String>,
+            images= document["images"] as List<String>,
+            maxPeople= (document["maxPeople"] as Long?)?.toInt(),
+            meetPoint= document["meetPoint"] as String?,
+            meetTime= document["meetTime"] as Long?,
+            buyPoint= document["buyPoint"] as String?,
         )
         return dto
     }

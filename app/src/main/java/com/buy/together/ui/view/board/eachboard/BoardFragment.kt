@@ -1,11 +1,9 @@
-package com.buy.together.ui.view.board
+package com.buy.together.ui.view.board.eachboard
 
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -65,6 +63,10 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
         binding.btnParticipate.setOnClickListener {
             makeDialog()
         }
+        //댓글 버튼 클릭
+        binding.ibComment.setOnClickListener {
+            showCommentFragment()
+        }
     }
 
     private fun makeDialog(){
@@ -77,7 +79,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
             "확인"
         ) {
             val userID = Application.sharedPreferences.getAuthToken()
-            var boardDto = viewModel.boardDto
+            val boardDto = viewModel.boardDto
             if(userID == null){
                 Log.d(TAG, "makeDialog: userId가 없음")
                 Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
@@ -127,7 +129,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
 
     fun makeView(dto : BoardDto){
         binding.apply {
-            tvLeftPerson.visibility = View.GONE //TODO : 남은 인원 어쩌지
+            tvLeftPerson.visibility = View.GONE
             tvWriterName.text = dto.writer
             tvDday.text = CommonUtils.getDday(dto.deadLine)
             tvWritenTitle.text = dto.title
@@ -178,5 +180,9 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
     private fun backPress(){
         Toast.makeText(requireContext(), "존재하지 않는 게시글입니다.",Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()
+    }
+
+    private fun showCommentFragment(){
+        findNavController().navigate(R.id.action_boardFragment_to_commentFragment)
     }
 }

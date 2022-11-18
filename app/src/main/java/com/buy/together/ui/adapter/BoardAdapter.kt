@@ -9,10 +9,9 @@ import com.bumptech.glide.Glide
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.databinding.ItemBoardBinding
-import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.util.CommonUtils
 
-class BoardAdapter(val viewModel: BoardViewModel) : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
+class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
     private lateinit var binding : ItemBoardBinding
     var boardDtoList : List<BoardDto> = mutableListOf()
 

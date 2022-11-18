@@ -43,5 +43,8 @@
     <!--  BoardFragment  -->
     <string name="btn_participate">참여하기</string>
     <string name="btn_cancel">취소하기</string>
+    
+    <string name="label_meet_place">만날장소</string>
+    <string name="label_buy_place">구매장소</string>
 
 </resources>

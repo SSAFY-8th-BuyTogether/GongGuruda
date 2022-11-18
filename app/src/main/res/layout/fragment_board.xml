@@ -216,7 +216,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="만날장소"
+                        android:text="@string/label_meet_place"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
                     <TextView
@@ -246,7 +246,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="구매장소"
+                        android:text="@string/label_buy_place"
                         android:textStyle="bold"
                         android:textSize="16sp"/>
                     <TextView
@@ -275,6 +275,7 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/ib_comment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

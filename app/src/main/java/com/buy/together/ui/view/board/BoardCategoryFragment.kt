@@ -27,7 +27,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
     }
 
     fun initAdapter(){
-        boardAdapter = BoardAdapter(viewModel)
+        boardAdapter = BoardAdapter()
         binding.rvBoard.adapter = boardAdapter
         if(viewModel.category == "전체"){
             getDataAll()

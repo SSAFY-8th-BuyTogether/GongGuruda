@@ -239,7 +239,16 @@
     </fragment>
     <fragment
         android:id="@+id/boardFragment"
-        android:name="com.buy.together.ui.view.board.BoardFragment"
+        android:name="com.buy.together.ui.view.board.eachboard.BoardFragment"
         android:label="fragment_board"
-        tools:layout="@layout/fragment_board" />
+        tools:layout="@layout/fragment_board" >
+        <action
+            android:id="@+id/action_boardFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/commentFragment"
+        android:name="com.buy.together.ui.view.board.eachboard.CommentFragment"
+        android:label="fragment_comment"
+        tools:layout="@layout/fragment_comment" />
 </navigation>

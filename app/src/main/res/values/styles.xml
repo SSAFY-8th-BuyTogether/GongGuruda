@@ -4,9 +4,29 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CustomBottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+    <style name="DialogAnimation">  // TODO : Need Repair
+        <item name="android:windowEnterAnimation">@anim/slide_enter</item>
+        <item name="android:windowExitAnimation">@anim/slide_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_pop_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_pop_exit</item>
+    </style>
+    <style name="AddressSearchViewStyle" parent="Widget.AppCompat.SearchView" >
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="OutlinedButtonWithIconStyle" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="fontFamily">@font/notosanskr_regular_hestia</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>
