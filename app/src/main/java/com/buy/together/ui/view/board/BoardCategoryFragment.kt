@@ -2,10 +2,12 @@ package com.buy.together.ui.view.board
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardCategoryBinding
 import com.buy.together.ui.adapter.BoardAdapter
 import com.buy.together.ui.base.BaseFragment
@@ -27,19 +29,62 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
     fun initAdapter(){
         boardAdapter = BoardAdapter(viewModel)
         binding.rvBoard.adapter = boardAdapter
-        viewModel.getSavedBoard(viewModel.category)
-        showLoadingDialog(requireContext())
-        viewModel.boardDtoListLiveData.observe(viewLifecycleOwner){
-            boardAdapter.boardDtoList = it
-            boardAdapter.notifyDataSetChanged()
-            if(!viewModel.isLoading){
-                dismissLoadingDialog()
-            }
+        if(viewModel.category == "전체"){
+            getDataAll()
+        }else{
+            getData()
         }
+
         boardAdapter.itemClickListener = object : BoardAdapter.ItemClickListener {
             override fun onClick(view: View, dto : BoardDto) {
                 viewModel.dto = dto
                 showBoardFragment()
+            }
+        }
+    }
+
+    fun getData(){
+        viewModel.getSavedBoard(viewModel.category).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Success -> {
+                    val list = mutableListOf<BoardDto>()
+                    response.data.forEach{
+                        list.add(viewModel.makeBoard(it))
+                    }
+                    boardAdapter.boardDtoList = list
+                    boardAdapter.notifyDataSetChanged()
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
+                }
+            }
+        }
+    }
+
+    fun getDataAll(){
+        val list = mutableListOf<BoardDto>()
+        var count = 0
+        viewModel.getSavedBoard(viewModel.category).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Success -> {
+                    response.data.forEach{
+                        list.add(viewModel.makeBoard(it))
+                    }
+                    count++
+                    if(count == viewModel.categoryListKr.size -1){
+                        boardAdapter.boardDtoList = list
+                        boardAdapter.notifyDataSetChanged()
+                    }
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
+                }
             }
         }
     }

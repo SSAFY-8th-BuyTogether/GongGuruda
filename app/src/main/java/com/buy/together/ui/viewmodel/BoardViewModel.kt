@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.util.RepositoryUtils
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.DocumentSnapshot
@@ -15,7 +16,7 @@ import kotlinx.coroutines.*
 
 private const val TAG = "BoardViewModel_싸피"
 class BoardViewModel : ViewModel() {
-    private var repository = RepositoryUtils.firestoreBoardRepository
+    private var repository = RepositoryUtils.boardRepository
     val categoryListKr = arrayListOf("전체","식품","문구","생활용품","기타")
     private val fbStore = FirebaseStorage.getInstance().reference.child("images")
 
@@ -24,52 +25,18 @@ class BoardViewModel : ViewModel() {
     //boardlist
     val boardDtoListLiveData: LiveData<List<BoardDto>> get() = _boardDtoListLiveData
     private var _boardDtoListLiveData : MutableLiveData<List<BoardDto>> = MutableLiveData()
-    var isLoading = false
 
     var dto : BoardDto? = null //main, boardCategory -> board
 
     // 카테고리별 데이터 가져오기
-    fun getSavedBoard(category : String){ //TODO : 코루틴, 지역 내에 게시글만 가져오기, 정렬
-        isLoading = true
-        _boardDtoListLiveData.postValue(mutableListOf())
+    fun getSavedBoard(category : String) = liveData(Dispatchers.IO){ //TODO : 코루틴, 지역 내에 게시글만 가져오기, 정렬
+        Log.d(TAG, "가져오기 시작 =========================")
         if(category == "전체"){
-            getAllSavedBoard()
-        }else{
-            Log.d(TAG, "가져오기 시작 =========================")
-            repository.getSavedBoardList(category)
-                .addOnSuccessListener { documents ->
-                    val savedBoardListDto : MutableList<BoardDto> = mutableListOf()
-                    for(doc in documents){
-                        val dto = makeBoard(doc)
-                        savedBoardListDto.add(dto)
-                        Log.d(TAG, "가져오기 성공 | dto : $dto==========")
-                        isLoading = false
-                    }
-                    _boardDtoListLiveData.postValue(savedBoardListDto)
-                }
-                .addOnFailureListener{
-                    Log.d(TAG, "통신 오류")
-                    isLoading = false
-                }
-        }
-    }
-
-    //모든 데이터 가져오기
-    fun getAllSavedBoard(){
-        isLoading = true
-        val savedBoardListDto : MutableList<BoardDto> = mutableListOf()
-        for(i in 1..4){
-            repository.getSavedBoardList(categoryListKr[i])
-                .addOnSuccessListener { documents ->
-                    for(doc in documents){
-                        val dto = makeBoard(doc)
-                        savedBoardListDto.add(dto)
-                    }
-                    if(i == 4){
-                        _boardDtoListLiveData.postValue(savedBoardListDto)
-                        isLoading = false
-                    }
-                }
+            for(i in 1..4){
+                repository.getBoardList(categoryListKr[i]).collect { emit(it) }
+            }
+        }else {
+            repository.getBoardList(category).collect { emit(it) }
         }
     }
 

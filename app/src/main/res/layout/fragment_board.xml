@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="?attr/actionBarSize">
@@ -98,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:text="공구 님"
+                        tools:text="공구 님"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/cv_board_img"
@@ -110,8 +111,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-
-                        android:text="D - 7"
+                        tools:text="D - 7"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toTopOf="@+id/tv_left_person"
@@ -123,7 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:text="2명 남았어요!!"
+                        tools:text="2명 남았어요!!"
                         android:textColor="@color/red"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -143,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="16dp"
                         android:singleLine="true"
-                        android:text="제목입니다. 공구해요"
+                        tools:text="제목입니다. 공구해요"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -157,7 +157,7 @@
                             android:id="@+id/tv_writen_category"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="카테고리"
+                            tools:text="카테고리"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -166,7 +166,7 @@
                             android:id="@+id/tv_writen_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2022.01.12"
+                            tools:text="2022.01.12"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -181,13 +181,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="내용입니다. 토마토 3개 공구하실 분 구해요 개당 천원에 공구합니다. 만날장소 및 구매 장소는 아래를 확인해주세요"
+                        tools:text="내용입니다. 토마토 3개 공구하실 분 구해요 개당 천원에 공구합니다. 만날장소 및 구매 장소는 아래를 확인해주세요"
                         android:textSize="16sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/ll_meet_place"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -210,12 +211,13 @@
                         android:layout_marginTop="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="대구시 달서구 군평로 560"/>
+                        tools:text="대구시 달서구 군평로 560"/>
                     <!--  TODO : map 들어갈 자리   -->
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/ll_buy_place"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -239,7 +241,7 @@
                         android:layout_marginTop="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="대구시 달서구 군평로 560"/>
+                        tools:text="대구시 달서구 군평로 560"/>
                     <!--  TODO : map 들어갈 자리   -->
                 </LinearLayout>
             </LinearLayout>
@@ -277,7 +279,7 @@
             android:gravity="center"
             android:layout_weight="3"
             android:textSize="26sp"
-            android:text="3000원"/>
+            tools:text="3000원"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_participate"
