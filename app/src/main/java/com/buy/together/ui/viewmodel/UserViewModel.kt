@@ -3,13 +3,11 @@ package com.buy.together.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import com.buy.together.data.dto.UserDto
-import com.buy.together.data.dto.firestore.FireStoreInfo
+import com.buy.together.data.model.domain.UserDto
+import com.buy.together.data.model.network.firestore.FireStoreInfo
 import com.buy.together.ui.base.BaseViewModel
 import com.buy.together.util.RegularExpression
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 
 class UserViewModel : BaseViewModel() {
     private val _checkUserNameLiveData = MutableLiveData<Any>()
@@ -134,7 +132,8 @@ class UserViewModel : BaseViewModel() {
                 val checkBirthInfo = checkForUserBirth(userBirth)
                 val checkSmsInfo = checkForUserSms(userSms)
                 if (checkName && checkBirthInfo && checkSmsInfo) userRepository.findId(userName, userBirth, userSms).collect(){ emit(it) }
-            }FireStoreInfo.USER_PWD -> {
+            }
+            FireStoreInfo.USER_PWD -> {
                 val checkName = checkForUserName(userName2)
                 val checkId = checkForUserId(userId)
                 if (checkName && checkId) userRepository.findPwd(userName2, userId).collect(){ emit(it) }
@@ -171,7 +170,7 @@ class UserViewModel : BaseViewModel() {
     }
 
     fun logIn(userId : String, userPwd : String, fcmToken:String) = liveData(Dispatchers.IO){
-        userRepository.logIn(userId, userPwd, fcmToken).collect(){ emit(it) }
+        if (userId.isNotBlank() && userPwd.isNotBlank()) userRepository.logIn(userId, userPwd, fcmToken).collect(){ emit(it) }
     }
 
 }

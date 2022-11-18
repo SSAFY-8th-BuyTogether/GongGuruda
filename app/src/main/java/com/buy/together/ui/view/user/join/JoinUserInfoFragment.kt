@@ -7,7 +7,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.buy.together.R
-import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentJoinUserInfoBinding
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.UserViewModel

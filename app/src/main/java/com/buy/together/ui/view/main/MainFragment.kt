@@ -14,6 +14,7 @@ import com.buy.together.ui.adapter.BoardAdapter
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 
+// TODO : 인터넷 연결 여부 체크 필요.
 private const val TAG = "MainFragment_싸피"
 class MainFragment : BaseFragment<FragmentMainBinding>(
     FragmentMainBinding::bind, R.layout.fragment_main
@@ -75,6 +76,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
                     onclickCategory("기타")
                 }
             }
+
+            tvAddress.setOnClickListener { showAddressFragment() }
+            
             boardAdapter.itemClickListener = object : BoardAdapter.ItemClickListener {
                 override fun onClick(view: View, dto : BoardDto) {
                     viewModel.boardDto = dto
@@ -89,6 +93,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
         showBoardCategoryFragment()
     }
 
+    private fun showAddressFragment(){ findNavController().navigate(R.id.action_mainFragment_to_addressGraph) }
     private fun showBoardWritingFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardWritingFragment) }
     private fun showBoardCategoryFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardCategoryFragment)}
     private fun showBoardFragment() {findNavController().navigate(R.id.action_mainFragment_to_boardFragment)}

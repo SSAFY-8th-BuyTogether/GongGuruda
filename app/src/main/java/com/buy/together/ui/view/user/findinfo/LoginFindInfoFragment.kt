@@ -6,8 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.buy.together.R
-import com.buy.together.data.dto.firestore.FireStoreInfo
-import com.buy.together.data.dto.firestore.FireStoreResponse
+import com.buy.together.data.model.network.firestore.FireStoreInfo
+import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentLoginFindInfoBinding
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.UserViewModel
@@ -36,7 +36,7 @@ class LoginFindInfoFragment : BaseFragment<FragmentLoginFindInfoBinding>(Fragmen
                         dismissLoadingDialog()
                     }
                     is FireStoreResponse.Failure -> {
-                        val msg = if (type==FireStoreInfo.USER_ID) "아이디" else "비밀번호"
+                        val msg = if (type== FireStoreInfo.USER_ID) "아이디" else "비밀번호"
                         showCustomDialogBasicOneButton("$msg 찾기에 실패했습니다.\n입력 내용을 확인해주세요.")
                         dismissLoadingDialog()
                     }

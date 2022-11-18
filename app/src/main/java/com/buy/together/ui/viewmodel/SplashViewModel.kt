@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.buy.together.data.dto.firestore.FireStoreInfo
+import com.buy.together.data.model.network.firestore.FireStoreInfo
 import com.buy.together.ui.base.BaseViewModel
 
 class SplashViewModel : BaseViewModel(){
