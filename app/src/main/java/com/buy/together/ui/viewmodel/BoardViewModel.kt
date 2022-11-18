@@ -30,33 +30,11 @@ class BoardViewModel : ViewModel() {
     fun getBoardList(category : String) = liveData(Dispatchers.IO){ //TODO : 코루틴, 지역 내에 게시글만 가져오기, 정렬
         Log.d(TAG, "가져오기 시작 =========================")
         if(category == "전체"){
-            getAllSavedBoard()
-        }else{
-            Log.d(TAG, "가져오기 시작 =========================")
-            repository.getSavedBoardList(category)
-                .addOnSuccessListener { documents ->
-                    val savedBoardListDto : MutableList<BoardDto> = mutableListOf()
-                    for(doc in documents){
-                        val dto = makeBoard(doc)
-                        savedBoardListDto.add(dto)
-                        Log.d(TAG, "가져오기 성공 | dto : $dto==========")
-                    }
-                     _boardDtoListLiveData.postValue(savedBoardListDto)
-                }
-        }
-    }
-
-    //모든 데이터 가져오기
-    fun getAllSavedBoard(){
-        val savedBoardListDto : MutableList<BoardDto> = mutableListOf()
-        for(i in 1..4){
-            repository.getSavedBoardList(categoryListKr[i])
-                .addOnSuccessListener { documents ->
-                    for(doc in documents){
-                        val dto = makeBoard(doc)
-                        savedBoardListDto.add(dto)
-                    }
-                }
+            for(i in 1..4){
+                repository.getBoardList(categoryListKr[i]).collect { emit(it) }
+            }
+        }else {
+            repository.getBoardList(category).collect { emit(it) }
         }
     }
 
@@ -101,7 +79,7 @@ class BoardViewModel : ViewModel() {
                 Log.d(TAG, "getImage: Fail ${it.message}")
             }
     }
-    
+
     //게시글 저장
     fun saveBoard(boardDto : BoardDto) = liveData(Dispatchers.IO){ //TODO : user에 넣기
         repository.saveBoard(boardDto).collect{emit(it)}

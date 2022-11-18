@@ -3,10 +3,10 @@ package com.buy.together.data.repository
 import android.util.Log
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.dto.CommentDto
-import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.data.dto.usercollection.UserBoard
 import com.buy.together.data.dto.usercollection.UserComment
 import com.buy.together.data.dto.usercollection.UserParticipate
+import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

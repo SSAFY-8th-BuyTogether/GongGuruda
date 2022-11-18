@@ -3,10 +3,6 @@ package com.buy.together.ui.base
 
 import android.app.Dialog
 import android.content.Context
-import android.app.Activity
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -17,17 +13,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
 import com.buy.together.R
 import com.buy.together.util.CustomDialog
-import android.widget.Toast
-import androidx.annotation.LayoutRes
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
-import com.buy.together.R
-import com.buy.together.databinding.DialogBasicTwoButtonBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlin.system.exitProcess
 
 
 abstract class BaseBottomSheetDialogFragment<B : ViewBinding>(private val bindingInflater: (layoutInflater:LayoutInflater) -> B) : BottomSheetDialogFragment() {

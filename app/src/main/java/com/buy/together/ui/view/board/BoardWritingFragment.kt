@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.buy.together.Application.Companion.sharedPreferences
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
-import com.buy.together.data.dto.firestore.FireStoreResponse
+import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment

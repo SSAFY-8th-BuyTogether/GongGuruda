@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.buy.together.Application
 import com.buy.together.data.dto.CommentDto
-import com.buy.together.data.dto.firestore.FireStoreResponse
+import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentCommentBinding
 import com.buy.together.ui.adapter.CommentAdapter
 import com.buy.together.ui.base.BaseBottomSheetDialogFragment
@@ -21,7 +21,6 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     FragmentCommentBinding::inflate) {
     private val viewModel: BoardViewModel by activityViewModels()
     private lateinit var commentAdapter : CommentAdapter
-    lateinit var mLoadingDialog: CustomDialog
 
     override fun initView() {
         initAdapter()
@@ -120,16 +119,5 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     private fun backPress(){
         Toast.makeText(requireContext(), "존재하지 않는 게시글입니다.", Toast.LENGTH_SHORT).show()
         findNavController().popBackStack()
-    }
-
-    fun showLoadingDialog(context: Context) {
-        mLoadingDialog = CustomDialog(context)
-        mLoadingDialog.show()
-    }
-
-    fun dismissLoadingDialog() {
-        if (mLoadingDialog.isShowing) {
-            mLoadingDialog.dismiss()
-        }
     }
 }

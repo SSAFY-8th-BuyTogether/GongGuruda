@@ -10,7 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
-import com.buy.together.data.dto.firestore.FireStoreResponse
+import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardBinding
 import com.buy.together.restartActivity
 import com.buy.together.ui.adapter.PagerImageAdapter
