@@ -116,18 +116,54 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     }
 
     fun sendBoardData(){
-        val calendar = Calendar.getInstance()
         val userId = sharedPreferences.getAuthToken()
         if(userId == null){
             Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
             Log.e(TAG, "userId is null====================")
             return
         }
+        val board = setBoardDto(userId)
+        showLoadingDialog(requireContext())
+        viewModel.saveImage(board,imageAdapter.ImageList)
+        viewModel.ImgLiveData.observe(viewLifecycleOwner){
+            board.images = it
+            dismissLoadingDialog()
+            viewModel.saveBoard(board).observe(viewLifecycleOwner){ response ->
+                when(response){
+                    is FireStoreResponse.Loading ->{ showLoadingDialog(requireContext())}
+                    is FireStoreResponse.Success -> {
+                        viewModel.saveBoardToUser(userId,board).observe(viewLifecycleOwner){ response ->
+                            when(response){
+                                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
+                                is FireStoreResponse.Success -> {
+                                    Toast.makeText(requireContext(),"성공적으로 저장되었습니다.",Toast.LENGTH_SHORT).show()
+                                    dismissLoadingDialog()
+                                    findNavController().popBackStack()
+                                }
+                                is FireStoreResponse.Failure -> {
+                                    Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                                    dismissLoadingDialog()
+                                }
+                            }
+                        }
+                        dismissLoadingDialog()
+                    }
+                    is FireStoreResponse.Failure -> {
+                        Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                        dismissLoadingDialog()
+                    }
+                }
+            }
+        }
+    }
+
+    fun setBoardDto(userId : String) : BoardDto{
+        val calendar = Calendar.getInstance()
         val maxPeople = binding.includeWritingOption.etMaxPeople.editText?.text.toString()
         val meetPoint = binding.includeWritingOption.etMeetPoint.editText?.text.toString()
         val buyPoint = binding.includeWritingOption.etBuyPoint.editText?.text.toString()
         val board = BoardDto(
-            id = "${calendar.timeInMillis}_${userId}",
+            id = "Board_${calendar.timeInMillis}_${userId}",
             title= binding.etTitle.editText?.text.toString(),
             category= binding.spinnerCategory.selectedItem.toString(),
             deadLine =  selectedTime?:0,
@@ -141,26 +177,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             meetPoint= if(meetPoint.isEmpty()) null else meetPoint,
             buyPoint = if(meetPoint.isEmpty()) null else buyPoint
         )
-        showLoadingDialog(requireContext())
-        viewModel.saveImage(board,imageAdapter.ImageList)
-        viewModel.ImgLiveData.observe(viewLifecycleOwner){
-            board.images = it
-            dismissLoadingDialog()
-            viewModel.saveBoard(board).observe(viewLifecycleOwner){ response ->
-                when(response){
-                    is FireStoreResponse.Loading ->{ showLoadingDialog(requireContext())}
-                    is FireStoreResponse.Success -> {
-                        showCustomDialogBasicOneButton("성공적으로 저장되었습니다.")
-                        dismissLoadingDialog()
-                        findNavController().popBackStack()
-                    }
-                    is FireStoreResponse.Failure -> {
-                        showCustomDialogBasicOneButton(response.errorMessage)
-                        dismissLoadingDialog()
-                    }
-                }
-            }
-        }
+        return board
     }
 
     fun getGallery() {

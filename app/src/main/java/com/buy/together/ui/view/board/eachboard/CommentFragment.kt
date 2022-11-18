@@ -1,28 +1,20 @@
 package com.buy.together.ui.view.board.eachboard
 
-import android.R
 import android.content.Context
-import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.buy.together.Application
-import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.dto.CommentDto
 import com.buy.together.data.dto.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentCommentBinding
 import com.buy.together.ui.adapter.CommentAdapter
-import com.buy.together.ui.adapter.PagerImageAdapter
 import com.buy.together.ui.base.BaseBottomSheetDialogFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.util.CustomDialog
 import com.google.firebase.Timestamp
-import org.w3c.dom.Comment
 import java.util.*
 
 class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
@@ -40,31 +32,51 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
         binding.apply {
             btnSend.setOnClickListener{
                 val userId : String? = Application.sharedPreferences.getAuthToken()
-                if(viewModel.boardDto != null && userId != null){ //TODO : profileImage
-                    val calendar = Calendar.getInstance()
-                    val comment = CommentDto(
-                        id= "${calendar.timeInMillis}_${userId}",
-                        boardId= viewModel.boardDto!!.id,
-                        writer=  userId,
-                        content= etComment.text.toString(),
-                        time= Timestamp.now()
-                    )
-                    viewModel.insertComment(viewModel.boardDto!!.category, comment).observe(viewLifecycleOwner){ response->
-                        when(response){
-                            is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
-                            is FireStoreResponse.Success -> {
-                                dismissLoadingDialog()
-                                etComment.setText("")
-                                initData()
-                            }
-                            is FireStoreResponse.Failure -> {
-                                dismissLoadingDialog()
-                                backPress()
+                if(viewModel.boardDto == null || userId == null) { //TODO : profileImage
+                    Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                saveComment(userId)
+            }
+        }
+    }
+
+    fun saveComment(userId : String){
+        val calendar = Calendar.getInstance()
+        val comment = CommentDto(
+            id= "Comment_${calendar.timeInMillis}_${userId}",
+            boardId= viewModel.boardDto!!.id,
+            writer=  userId,
+            content= binding.etComment.text.toString(),
+            time= Timestamp.now()
+        )
+        val category = viewModel.boardDto!!.category
+        viewModel.insertComment(category, comment).observe(viewLifecycleOwner){ response->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Success -> {
+                    viewModel.saveCommentToUser(userId, category, comment)
+                        .observe(viewLifecycleOwner) { _response ->
+                            when (_response) {
+                                is FireStoreResponse.Loading -> {
+                                    showLoadingDialog(requireContext())
+                                }
+                                is FireStoreResponse.Success -> {
+                                    dismissLoadingDialog()
+                                    binding.etComment.setText("")
+                                    initData()
+                                }
+                                is FireStoreResponse.Failure -> {
+                                    Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                                    dismissLoadingDialog()
+                                }
                             }
                         }
-                    }
-                }else{
-                    Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    dismissLoadingDialog()
+                    backPress()
                 }
             }
         }

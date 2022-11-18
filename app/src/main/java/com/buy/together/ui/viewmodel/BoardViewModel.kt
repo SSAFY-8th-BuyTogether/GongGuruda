@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.dto.CommentDto
+import com.buy.together.data.dto.usercollection.UserBoard
+import com.buy.together.data.dto.usercollection.UserComment
+import com.buy.together.data.dto.usercollection.UserParticipate
 import com.buy.together.util.RepositoryUtils
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.DocumentSnapshot
@@ -82,6 +85,16 @@ class BoardViewModel : ViewModel() {
         repository.saveBoard(boardDto).collect{emit(it)}
     }
 
+    fun saveBoardToUser(userId: String,boardDto: BoardDto) = liveData(Dispatchers.IO) {
+        val userBoard = UserBoard(
+            id= boardDto.id,
+            title= boardDto.title,
+            category= boardDto.category,
+            content= boardDto.content
+        )
+        repository.insertBoardToUser(userId,userBoard).collect{emit(it)}
+    }
+
     //참여자 추가 true / 참여자 삭제 false
     fun insertParticipator(boardDto: BoardDto, userId : String, flag : Boolean) = liveData(Dispatchers.IO){
         val arrayList : ArrayList<String> = ArrayList(boardDto.participator)
@@ -94,12 +107,34 @@ class BoardViewModel : ViewModel() {
         repository.saveBoard(boardDto).collect{emit(it)}
     }
 
+    fun insertUserParticipate(userId: String, boardDto: BoardDto,flag : Boolean) = liveData(Dispatchers.IO) {
+        val participate = UserParticipate(
+            id= boardDto.id,
+            category= boardDto.category,
+        )
+        if(flag){
+            repository.insertParticipator(userId,participate).collect{emit(it)}
+        }else{
+            repository.deleteParticipator(userId,participate).collect{emit(it)}
+        }
+    }
+
     fun getComments(category: String, boardId : String) = liveData(Dispatchers.IO) {
         repository.getCommentList(category,boardId).collect{emit(it)}
     }
 
     fun insertComment(category: String, comment: CommentDto) = liveData(Dispatchers.IO) {
         repository.insertComment(category,comment).collect{emit(it)}
+    }
+
+    fun saveCommentToUser(userId: String, category: String, commentDto: CommentDto) = liveData(Dispatchers.IO) {
+        val userComment = UserComment(
+            id= commentDto.id,
+            boardId = commentDto.boardId,
+            category= category,
+            content= commentDto.content
+        )
+        repository.insertCommentToUser(userId, userComment).collect{emit(it)}
     }
 
     fun makeBoard(document : DocumentSnapshot) : BoardDto { //TODO : Board내로 옮기기

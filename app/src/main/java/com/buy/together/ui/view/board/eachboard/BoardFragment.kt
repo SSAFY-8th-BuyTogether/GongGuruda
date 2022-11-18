@@ -88,19 +88,38 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
                 Log.d(TAG, "makeDialog: boardId가 없음")
                 backPress()
             }else{
-                val flag: Boolean = (btnText == requireContext().getString(R.string.btn_participate))
-                viewModel.insertParticipator(boardDto,userID, flag).observe(viewLifecycleOwner){ response ->
-                    when(response){
-                        is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
-                        is FireStoreResponse.Success -> {
-                            dismissLoadingDialog()
-                            initData()
+                saveData(userID,btnText,boardDto)
+            }
+        }
+    }
+
+    private fun saveData(userId:String,btnText: String, boardDto:BoardDto){
+        val flag: Boolean = (btnText == requireContext().getString(R.string.btn_participate))
+        viewModel.insertParticipator(boardDto,userId, flag).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Success -> {
+                    viewModel.insertUserParticipate(userId,boardDto,flag)
+                        .observe(viewLifecycleOwner) { response_ ->
+                            when (response_) {
+                                is FireStoreResponse.Loading -> {
+                                    showLoadingDialog(requireContext())
+                                }
+                                is FireStoreResponse.Success -> {
+                                    dismissLoadingDialog()
+                                    initData()
+                                }
+                                is FireStoreResponse.Failure -> {
+                                    Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                                    dismissLoadingDialog()
+                                }
+                            }
                         }
-                        is FireStoreResponse.Failure -> {
-                            dismissLoadingDialog()
-                            backPress()
-                        }
-                    }
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    dismissLoadingDialog()
+                    backPress()
                 }
             }
         }
