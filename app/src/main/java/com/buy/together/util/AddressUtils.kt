@@ -11,7 +11,13 @@ import com.gun0912.tedpermission.normal.TedPermission
 import java.util.*
 
 object AddressUtils {
-    fun getSelectedAddress(address:String) : String {
+
+    fun getSelectedAddress(address:String) : String{
+        return if ("(" in address) address.split(" (")[0]
+        else address
+    }
+
+    fun getRepresentAddress(address:String) : String {
         return if ("시" in address) address.split("시")[0]+"시"
         else if ("구" in address) address.split("구")[0] + "구"
         else address.split("군")[0] + "군"

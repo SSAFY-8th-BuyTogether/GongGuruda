@@ -22,6 +22,23 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_pop_enter</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_pop_exit</item>
     </style>
+    <style name="TabLayoutStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMaxWidth">0dp</item>
+        <item name="tabMode">fixed</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/black_60</item>
+        <item name="tabSelectedTextColor">@color/mainColor</item>
+        <item name="android:fontFamily">@font/notosanskr_regular_hestia</item>
+        <item name="android:includeFontPadding">true</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="tabIndicatorColor">@color/mainColor</item>
+        <item name="tabIndicatorHeight">3dp</item>
+    </style>
+    <style name="TabLayoutText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
     <style name="AddressSearchViewStyle" parent="Widget.AppCompat.SearchView" >
         <item name="android:textSize">16sp</item>
     </style>

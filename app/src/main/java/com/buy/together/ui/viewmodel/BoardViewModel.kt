@@ -11,6 +11,7 @@ import com.buy.together.data.dto.CommentDto
 import com.buy.together.data.dto.usercollection.UserBoard
 import com.buy.together.data.dto.usercollection.UserComment
 import com.buy.together.data.dto.usercollection.UserParticipate
+import com.buy.together.ui.base.BaseViewModel
 import com.buy.together.util.RepositoryUtils
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.DocumentSnapshot
@@ -18,7 +19,8 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.*
 
 private const val TAG = "BoardViewModel_싸피"
-class BoardViewModel : ViewModel() {
+class BoardViewModel : BaseViewModel() {
+
     private var repository = RepositoryUtils.boardRepository
     val categoryListKr = arrayListOf("전체","식품","문구","생활용품","기타")
     private val fbStore = FirebaseStorage.getInstance().reference.child("images")

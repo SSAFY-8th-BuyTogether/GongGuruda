@@ -1,4 +1,4 @@
-package com.buy.together
+package com.buy.together.ui.view
 
 import android.content.Intent
 import android.os.Bundle

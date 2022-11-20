@@ -5,7 +5,7 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/splashFragment">
     <action
-        android:id="@+id/action_global_introFragment"
+        android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
@@ -54,7 +54,8 @@
             app:destination="@id/mainFragment"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"
-            app:popUpTo="@id/mainFragment" />
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_findInfoGraph"
             app:destination="@id/findInfoGraph"
@@ -221,10 +222,36 @@
             app:popExitAnim="@anim/slide_pop_exit"/>
         <action
             android:id="@+id/action_mainFragment_to_addressGraph"
-            app:destination="@id/addressGraph" />
+            app:destination="@id/addressGraph" >
+            <argument
+                android:name="isSelected"
+                app:argType="boolean"
+                android:defaultValue="false" />
+        </action>
         <action
             android:id="@+id/action_mainFragment_to_boardFragment"
             app:destination="@id/boardFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_myInfoModifyFragment"
+            app:destination="@id/myInfoModifyFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" />
+        <action
+            android:id="@+id/action_mainFragment_to_myPwdModifyFragment"
+            app:destination="@id/myPwdModifyFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_myWriteCommentFragment"
+            app:destination="@id/myWriteCommentFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
     </fragment>
     <navigation
         android:id="@+id/addressGraph"
@@ -234,6 +261,10 @@
             android:name="com.buy.together.ui.view.address.AddressFragment"
             android:label="AddressFragment"
             tools:layout="@layout/fragment_address">
+            <argument
+                android:name="isSelected"
+                app:argType="boolean"
+                android:defaultValue="false" />
             <action
                 android:id="@+id/action_addressFragment_to_addressSearchFragment"
                 app:destination="@id/addressSearchFragment" />
@@ -290,4 +321,37 @@
         android:name="com.buy.together.ui.view.board.eachboard.CommentFragment"
         android:label="fragment_comment"
         tools:layout="@layout/fragment_comment" />
+    <fragment
+        android:id="@+id/myInfoModifyFragment"
+        android:name="com.buy.together.ui.view.mypage.MyInfoModifyFragment"
+        android:label="MyInfoModifyFragment"
+        tools:layout="@layout/fragment_my_info_modify">
+        <action
+            android:id="@+id/action_myInfoModifyFragment_pop"
+            app:popUpTo="@id/myInfoModifyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPwdModifyFragment"
+        android:name="com.buy.together.ui.view.mypage.MyPwdModifyFragment"
+        android:label="MyPwdModifyFragment"
+        tools:layout="@layout/fragment_my_pwd_modify">
+        <action
+            android:id="@+id/action_myPwdModifyFragment_pop"
+            app:popUpTo="@id/myPwdModifyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/myWriteCommentFragment"
+        android:name="com.buy.together.ui.view.mypage.MyWriteCommentFragment"
+        android:label="fragment_my_write_comment"
+        tools:layout="@layout/fragment_my_write_comment" >
+        <action
+            android:id="@+id/action_myWriteCommentFragment_pop"
+            app:popUpTo="@id/myWriteCommentFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_myWriteCommentFragment_to_boardFragment"
+            app:destination="@id/boardFragment" />
+    </fragment>
 </navigation>

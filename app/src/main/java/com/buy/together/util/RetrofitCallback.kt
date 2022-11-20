@@ -1,4 +1,4 @@
-package com.ssafy.ws_android_network_01_jiyunlee.util
+package com.buy.together.util
 
 import android.content.Context
 import android.widget.Toast

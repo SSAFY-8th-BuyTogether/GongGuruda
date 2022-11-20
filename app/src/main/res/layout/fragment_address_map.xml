@@ -19,7 +19,7 @@
     <LinearLayout
         android:id="@+id/layout_address_map"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +40,7 @@
             android:id="@+id/mapView"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
+            android:nestedScrollingEnabled="true"
             android:layout_height="0dp"
             android:layout_weight="1"/>
         <View

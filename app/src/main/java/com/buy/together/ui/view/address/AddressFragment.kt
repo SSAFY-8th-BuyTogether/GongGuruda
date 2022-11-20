@@ -1,26 +1,57 @@
 package com.buy.together.ui.view.address
 
 
+import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.buy.together.R
 import com.buy.together.data.model.domain.AddressDto
+import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentAddressBinding
 import com.buy.together.ui.adapter.AddressAdapter
 import com.buy.together.ui.base.BaseBottomSheetDialogFragment
 import com.buy.together.ui.viewmodel.AddressViewModel
 
 class AddressFragment() : BaseBottomSheetDialogFragment<FragmentAddressBinding>(FragmentAddressBinding::inflate) {
+    private val navArgs : AddressFragmentArgs by navArgs()
     private val viewModel: AddressViewModel by viewModels()
     private lateinit var rvAdapter : AddressAdapter
+    private var selectedAddressDto : AddressDto = AddressDto()
 
     override fun initView() {
+        if (navArgs.isSelected) {
+            viewModel.getAddress().observe(viewLifecycleOwner) {
+                if (!(it == null || it.isEmpty())) {
+                    selectedAddressDto = (it as ArrayList<AddressDto>)[0]
+                    setSelectedView(selectedAddressDto)
+                }
+            }
+        }
         rvAdapter = AddressAdapter().apply {
             setItemClickListener(object : AddressAdapter.ItemClickListener{
                 override fun onClickItem(view: View, position: Int, addressDto: AddressDto) {
-                    // TODO : 해당 값 전달
-                    this@AddressFragment.dismiss()
+                    if (navArgs.isSelected) {
+                        viewModel.changeSelectedAddress(selectedAddressDto.apply { selected = false }, addressDto.apply { selected = true })
+                            .observe(viewLifecycleOwner){ response ->
+                            when(response){
+                                is FireStoreResponse.Loading -> showLoadingDialog(requireContext())
+                                is FireStoreResponse.Success -> {
+                                    dismissLoadingDialog()
+                                    this@AddressFragment.dismiss()
+                                }
+                                is FireStoreResponse.Failure -> {
+                                    showToast(response.errorMessage)
+                                    dismissLoadingDialog()
+                                }
+                            }
+                        }
+                    } else{
+                        val bundle = Bundle().apply { putSerializable("address",addressDto) }
+                        requireActivity().supportFragmentManager.setFragmentResult("getAddress",bundle)
+                        this@AddressFragment.dismiss()
+                    }
                 }
                 override fun onClickRemove(view: View, position: Int, addressDto: AddressDto) {
                     viewModel.deleteAddress(addressDto)
@@ -51,6 +82,10 @@ class AddressFragment() : BaseBottomSheetDialogFragment<FragmentAddressBinding>(
             btnAddressSearch.setOnClickListener { showAddressSearchResultFragment() }
             btnAddressLocationSearch.setOnClickListener { showAddressMapFragment() }
         }
+    }
+    private fun setSelectedView(addressDto: AddressDto){
+        binding.layoutAddressSelected.layoutAddressSelected.visibility = View.VISIBLE
+        binding.layoutAddressSelected.tvAddressItem.text = addressDto.addressDetail
     }
     private fun setEmptyView(isSet : Boolean){
         if (isSet){

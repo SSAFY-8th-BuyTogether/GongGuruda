@@ -1,0 +1,227 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_navi_myPage"
+    android:visibility="visible"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="27sp"
+                android:layout_height="27sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:background="@drawable/ic_arrow_back_black"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.Toolbar>
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:layout_marginVertical="5dp"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:text="마이페이지"
+        android:textColor="@color/blackForText"
+        android:textSize="25sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/white_gray" />
+    <LinearLayout
+        android:id="@+id/layout_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="1dp"
+            app:cardCornerRadius="50dp"
+            android:layout_centerHorizontal="true"
+            android:innerRadius="0dp"
+            android:shape="ring"
+            android:thicknessRatio="1.9">
+            <ImageView
+                android:id="@+id/img_user_profile"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/img_profile_default"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+            </ImageView>
+        </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_user_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                    android:textSize="15sp"
+                    android:textColor="@color/black_80"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 님"
+                    android:textSize="14sp"
+                    android:textColor="@color/black_60"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:text="이름 : "
+                    android:textColor="@color/black_60"
+                    android:textSize="11sp" />
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                    android:textSize="11sp"
+                    android:textColor="@color/black_87"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="생년월일 : "
+                    android:textSize="11sp"
+                    android:textColor="@color/black_60"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+                <TextView
+                    android:id="@+id/tv_user_birth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                    android:textSize="11sp"
+                    android:textColor="@color/black_87"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="전화번호 : "
+                    android:textSize="11sp"
+                    android:textColor="@color/black_60"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+                <TextView
+                    android:id="@+id/tv_user_sms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                    android:textSize="11sp"
+                    android:textColor="@color/black_87"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"/>
+        <TextView
+            android:id="@+id/btn_myInfoModify"
+            android:text="@string/tv_profile_change"
+            android:textSize="10sp"
+            android:textColor="@color/gray"
+            android:padding="5dp"
+            android:gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white_gray"/>
+    <TextView
+        android:id="@+id/btn_myPwdModify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="20dp"
+        android:text="비밀번호 변경"
+        android:textSize="14sp"
+        android:background="@drawable/view_rectangle_stroke_gray"
+        android:textColor="@color/blackForText"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:clickable="false"/>
+    <TextView
+        android:id="@+id/btn_myWriteComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="20dp"
+        android:text="내가 쓴 글/댓글"
+        android:textSize="14sp"
+        android:textColor="@color/blackForText"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:clickable="false"/>
+    <TextView
+        android:id="@+id/btn_withDraw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="20dp"
+        android:text="회원 탈퇴"
+        android:textSize="14sp"
+        android:textColor="@color/blackForText"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:clickable="false"/>
+    <TextView
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="20dp"
+        android:text="로그아웃"
+        android:textSize="14sp"
+        android:textColor="@color/blackForText"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:clickable="false"/>
+</LinearLayout>

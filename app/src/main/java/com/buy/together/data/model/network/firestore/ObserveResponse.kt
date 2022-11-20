@@ -1,5 +1,6 @@
 package com.buy.together.data.model.network.firestore
 
+import android.util.Log
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose

@@ -2,23 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_item_address"
+    android:id="@+id/layout_address_selected"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:background="@color/white"
     android:padding="16dp"
     android:layout_marginBottom="2dp"
+    android:visibility="gone"
     android:focusable="true">
     <TextView
         android:id="@+id/tv_address_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="최근 주소"
+        android:text="현재 주소"
         android:textSize="13sp"
         android:textColor="@color/white"
         android:fontFamily="@font/notosanskr_regular_hestia"
-        android:background="@color/mainColor_light"
+        android:background="@color/light_orange"
         android:layout_marginTop="8dp"
         android:maxLines="1"
         android:padding="4dp"
@@ -38,25 +39,6 @@
         app:layout_constraintLeft_toRightOf="@id/tv_address_comment"
         app:layout_constraintTop_toTopOf="@id/tv_address_comment"
         app:layout_constraintBottom_toBottomOf="@id/tv_address_comment"
-        app:layout_constraintRight_toRightOf="@id/barrier"
-        />
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:barrierDirection="left"
-        app:barrierMargin="-10dp"
-        app:constraint_referenced_ids="btn_address_item_delete"/>
-    <ImageView
-        android:id="@+id/btn_address_item_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
-        android:src="@drawable/ic_remove_gray"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

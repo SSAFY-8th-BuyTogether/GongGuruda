@@ -20,16 +20,17 @@ class SharedPreferencesUtil (context: Context) {
         preferences.edit {
             putString(AUTH_TOKEN, authToken)
             apply()
-            Log.d("체크", "icdddcdd!!!e: $authToken")
         }
-        Log.d("체크", "initSharedPreference: ${getAuthToken()}")
+        Application.authToken = Application.sharedPreferences.getAuthToken()
     }
 
     fun getAuthToken(): String? = preferences.getString(AUTH_TOKEN, null)
-    fun deleteAuthToken() {
+    fun removeAuthToken() {
         preferences.edit {
             remove(AUTH_TOKEN)
+            apply()
         }
+        Application.authToken = Application.sharedPreferences.getAuthToken()
     }
 
     fun putFCMToken(fcmToken: String) {
@@ -37,14 +38,17 @@ class SharedPreferencesUtil (context: Context) {
             putString(FCM_TOKEN, fcmToken)
             apply()
         }
+        Application.fcmToken = Application.sharedPreferences.getFCMToken()
     }
 
     fun getFCMToken(): String? = preferences.getString(FCM_TOKEN, null)
 
-    fun deleteFCMToken() {
+    fun removeFCMToken() {
         preferences.edit {
             remove(FCM_TOKEN)
+            apply()
         }
+        Application.fcmToken = Application.sharedPreferences.getFCMToken()
     }
 
 }

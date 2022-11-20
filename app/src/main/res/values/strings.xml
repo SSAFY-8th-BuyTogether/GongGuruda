@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">GongGurumi</string>
     <string name="map_api_key">AIzaSyCU5AO-vy7T0lPoHaHhpWEfxfcHBFMdon4</string>
+
     <!-- Login & Find & Join -->
     <string name="et_find_id">아이디 찾기</string>
     <string name="et_find_pwd">비밀번호 찾기</string>
@@ -15,6 +16,8 @@
     <string name="tv_error_msg_pwd_check_2">비밀번호를 한번 더 입력해주세요.</string>
 
     <!-- Address -->
+    <string name="tv_address_selected">%s ▾</string>
+    <string name="tv_address_unselected">주소를 등록해주세요 ▾</string>
     <string name="tv_address_empty">최근 사용한 주소가</string>
     <string name="tv_address_search_query">지번, 도로명, 건물명으로 검색</string>
     <string name="url_address_search">https://test-1c6be.web.app</string>
@@ -52,8 +55,10 @@
     <!--  BoardFragment  -->
     <string name="btn_participate">참여하기</string>
     <string name="btn_cancel">취소하기</string>
-
     <string name="label_meet_place">만날장소</string>
     <string name="label_buy_place">구매장소</string>
 
+    <!-- My-page-Fragment -->
+    <string name="tv_profile_change"><u>수정하기</u></string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

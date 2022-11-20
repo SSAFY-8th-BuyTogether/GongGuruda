@@ -35,4 +35,5 @@
     <color name="white_gray">#E8E6E6</color>
     <color name="white">#FFFFFFFF</color>
     <color name="pinkish_orange">#ff7146</color>
+    <color name="light_orange">#FF9F82</color>
 </resources>

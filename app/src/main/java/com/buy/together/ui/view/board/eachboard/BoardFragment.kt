@@ -12,9 +12,9 @@ import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardBinding
-import com.buy.together.restartActivity
 import com.buy.together.ui.adapter.PagerImageAdapter
 import com.buy.together.ui.base.BaseFragment
+import com.buy.together.ui.view.restartActivity
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.util.CommonUtils
 import java.lang.Math.abs
