@@ -8,6 +8,7 @@ import com.buy.together.data.dto.usercollection.UserComment
 import com.buy.together.data.dto.usercollection.UserParticipate
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -17,9 +18,11 @@ class BoardRepository {
     private val boardDB = FirebaseFirestore.getInstance().collection("Board")
     private val userDB = FirebaseFirestore.getInstance().collection("User")
 
+    //Board
     fun getBoardList(category: String) = flow {
        Log.d(TAG, "getBoardList: 카테고리 : ${category}")
         val query = boardDB.document(category).collection(category)
+            .orderBy("deadLine",Query.Direction.ASCENDING)
         emit(FireStoreResponse.Loading())
         emit(FireStoreResponse.Success(query.get().await().documents))
     }.catch {
@@ -44,12 +47,32 @@ class BoardRepository {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }
 
+    fun deleteBoard(boardDto : BoardDto)= flow {
+        val query = boardDB.document(boardDto.category)
+            .collection(boardDto.category)
+            .document(boardDto.id)
+        emit(FireStoreResponse.Loading())
+        emit(FireStoreResponse.Success(query.delete().await()))
+    }.catch {
+        emit(FireStoreResponse.Failure("데이터를 삭제하는데 실패했습니다."))
+    }
+
     fun insertBoardToUser(userId:String, dto : UserBoard)= flow{
         val query = userDB.document(userId)
             .collection("Board")
             .document(dto.id)
         emit(FireStoreResponse.Loading())
         emit(FireStoreResponse.Success(query.set(dto).await()))
+    }.catch {
+        emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
+    }
+
+    fun deleteBoardFromUser(userId:String, dto : UserBoard)= flow{
+        val query = userDB.document(userId)
+            .collection("Board")
+            .document(dto.id)
+        emit(FireStoreResponse.Loading())
+        emit(FireStoreResponse.Success(query.delete().await()))
     }.catch {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }
@@ -93,12 +116,32 @@ class BoardRepository {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }
 
+    fun deleteComment(category : String ,comment: CommentDto) = flow {
+        val query = boardDB.document(category)
+            .collection(category).document(comment.boardId)
+            .collection("Comment").document(comment.id)
+        emit(FireStoreResponse.Loading())
+        emit(FireStoreResponse.Success(query.delete().await()))
+    }.catch{
+        emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
+    }
+
     fun insertCommentToUser(userId:String, dto : UserComment)= flow{
         val query = userDB.document(userId)
             .collection("Comment")
             .document(dto.id)
         emit(FireStoreResponse.Loading())
         emit(FireStoreResponse.Success(query.set(dto).await()))
+    }.catch {
+        emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
+    }
+
+    fun deleteCommentFromUser(userId:String, dto : UserComment)= flow{
+        val query = userDB.document(userId)
+            .collection("Comment")
+            .document(dto.id)
+        emit(FireStoreResponse.Loading())
+        emit(FireStoreResponse.Success(query.delete().await()))
     }.catch {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }

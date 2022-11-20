@@ -3,8 +3,12 @@ package com.buy.together.ui.view.board
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
@@ -28,7 +32,10 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
 
     fun initAdapter(){
         boardAdapter = BoardAdapter()
+        val decoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        binding.rvBoard.addItemDecoration(decoration)
         binding.rvBoard.adapter = boardAdapter
+
         if(viewModel.category == "전체"){
             getDataAll()
         }else{
@@ -39,6 +46,60 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
             override fun onClick(view: View, dto : BoardDto) {
                 viewModel.boardDto = dto
                 showBoardFragment()
+            }
+
+            override fun onItemOptionClick(view: View, dto: BoardDto) {
+                popUpMenu(view,dto)
+            }
+        }
+    }
+
+    private fun popUpMenu(view : View, dto : BoardDto){
+        val popupMenu = PopupMenu(requireContext(),view)
+        popupMenu.menuInflater.inflate(R.menu.menu_option_comment,popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener{ item ->
+            when(item.itemId) {
+                R.id.comment_delete -> deleteComment(dto)
+            }
+            true
+        }
+        popupMenu.show()
+    }
+
+    private fun deleteComment(dto : BoardDto){
+        val userId : String? = Application.sharedPreferences.getAuthToken()
+        if(userId == null) {
+            Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+            return
+        }
+        viewModel.removeBoardFromUser(userId,dto).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Success -> {
+                    viewModel.removeBoard(dto).observe(viewLifecycleOwner){ _response ->
+                        when(_response){
+                            is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                            is FireStoreResponse.Success -> {
+                                dismissLoadingDialog()
+                                if(viewModel.category == "전체"){
+                                    getDataAll()
+                                }else{
+                                    getData()
+                                }
+                                Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                            is FireStoreResponse.Failure -> {
+                                Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                dismissLoadingDialog()
+                            }
+                        }
+                    }
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
+                }
             }
         }
     }
@@ -76,6 +137,8 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
                     }
                     count++
                     if(count == viewModel.categoryListKr.size -1){
+                        list.sortBy { it.deadLine }
+                        boardAdapter.boardDtoList = mutableListOf()
                         boardAdapter.boardDtoList = list
                         boardAdapter.notifyDataSetChanged()
                     }

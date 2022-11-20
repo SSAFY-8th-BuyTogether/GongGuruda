@@ -13,7 +13,7 @@ data class UserDto(
     var id : String,
     var nickName : String,
     var password : String,
-    val profile : String,
+    var profile : String,
     val devices : ArrayList<String>
 ){
     constructor() : this("", "","","","","", "", arrayListOf())

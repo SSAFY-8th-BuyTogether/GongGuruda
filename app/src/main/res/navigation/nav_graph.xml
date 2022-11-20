@@ -297,7 +297,11 @@
         android:id="@+id/boardWritingFragment"
         android:name="com.buy.together.ui.view.board.BoardWritingFragment"
         android:label="fragment_board_writing"
-        tools:layout="@layout/fragment_board_writing" />
+        tools:layout="@layout/fragment_board_writing" >
+        <action
+            android:id="@+id/action_boardWritingFragment_to_addressGraph"
+            app:destination="@id/addressGraph" />
+    </fragment>
     <fragment
         android:id="@+id/boardCategoryFragment"
         android:name="com.buy.together.ui.view.board.BoardCategoryFragment"

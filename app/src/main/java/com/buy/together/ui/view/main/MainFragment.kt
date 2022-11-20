@@ -2,16 +2,19 @@ package com.buy.together.ui.view.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.GravityCompat
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.buy.together.Application.Companion.sharedPreferences
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.model.domain.AddressDto
@@ -51,31 +54,21 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         initMyPageNavi()
         initAdapter()
         initListener()
+        initData()
+        requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
+            if(requestKey == "getAddress" && result["address"] != null){
+                val addressDto : AddressDto = result["address"] as AddressDto
+                binding.tvAddress.text = "${addressDto.address} ▾"
+                initData()
+            }
+        }
     }
 
     private fun initAdapter(){
         boardAdapter = BoardAdapter()
+        val decoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+        binding.rvMainBoard.addItemDecoration(decoration)
         binding.rvMainBoard.adapter = boardAdapter
-        val random = (1..4).random()
-        Log.d(TAG, "initAdapter: $random")
-        viewModel.getBoardList(viewModel.categoryListKr[random]).observe(viewLifecycleOwner){ response ->
-            when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
-                is FireStoreResponse.Success -> {
-                    val list = mutableListOf<BoardDto>()
-                    response.data.forEach{
-                        list.add(viewModel.makeBoard(it))
-                    }
-                    boardAdapter.boardDtoList = list
-                    boardAdapter.notifyDataSetChanged()
-                    dismissLoadingDialog()
-                }
-                is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
-                    dismissLoadingDialog()
-                }
-            }
-        }
     }
 
     private fun initListener(){
@@ -105,6 +98,79 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                 override fun onClick(view: View, dto : BoardDto) {
                     viewModel.boardDto = dto
                     showBoardFragment()
+                }
+
+                override fun onItemOptionClick(view: View, dto: BoardDto) {
+                    popUpMenu(view, dto)
+                }
+            }
+        }
+    }
+
+    private fun initData(){
+        viewModel.getBoardList(viewModel.categoryListKr[1]).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Success -> {
+                    val list = mutableListOf<BoardDto>()
+                    response.data.forEach{
+                        if((it["meetPoint"] as String).contains("구미시")){ //TODO : 현재 위치 받아오기
+                            list.add(viewModel.makeBoard(it))
+                        }
+                    }
+                    boardAdapter.boardDtoList = list
+                    boardAdapter.notifyDataSetChanged()
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
+                }
+            }
+        }
+    }
+
+    private fun popUpMenu(view : View, dto : BoardDto){
+        val popupMenu = PopupMenu(requireContext(),view)
+        popupMenu.menuInflater.inflate(R.menu.menu_option_comment,popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener{ item ->
+            when(item.itemId) {
+                R.id.comment_delete -> deleteComment(dto)
+            }
+            true
+        }
+        popupMenu.show()
+    }
+
+    private fun deleteComment(dto : BoardDto){
+        val userId : String? = Application.sharedPreferences.getAuthToken()
+        if(userId == null) {
+            Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+            return
+        }
+        viewModel.removeBoardFromUser(userId,dto).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Success -> {
+                    viewModel.removeBoard(dto).observe(viewLifecycleOwner){ _response ->
+                        when(_response){
+                            is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                            is FireStoreResponse.Success -> {
+                                dismissLoadingDialog()
+                                initData()
+                                Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                            is FireStoreResponse.Failure -> {
+                                Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                dismissLoadingDialog()
+                            }
+                        }
+                    }
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
                 }
             }
         }

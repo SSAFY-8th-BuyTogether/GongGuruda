@@ -167,13 +167,14 @@ open class UserViewModel : BaseViewModel() {
         userRepository.modify(userDto.makeToUser()).collect(){ emit(it) }
     }
 
-    fun join(userNickName:String, userId: String, userPwd: String, userPwdCheck:String) = liveData(Dispatchers.IO){
+    fun join(userNickName:String, userId: String, userPwd: String, userPwdCheck:String, profileImg : String) = liveData(Dispatchers.IO){
         val checkPwdInfo = checkForUserPwd(userPwd, userPwdCheck)
         if (checkPwdInfo) {
             userDto.apply {
                 nickName = userNickName
                 id = userId
                 password = userPwd
+                profile = profileImg
             }
             userRepository.join(userDto.makeToUser()).collect(){ emit(it) }
         }

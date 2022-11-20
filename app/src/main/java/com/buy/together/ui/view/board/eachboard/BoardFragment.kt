@@ -16,20 +16,38 @@ import com.buy.together.ui.adapter.PagerImageAdapter
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.view.restartActivity
 import com.buy.together.ui.viewmodel.BoardViewModel
+import com.buy.together.util.AddressUtils
 import com.buy.together.util.CommonUtils
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import java.lang.Math.abs
 
 private const val TAG = "BoardFragment_싸피"
 class BoardFragment : BaseFragment<FragmentBoardBinding>(
     FragmentBoardBinding::bind, R.layout.fragment_board
-) {
+){
     private val viewModel: BoardViewModel by activityViewModels()
+
+    private lateinit var mapMeetFragment : SupportMapFragment
+    private lateinit var googleMeetMap: GoogleMap
+    private lateinit var mapBuyFragment : SupportMapFragment
+    private lateinit var googleBuyMap: GoogleMap
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        binding.collapseToolbar.inflateMenu()
         initAdapter()
         initListener()
         initData()
+        initMap()
+    }
+
+    private fun initMap(){
+        mapMeetFragment = childFragmentManager.findFragmentById(R.id.fcv_meet_map) as SupportMapFragment
+        mapMeetFragment.getMapAsync { setMeetMap(it)}
+        mapBuyFragment = childFragmentManager.findFragmentById(R.id.fcv_buy_map) as SupportMapFragment
+        mapBuyFragment.getMapAsync{ setBuyMap(it) }
     }
 
     private fun initAdapter(){
@@ -157,13 +175,13 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
             tvWritenContent.text = dto.content
             if(dto.meetPoint != null){
                 llMeetPlace.visibility = View.VISIBLE
-                tvMeetAddress.text = "임시주소" //TODO : 변환 코드 넣기
+                tvMeetAddress.text = dto.meetPoint
             }else{
                 llMeetPlace.visibility = View.GONE
             }
             if(dto.buyPoint != null){
                 llBuyPlace.visibility = View.VISIBLE
-                tvBuyAddress.text = "임시주소"
+                tvBuyAddress.text = dto.buyPoint
             }else{
                 llBuyPlace.visibility = View.GONE
             }
@@ -194,6 +212,73 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
             }
         }
         dismissLoadingDialog()
+    }
+
+    //Map
+    private fun setMeetMap(map : GoogleMap){
+        val dto = viewModel.boardDto
+        if(dto == null){
+            backPress()
+            return
+        }
+        if(dto.meetPoint == null) return
+        val place : LatLng = AddressUtils.getPointsFromGeo(requireContext(), dto.meetPoint!!) ?: return
+        val marker = MarkerOptions().position(place)
+        map.addMarker(marker)
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(place, 15f)
+        map.moveCamera(cameraUpdate)
+        googleMeetMap = map
+    }
+
+    private fun setBuyMap(map : GoogleMap){
+        val dto = viewModel.boardDto
+        if(dto == null){
+            backPress()
+            return
+        }
+        if(dto.buyPoint == null) return
+        val place : LatLng = AddressUtils.getPointsFromGeo(requireContext(), dto.buyPoint!!) ?: return
+        val marker = MarkerOptions().position(place)
+        map.addMarker(marker)
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(place, 15f)
+        map.moveCamera(cameraUpdate)
+        googleBuyMap = map
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapMeetFragment.onDestroy()
+        mapBuyFragment.onDestroy()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapMeetFragment.onStart()
+        mapBuyFragment.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapMeetFragment.onStop()
+        mapBuyFragment.onStop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapMeetFragment.onResume()
+        mapBuyFragment.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapMeetFragment.onPause()
+        mapBuyFragment.onPause()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapMeetFragment.onLowMemory()
+        mapBuyFragment.onLowMemory()
     }
 
     private fun backPress(){
