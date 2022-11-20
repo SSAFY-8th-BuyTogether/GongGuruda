@@ -157,13 +157,14 @@ class UserViewModel : BaseViewModel() {
         return false
     }
 
-    fun join(userNickName:String, userId: String, userPwd: String, userPwdCheck:String) = liveData(Dispatchers.IO){
+    fun join(userNickName:String, userId: String, userPwd: String, userPwdCheck:String, profileImg : String) = liveData(Dispatchers.IO){
         val checkPwdInfo = checkForUserPwd(userPwd, userPwdCheck)
         if (checkPwdInfo) {
             user.apply {
                 nickName = userNickName
                 id = userId
                 password = userPwd
+                profile = profileImg
             }
             userRepository.join(user).collect(){ emit(it) }
         }

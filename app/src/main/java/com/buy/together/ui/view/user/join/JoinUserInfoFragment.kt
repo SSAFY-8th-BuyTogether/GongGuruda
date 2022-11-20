@@ -1,16 +1,22 @@
 package com.buy.together.ui.view.user.join
 
+import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.bumptech.glide.Glide
 import com.buy.together.R
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentJoinUserInfoBinding
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.UserViewModel
+import com.buy.together.util.GalleryUtils
 import com.buy.together.util.RegularExpression
 import com.buy.together.util.hideKeyboard
 
@@ -18,12 +24,14 @@ class JoinUserInfoFragment : BaseFragment<FragmentJoinUserInfoBinding>(FragmentJ
     private val viewModel: UserViewModel by navGraphViewModels(R.id.joinGraph)
     private var isNickNameChecked : Boolean = false
     private var isIdChecked : Boolean = false
+    private var profileImage : Uri = Uri.parse(GalleryUtils.baseProfile)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setObservers()
         setFocusChangeListener()
         setTextChangeListener()
+        Log.d("싸피", "uri : $profileImage")
 
         binding.fragmentContent.setOnClickListener { hideKeyboard(it) }
         binding.apply {
@@ -64,7 +72,14 @@ class JoinUserInfoFragment : BaseFragment<FragmentJoinUserInfoBinding>(FragmentJ
             }
             btnSubmit.setOnClickListener {
                 if (getIsNickNameChecked()&&getIsIdChecked()){
-                    viewModel.join(getUserNickName(), getUserId(), getUserPwd(), getUserPwdCheck())
+                    showLoadingDialog(requireContext())
+                    GalleryUtils.changeProfileImg(getUserId(),profileImage).observe(viewLifecycleOwner){ img->
+                        dismissLoadingDialog()
+                        if(img == null){
+                            Log.d("싸피", "onViewCreated: null=======================")
+                            return@observe
+                        }
+                        viewModel.join(getUserNickName(), getUserId(), getUserPwd(), getUserPwdCheck(),img)
                         .observe(viewLifecycleOwner){ response ->
                             when(response){
                                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
@@ -78,10 +93,32 @@ class JoinUserInfoFragment : BaseFragment<FragmentJoinUserInfoBinding>(FragmentJ
                                 }
                             }
                         }
+                    }
                 }
+            }
+            ivCameraButton.setOnClickListener{
+                GalleryUtils.getGallery(requireContext(), imageLauncher)
             }
         }
     }
+    
+    private val imageLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val imageUri: Uri? = result.data?.data
+            Log.d("싸피", "uri : $imageUri")
+            if (imageUri != null) {
+                profileImage = imageUri
+                Glide.with(requireActivity())
+                    .load(imageUri)
+                    .into(binding.ivWriterProfile)
+            }else{
+                Toast.makeText(requireContext(), "이미지를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    
     private fun setObservers(){
         viewModel.run {
             checkUserNickNameLiveData.observe(viewLifecycleOwner){

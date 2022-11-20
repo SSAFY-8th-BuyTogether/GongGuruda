@@ -11,17 +11,17 @@ import com.buy.together.data.dto.CommentDto
 import com.buy.together.data.dto.usercollection.UserBoard
 import com.buy.together.data.dto.usercollection.UserComment
 import com.buy.together.data.dto.usercollection.UserParticipate
-import com.buy.together.util.RepositoryUtils
-import com.google.android.gms.tasks.OnSuccessListener
+import com.buy.together.data.repository.BoardRepository
+import com.buy.together.util.GalleryUtils.insertImage
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.*
 
 private const val TAG = "BoardViewModel_싸피"
 class BoardViewModel : ViewModel() {
-    private var repository = RepositoryUtils.boardRepository
+    private var repository = BoardRepository()
     val categoryListKr = arrayListOf("전체","식품","문구","생활용품","기타")
-    private val fbStore = FirebaseStorage.getInstance().reference.child("images")
 
     var category : String = "" //main -> boardCategory
     var boardDto : BoardDto? = null //main, boardCategory -> board
@@ -54,30 +54,16 @@ class BoardViewModel : ViewModel() {
         }
         val list = arrayListOf<String>()
         for(i in 0..imgs.size-1){ //이미지 저장
-            fbStore.child("IMAGE_${boardDto.id}_${i}.png").putFile(imgs[i])
-                .addOnSuccessListener{
-                    CoroutineScope(Dispatchers.IO).launch {
-                        getImage("IMAGE_${boardDto.id}_${i}.png"){
-                            list.add(it.toString())
-                            Log.d(TAG, "이미지 저장 성공~~~~~~~~~~$i\n image : ${list}")
-                            if (list.size == imgs.size) {
-                                Log.d(TAG, "모든 이미지 완료 ${list}")
-                                boardDto.images = list
-                                _ImgLiveData.postValue(list)
-                            }
-                        }
-                    }
+            insertImage("IMAGE_${boardDto.id}_${i}.png",imgs[i]){
+                list.add(it.toString())
+                Log.d(TAG, "이미지 저장 성공~~~~~~~~~~$i\n image : ${list}")
+                if (list.size == imgs.size) {
+                    Log.d(TAG, "모든 이미지 완료 ${list}")
+                    boardDto.images = list
+                    _ImgLiveData.postValue(list)
                 }
-        }
-    }
-
-    //이미지 가져오기
-    fun getImage(url : String, listener : OnSuccessListener<Uri>){
-        fbStore.child(url).downloadUrl
-            .addOnSuccessListener(listener)
-            .addOnFailureListener{
-                Log.d(TAG, "getImage: Fail ${it.message}")
             }
+        }
     }
 
     //게시글 저장
@@ -90,7 +76,8 @@ class BoardViewModel : ViewModel() {
             id= boardDto.id,
             title= boardDto.title,
             category= boardDto.category,
-            content= boardDto.content
+            content= boardDto.content,
+            time= Timestamp.now(),
         )
         repository.insertBoardToUser(userId,userBoard).collect{emit(it)}
     }
@@ -100,7 +87,8 @@ class BoardViewModel : ViewModel() {
             id= boardDto.id,
             title= boardDto.title,
             category= boardDto.category,
-            content= boardDto.content
+            content= boardDto.content,
+            time= Timestamp.now(),
         )
         repository.deleteBoardFromUser(userId,userBoard).collect{emit(it)}
     }
@@ -149,8 +137,10 @@ class BoardViewModel : ViewModel() {
         val userComment = UserComment(
             id= commentDto.id,
             boardId = commentDto.boardId,
+            boardTitle= commentDto.boardTitle,
             category= category,
-            content= commentDto.content
+            content= commentDto.content,
+            time= Timestamp.now(),
         )
         repository.insertCommentToUser(userId, userComment).collect{emit(it)}
     }
@@ -158,9 +148,12 @@ class BoardViewModel : ViewModel() {
     fun removeCommentFromUser(userId: String, category: String, commentDto: CommentDto) = liveData(Dispatchers.IO) {
         val userComment = UserComment(
             id= commentDto.id,
-            boardId = commentDto.boardId,
+            boardId= commentDto.boardId,
+            boardTitle= commentDto.boardTitle,
             category= category,
-            content= commentDto.content
+            content= commentDto.content,
+            time= Timestamp.now(),
+
         )
         repository.deleteCommentFromUser(userId, userComment).collect{emit(it)}
     }

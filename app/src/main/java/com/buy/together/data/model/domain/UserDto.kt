@@ -8,7 +8,7 @@ data class UserDto(
     var id : String,
     var nickName : String,
     var password : String,
-    val profile : String,
+    var profile : String,
     val devices : ArrayList<String>
 ){
     constructor() : this("", "","","","","", "", arrayListOf()) //TODO : profile 디폴트 값 결정 : @drawable/img_profile_default.png

@@ -46,6 +46,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
         val comment = CommentDto(
             id= "Comment_${calendar.timeInMillis}_${userId}",
             boardId= viewModel.boardDto!!.id,
+            boardTitle= viewModel.boardDto!!.title,
             writer=  userId,
             content= binding.etComment.text.toString(),
             time= Timestamp.now()

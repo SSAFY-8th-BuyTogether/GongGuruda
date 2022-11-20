@@ -2,10 +2,8 @@ package com.buy.together.ui.view.board
 
 import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -22,8 +20,7 @@ import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.normal.TedPermission
+import com.buy.together.util.GalleryUtils
 import java.util.*
 
 private const val TAG = "BoardWritingFragment_싸피"
@@ -228,25 +225,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     }
 
     fun getGallery() {
-        getPermission(object : PermissionListener {
-            override fun onPermissionGranted() {
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-                imageLauncher.launch(intent)
-            }
-
-            override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                Toast.makeText(requireContext(), "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun getPermission(listener: PermissionListener){
-        TedPermission.create()
-            .setPermissionListener(listener)
-            .setDeniedMessage("권한을 허용해주세요")
-            .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            .check()
+        GalleryUtils.getGallery(requireContext(), imageLauncher)
     }
 
     private val imageLauncher = registerForActivityResult(
