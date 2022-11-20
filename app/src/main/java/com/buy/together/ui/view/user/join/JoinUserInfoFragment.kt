@@ -32,7 +32,6 @@ class JoinUserInfoFragment : BaseFragment<FragmentJoinUserInfoBinding>(FragmentJ
         setObservers()
         setFocusChangeListener()
         setTextChangeListener()
-        Log.d("싸피", "uri : $profileImage")
 
         binding.fragmentContent.setOnClickListener { hideKeyboard(it) }
         binding.apply {
@@ -76,10 +75,7 @@ class JoinUserInfoFragment : BaseFragment<FragmentJoinUserInfoBinding>(FragmentJ
                     showLoadingDialog(requireContext())
                     GalleryUtils.changeProfileImg(getUserId(),profileImage).observe(viewLifecycleOwner){ img->
                         dismissLoadingDialog()
-                        if(img == null){
-                            Log.d("싸피", "onViewCreated: null=======================")
-                            return@observe
-                        }
+                        if(img == null){ return@observe }
                         viewModel.join(getUserNickName(), getUserId(), getUserPwd(), getUserPwdCheck(),img)
                         .observe(viewLifecycleOwner){ response ->
                             when(response){
