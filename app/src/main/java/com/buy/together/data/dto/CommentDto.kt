@@ -13,6 +13,7 @@ data class CommentDto(
 
     var writerProfile : String? = null,
 ){
+    var mention : String? = null
     constructor(doc : DocumentSnapshot) : this(
         id= doc[COMMENT_ID] as String,
         boardId= doc[COMMENT_BOARD] as String,
@@ -20,8 +21,10 @@ data class CommentDto(
         writer= doc[COMMENT_WRITER] as String,
         content= doc[COMMENT_CONTENT] as String,
         time= doc[COMMENT_TIME] as Timestamp? ?: Timestamp.now(),
-        writerProfile= doc[COMMENT_WRITER_PROFILE] as String?
-    )
+        writerProfile= doc[COMMENT_WRITER_PROFILE] as String?,
+    ){
+        mention= doc[COMMNET_MENTION] as String?
+    }
 
     companion object{
         val COMMENT_ID = "id"
@@ -31,5 +34,6 @@ data class CommentDto(
         val COMMENT_CONTENT = "content"
         val COMMENT_TIME = "time"
         var COMMENT_WRITER_PROFILE = "writerProfile"
+        var COMMNET_MENTION = "mention"
     }
 }

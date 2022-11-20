@@ -1,6 +1,5 @@
 package com.buy.together.ui.view.board.eachboard
 
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
@@ -24,6 +23,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     FragmentCommentBinding::inflate) {
     private val viewModel: BoardViewModel by activityViewModels()
     private lateinit var commentAdapter : CommentAdapter
+    private var mention : String? = null
 
     override fun initView() {
         initAdapter()
@@ -38,6 +38,11 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                     saveComment(userId!!)
                 }
             }
+            ibMentionRemove.setOnClickListener {
+                mention = null
+                tvMention.text = ""
+                llMentionLayout.visibility = View.GONE
+            }
         }
     }
 
@@ -49,8 +54,11 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
             boardTitle= viewModel.boardDto!!.title,
             writer=  userId,
             content= binding.etComment.text.toString(),
-            time= Timestamp.now()
+            time= Timestamp.now(),
         )
+        if(mention != null){
+            comment.mention = mention
+        }
         val category = viewModel.boardDto!!.category
         viewModel.insertComment(category, comment).observe(viewLifecycleOwner){ response->
             when(response){
@@ -92,7 +100,12 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
         val decoration = DividerItemDecoration(requireContext(),RecyclerView.VERTICAL)
         commentAdapter.itemClickListener = object : CommentAdapter.ItemClickListener {
             override fun onClick(view: View, dto : CommentDto) {
-                Log.d(TAG, "onClick: $dto")
+                val userId : String? = Application.sharedPreferences.getAuthToken()
+                if(userId != dto.writer) {
+                    binding.llMentionLayout.visibility = View.VISIBLE
+                    mention = dto.writer
+                    binding.tvMention.text = "${getString(R.string.at_sign)}${mention}"
+                }
             }
 
             override fun onItemOptionClick(view: View, dto: CommentDto) {
@@ -104,6 +117,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     }
 
     private fun initData(){
+        binding.llMentionLayout.visibility = View.GONE
         if(viewModel.boardDto == null){
             return
         }

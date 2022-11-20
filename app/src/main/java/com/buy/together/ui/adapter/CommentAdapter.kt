@@ -23,6 +23,12 @@ class CommentAdapter() : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
                 }
                 tvCommentWriter.text = comment.writer
                 tvCommentContent.text = comment.content
+                if(comment.mention == null){
+                    tvMention.visibility = View.GONE
+                }else{
+                    tvMention.visibility = View.VISIBLE
+                    tvMention.text = "\u0040${comment.mention}"
+                }
                 tvCommentTime.text = CommonUtils.getDateString(comment.time.seconds * 1000)
                 ibOptionButton.setOnClickListener {
                     itemClickListener.onItemOptionClick(it,comment)
@@ -33,7 +39,7 @@ class CommentAdapter() : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
             }
         }
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentAdapter.CommentHolder {
         binding = ItemCommentBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return CommentHolder(binding.root)
     }
