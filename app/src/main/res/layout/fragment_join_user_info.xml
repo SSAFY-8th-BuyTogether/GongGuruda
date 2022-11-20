@@ -93,17 +93,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_gravity="center_horizontal">
-                <ImageView
+
+                <androidx.cardview.widget.CardView
                     android:id="@+id/sign_up_personal_info_profile_image"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/img_profile_default"
+                    app:cardCornerRadius="160dp"
+                    android:translationZ="-10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_writer_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_profile_default" />
+                </androidx.cardview.widget.CardView>
+
                 <ImageView
+                    android:id="@+id/iv_camera_button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginEnd="6dp"
@@ -113,6 +124,7 @@
                     android:src="@drawable/ic_camera"
                     app:layout_constraintBottom_toBottomOf="@+id/sign_up_personal_info_profile_image"
                     app:layout_constraintEnd_toEndOf="@+id/sign_up_personal_info_profile_image" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
                 android:layout_width="match_parent"

@@ -56,4 +56,6 @@
     <string name="label_meet_place">만날장소</string>
     <string name="label_buy_place">구매장소</string>
 
+    <string name="at_sign">\u0040</string>
+
 </resources>

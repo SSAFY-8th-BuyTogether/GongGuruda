@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_board_layout"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp"
+    android:padding="6dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -33,18 +33,29 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="주말특가) 고사양 3080ti PC컴퓨터 최저가 팝니다."
+        android:layout_marginEnd="10dp"
+        tools:text="주말특가) 고사양 3080ti PC컴퓨터 최저가 팝니다."
         android:textSize="16sp"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="2"
+        app:layout_constraintEnd_toStartOf="@id/ib_option_button"
         app:layout_constraintStart_toEndOf="@id/cv_board_img"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ib_option_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_option"
+        android:backgroundTint="@color/black_60"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_board_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="석적읍"
+        tools:text="석적읍"
         android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="@+id/tv_board_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_board_title" />
@@ -54,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="4분전"
+        tools:text="4분전"
         app:layout_constraintStart_toEndOf="@+id/tv_board_address"
         app:layout_constraintTop_toTopOf="@+id/tv_board_address" />
 
@@ -64,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:textSize="16sp"
-        android:text="D-3"
+        tools:text="D-3"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/cv_board_img" />
@@ -73,7 +84,7 @@
         android:id="@+id/tv_board_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="300만원"
+        tools:text="300만원"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.databinding.ItemBoardBinding
@@ -18,6 +19,12 @@ class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
     inner class BoardHolder(view : View) : RecyclerView.ViewHolder(view){
         fun bindInfo(position: Int, dto : BoardDto){
             binding.apply {
+                val userId = Application.sharedPreferences.getAuthToken()
+                if(dto.writer == userId){
+                    ibOptionButton.visibility = View.VISIBLE
+                }else{
+                    ibOptionButton.visibility = View.GONE
+                }
                 if(dto.images.isEmpty()){
                     binding.ivBoardImg.setImageResource(R.drawable.img_category_carrot)
                 }else{
@@ -32,12 +39,16 @@ class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
                 binding.clBoardLayout.setOnClickListener{
                     itemClickListener.onClick(it,boardDtoList[position])
                 }
+                ibOptionButton.setOnClickListener {
+                    itemClickListener.onItemOptionClick(it,dto)
+                }
             }
         }
     }
 
     interface ItemClickListener{
         fun onClick(view: View, dto : BoardDto)
+        fun onItemOptionClick(view: View, dto : BoardDto)
     }
     lateinit var itemClickListener: ItemClickListener
 

@@ -201,12 +201,12 @@
 
                 <LinearLayout
                     android:id="@+id/ll_meet_place"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
@@ -217,26 +217,35 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="@string/label_meet_place"
-                        android:textStyle="bold"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_meet_address"
-                        android:layout_marginTop="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="대구시 달서구 군평로 560"/>
-                    <!--  TODO : map 들어갈 자리   -->
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="6dp"
+                        tools:text="대구시 달서구 군평로 560" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/fcv_meet_map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="@color/black_50" />
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/ll_buy_place"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
@@ -247,15 +256,24 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="@string/label_buy_place"
-                        android:textStyle="bold"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/tv_buy_address"
-                        android:layout_marginTop="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="대구시 달서구 군평로 560"/>
-                    <!--  TODO : map 들어갈 자리   -->
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="6dp"
+                        tools:text="대구시 달서구 군평로 560" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/fcv_buy_map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/black_50" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

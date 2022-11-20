@@ -2,10 +2,8 @@ package com.buy.together.ui.view.board
 
 import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -16,13 +14,13 @@ import androidx.navigation.fragment.findNavController
 import com.buy.together.Application.Companion.sharedPreferences
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.normal.TedPermission
+import com.buy.together.util.GalleryUtils.getGallery
 import java.util.*
 
 private const val TAG = "BoardWritingFragment_싸피"
@@ -35,11 +33,25 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     private lateinit var imageAdapter: ImageAdpater
     private var selectedTime: Long? = null
 
+    private var clickedAddress = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
         setListener()
+        requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
+            if(requestKey == "getAddress" && result["address"] != null){
+                val addressDto : AddressDto = result["address"] as AddressDto
+                if(clickedAddress == 1){
+                    binding.includeWritingOption.etBuyPoint.editText?.setText(addressDto.addressDetail)
+                }else if(clickedAddress == 2){
+                    binding.includeWritingOption.etMeetPoint.editText?.setText(addressDto.addressDetail)
+                }else{
+                    Toast.makeText(requireContext(), "오류가 발생했습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     fun setAdapter() {
@@ -79,12 +91,21 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 findNavController().popBackStack()
             }
             ibGallery.setOnClickListener {
-                getGallery()
+                getGallery(requireContext(), imageLauncher)
             }
             btnOkay.setOnClickListener {
                 if(checkAllWritten()){
                     sendBoardData()
                 }
+            }
+            includeWritingOption.ibBuyPointButton.setOnClickListener {
+                clickedAddress = 1
+                showAddressFragment()
+            }
+
+            includeWritingOption.ibMeetPoint.setOnClickListener {
+                clickedAddress = 2
+                showAddressFragment()
             }
         }
     }
@@ -132,20 +153,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 when(response){
                     is FireStoreResponse.Loading ->{ showLoadingDialog(requireContext())}
                     is FireStoreResponse.Success -> {
-                        viewModel.saveBoardToUser(userId,board).observe(viewLifecycleOwner){ response ->
-                            when(response){
-                                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
-                                is FireStoreResponse.Success -> {
-                                    Toast.makeText(requireContext(),"성공적으로 저장되었습니다.",Toast.LENGTH_SHORT).show()
-                                    dismissLoadingDialog()
-                                    findNavController().popBackStack()
-                                }
-                                is FireStoreResponse.Failure -> {
-                                    Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
-                                    dismissLoadingDialog()
-                                }
-                            }
-                        }
+                        sendUser(userId,board)
                         dismissLoadingDialog()
                     }
                     is FireStoreResponse.Failure -> {
@@ -155,6 +163,42 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 }
             }
         }
+    }
+
+    fun sendUser(userId: String,boardDto: BoardDto){
+        viewModel.saveBoardToUser(userId,boardDto).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
+                is FireStoreResponse.Success -> {
+                    sendParticipator(userId,boardDto)
+                    dismissLoadingDialog()
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
+                }
+            }
+        }
+    }
+
+    fun sendParticipator(userId: String, boardDto : BoardDto){
+        viewModel.insertUserParticipate(userId,boardDto,true)
+            .observe(viewLifecycleOwner) { response_ ->
+                when (response_) {
+                    is FireStoreResponse.Loading -> {
+                        showLoadingDialog(requireContext())
+                    }
+                    is FireStoreResponse.Success -> {
+                        Toast.makeText(requireContext(),"성공적으로 저장되었습니다.",Toast.LENGTH_SHORT).show()
+                        dismissLoadingDialog()
+                        findNavController().popBackStack()
+                    }
+                    is FireStoreResponse.Failure -> {
+                        Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                        dismissLoadingDialog()
+                    }
+                }
+            }
     }
 
     fun setBoardDto(userId : String) : BoardDto{
@@ -174,32 +218,10 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             participator = arrayListOf(userId),
             images= listOf(),
             maxPeople = if(maxPeople.isEmpty()) null else maxPeople.toInt(),
-            meetPoint= if(meetPoint.isEmpty()) null else meetPoint,
-            buyPoint = if(meetPoint.isEmpty()) null else buyPoint
+            meetPoint= if(meetPoint.isEmpty()) "" else meetPoint,
+            buyPoint = if(meetPoint.isEmpty()) "" else buyPoint
         )
         return board
-    }
-
-    fun getGallery() {
-        getPermission(object : PermissionListener {
-            override fun onPermissionGranted() {
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-                imageLauncher.launch(intent)
-            }
-
-            override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                Toast.makeText(requireContext(), "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    fun getPermission(listener: PermissionListener){
-        TedPermission.create()
-            .setPermissionListener(listener)
-            .setDeniedMessage("권한을 허용해주세요")
-            .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            .check()
     }
 
     private val imageLauncher = registerForActivityResult(
@@ -240,4 +262,6 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         dialog.datePicker.minDate = cal.timeInMillis
         dialog.show()
     }
+
+    private fun showAddressFragment(){ findNavController().navigate(R.id.action_boardWritingFragment_to_addressGraph) }
 }
