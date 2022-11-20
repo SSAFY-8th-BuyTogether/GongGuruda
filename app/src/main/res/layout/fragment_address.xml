@@ -93,13 +93,6 @@
             android:layout_height="2dp"
             android:background="@color/grayForBackground" />
         <include
-            android:id="@+id/layout_address_empty_view"
-            layout="@layout/layout_empty_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:visibility="gone"/>
-        <include
             android:id="@+id/layout_address_selected"
             layout="@layout/item_address_selected">
         </include>
@@ -107,7 +100,15 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/grayForBackground" />
+        <include
+            android:id="@+id/layout_address_empty_view"
+            layout="@layout/layout_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"/>
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/layout_address_rv_view"
             android:layout_width="match_parent"
             android:overScrollMode="never"
             android:layout_height="0dp"

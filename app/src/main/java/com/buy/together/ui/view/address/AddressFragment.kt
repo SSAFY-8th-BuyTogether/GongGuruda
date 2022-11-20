@@ -89,15 +89,15 @@ class AddressFragment() : BaseBottomSheetDialogFragment<FragmentAddressBinding>(
     }
     private fun setEmptyView(isSet : Boolean){
         if (isSet){
-            binding.layoutAddressEmptyView.layoutAddressEmptyView.visibility = View.VISIBLE
+            binding.layoutAddressEmptyView.layoutEmptyView.visibility = View.VISIBLE
             binding.layoutAddressEmptyView.tvEmptyView.text = getString(R.string.tv_address_empty)
-        }else binding.layoutAddressEmptyView.layoutAddressEmptyView.visibility = View.GONE
+        }else binding.layoutAddressEmptyView.layoutEmptyView.visibility = View.GONE
     }
     private fun setRVView(isSet : Boolean, itemList : ArrayList<AddressDto> = arrayListOf()){
         if (isSet) {
-            binding.rvAddressSearchRecent.visibility = View.VISIBLE
+            binding.layoutAddressRvView.visibility = View.VISIBLE
             rvAdapter.setListData(itemList)
-        } else binding.rvAddressSearchRecent.visibility = View.GONE
+        } else binding.layoutAddressRvView.visibility = View.GONE
     }
     private fun showAddressSearchResultFragment(){ findNavController().navigate(R.id.action_addressFragment_to_addressSearchFragment) }
     private fun showAddressMapFragment(){ findNavController().navigate(R.id.action_addressFragment_to_addressMapFragment) }

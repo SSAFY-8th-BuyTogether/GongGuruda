@@ -54,9 +54,11 @@ class AddressRepository {
 
     fun changeSelectedAddress(userId : String, oldAddress : Address, newAddress : Address) = flow {
         emit(FireStoreResponse.Loading())
-        val setUnselectedQuery = fireStore.collection(FireStoreInfo.USER).document(userId)
-            .collection(FireStoreInfo.ADDRESS).document(oldAddress.id)
-        setUnselectedQuery.set(oldAddress)
+        if (oldAddress.id.isNotEmpty()){
+            val setUnselectedQuery = fireStore.collection(FireStoreInfo.USER).document(userId)
+                .collection(FireStoreInfo.ADDRESS).document(oldAddress.id)
+            setUnselectedQuery.set(oldAddress)
+        }
         val setSelectedQuery = fireStore.collection(FireStoreInfo.USER).document(userId)
             .collection(FireStoreInfo.ADDRESS).document(newAddress.id)
         emit(FireStoreResponse.Success(setSelectedQuery.set(newAddress).await()))

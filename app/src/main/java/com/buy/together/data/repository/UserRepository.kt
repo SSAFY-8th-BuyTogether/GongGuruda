@@ -1,11 +1,10 @@
 package com.buy.together.data.repository
 
 import android.content.Context
-import androidx.lifecycle.liveData
 import androidx.room.Room
 import com.buy.together.data.AppDatabase
-import com.buy.together.data.model.domain.UserDto
-import com.buy.together.data.model.network.Address
+import com.buy.together.data.model.network.MyComment
+import com.buy.together.data.model.network.MyWrite
 import com.buy.together.data.model.network.User
 import com.buy.together.data.model.network.firestore.FireStoreInfo
 import com.buy.together.data.model.network.firestore.FireStoreResponse
@@ -157,6 +156,17 @@ class UserRepository private constructor(context: Context){
         return observeDoc(fireStore.collection(FireStoreInfo.USER).document(userId))
     }
 
+    fun getMyWriteInfo(userId: String) : Flow<List<MyWrite?>?> {
+        return observeCollection(fireStore.collection(FireStoreInfo.USER).document(userId)
+            .collection(FireStoreInfo.USER_WRITE)
+            .orderBy(FireStoreInfo.USER_WRITE_COMMENT_TIME, Query.Direction.DESCENDING)
+        )
+    }
 
-
+    fun getMyCommentInfo(userId: String) : Flow<List<MyComment?>?> {
+        return observeCollection(fireStore.collection(FireStoreInfo.USER).document(userId)
+            .collection(FireStoreInfo.USER_COMMENT)
+            .orderBy(FireStoreInfo.USER_WRITE_COMMENT_TIME, Query.Direction.DESCENDING)
+        )
+    }
 }

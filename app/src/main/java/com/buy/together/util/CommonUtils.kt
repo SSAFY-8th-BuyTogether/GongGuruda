@@ -23,14 +23,12 @@ object CommonUtils {
         val dateFormat = SimpleDateFormat("MM.dd HH:mm")
         val now = System.currentTimeMillis()
         val diff = now - time
-        val date : String
-        if(diff >= 24*60*60*1000){ //하루가 넘을 때
-            date = dateFormat.format(time).toString()
-        }
-        else if(diff >= 60*60*1000){ //한 시간 넘을 때
-            date = SDformat.format(time).toString()
+        val date : String = if(diff >= 24*60*60*1000){ //하루가 넘을 때
+            dateFormat.format(time).toString()
+        } else if(diff >= 60*60*1000){ //한 시간 넘을 때
+            SDformat.format(time).toString()
         }else{ //한 시간 전
-            date = "${diff/(60*1000)} 분전"
+            "${diff/(60*1000)} 분전"
         }
         return date
     }
@@ -39,16 +37,16 @@ object CommonUtils {
         val now = System.currentTimeMillis() / (24*60*60*1000)
         val time_day = time / (24*60*60*1000)
         val day = (time_day - now).toInt()
-        if(day < 0){
-            return "기한지남"
+        return if(day < 0){
+            "기한지남"
         }else if(day == 0){
-            return "D-day"
+            "D-day"
         }else{
-            return "D-$day"
+            "D-$day"
         }
     }
 
-    fun getDateString(cal : Calendar): String{
+    private fun getDateString(cal : Calendar): String{
         val year = cal.get(Calendar.YEAR)
         val month = cal.get(Calendar.MONTH)
         val date = cal.get(Calendar.DATE)

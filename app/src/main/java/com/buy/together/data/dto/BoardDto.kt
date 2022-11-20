@@ -1,14 +1,14 @@
 package com.buy.together.data.dto
 
 data class BoardDto (
-    var id: String,
-    var title : String,
-    var category : String,
-    var deadLine : Long,
-    var price : Int,
-    var content : String,
-    var writeTime : Long,
-    var writer : String,
+    var id: String = "",
+    var title : String = "",
+    var category : String = "",
+    var deadLine : Long = 0L,
+    var price : Int = 0,
+    var content : String = "",
+    var writeTime : Long= 0L,
+    var writer : String = "",
 
     var writerProfile : String? = null,
     var participator : List<String> = listOf(),

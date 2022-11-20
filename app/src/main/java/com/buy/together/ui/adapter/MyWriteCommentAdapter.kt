@@ -1,20 +1,55 @@
 package com.buy.together.ui.adapter
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.buy.together.ui.view.mypage.MyCommentFragment
-import com.buy.together.ui.view.mypage.MyWriteFragment
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
+import com.buy.together.R
+import com.buy.together.data.model.domain.AddressDto
+import com.buy.together.data.model.domain.MyWriteCommentDto
+import com.buy.together.databinding.ItemAddressBinding
+import com.buy.together.databinding.ItemMyWriteCommentBinding
 
-class MyWriteCommentAdapter (activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
-    override fun getItemCount(): Int = 2
+class MyWriteCommentAdapter() : RecyclerView.Adapter<MyWriteCommentAdapter.Holder>() {
 
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> MyWriteFragment()
-            1 -> MyCommentFragment()
-            else -> MyWriteFragment()
+    private val itemList : ArrayList<MyWriteCommentDto> = arrayListOf()
+
+    fun setListData(dataList: ArrayList<MyWriteCommentDto>){
+        itemList.clear()
+        itemList.addAll(dataList)
+        notifyDataSetChanged()
+    }
+
+
+    inner class Holder(private val binding: ItemMyWriteCommentBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bindInfo(position: Int, writeCommentDto: MyWriteCommentDto){
+            binding.itemDto = writeCommentDto
+            binding.layoutItemMyWriteComment.setOnClickListener { itemClickListener.onClickItem(it, position, itemList[position]) }
         }
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+        return  Holder(ItemMyWriteCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    }
+
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        val dto = itemList[position]
+        holder.apply {
+            bindInfo(position, dto)
+            itemView.tag = dto
+        }
+    }
+
+    override fun getItemCount(): Int = itemList.size
+
+    interface ItemClickListener{
+        fun onClickItem(view: View, position: Int, writeCommentDto: MyWriteCommentDto)
+    }
+
+    private lateinit var itemClickListener: ItemClickListener
+    fun setItemClickListener(itemClickListener: ItemClickListener){ this.itemClickListener = itemClickListener }
+
 }
