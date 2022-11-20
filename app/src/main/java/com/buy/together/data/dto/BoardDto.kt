@@ -14,7 +14,7 @@ data class BoardDto (
     var participator : List<String> = listOf(),
     var images : List<String> = listOf(),
     var maxPeople : Int? = null,
-    var meetPoint : String? = null,
+    var meetPoint : String = "",
     var meetTime : Long? = null,
-    var buyPoint : String? = null,
+    var buyPoint : String = "",
 ) : java.io.Serializable

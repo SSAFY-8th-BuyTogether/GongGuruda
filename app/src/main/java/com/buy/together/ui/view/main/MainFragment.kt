@@ -91,7 +91,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(
                 is FireStoreResponse.Success -> {
                     val list = mutableListOf<BoardDto>()
                     response.data.forEach{
-                        list.add(viewModel.makeBoard(it))
+                        if((it["meetPoint"] as String).contains("구미시")){ //TODO : 현재 위치 받아오기
+                            list.add(viewModel.makeBoard(it))
+                        }
                     }
                     boardAdapter.boardDtoList = list
                     boardAdapter.notifyDataSetChanged()

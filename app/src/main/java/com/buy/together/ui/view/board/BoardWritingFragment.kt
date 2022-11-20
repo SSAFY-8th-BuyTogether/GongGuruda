@@ -20,7 +20,7 @@ import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
-import com.buy.together.util.GalleryUtils
+import com.buy.together.util.GalleryUtils.getGallery
 import java.util.*
 
 private const val TAG = "BoardWritingFragment_싸피"
@@ -91,7 +91,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 findNavController().popBackStack()
             }
             ibGallery.setOnClickListener {
-                getGallery()
+                getGallery(requireContext(), imageLauncher)
             }
             btnOkay.setOnClickListener {
                 if(checkAllWritten()){
@@ -218,14 +218,10 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             participator = arrayListOf(userId),
             images= listOf(),
             maxPeople = if(maxPeople.isEmpty()) null else maxPeople.toInt(),
-            meetPoint= if(meetPoint.isEmpty()) null else meetPoint,
-            buyPoint = if(meetPoint.isEmpty()) null else buyPoint
+            meetPoint= if(meetPoint.isEmpty()) "" else meetPoint,
+            buyPoint = if(meetPoint.isEmpty()) "" else buyPoint
         )
         return board
-    }
-
-    fun getGallery() {
-        GalleryUtils.getGallery(requireContext(), imageLauncher)
     }
 
     private val imageLauncher = registerForActivityResult(

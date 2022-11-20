@@ -15,7 +15,6 @@ import com.buy.together.data.repository.BoardRepository
 import com.buy.together.util.GalleryUtils.insertImage
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.*
 
 private const val TAG = "BoardViewModel_싸피"
@@ -173,9 +172,9 @@ class BoardViewModel : ViewModel() {
             participator = document["participator"] as List<String>,
             images= document["images"] as List<String>,
             maxPeople= (document["maxPeople"] as Long?)?.toInt(),
-            meetPoint= document["meetPoint"] as String?,
+            meetPoint= document["meetPoint"] as String,
             meetTime= document["meetTime"] as Long?,
-            buyPoint= document["buyPoint"] as String?,
+            buyPoint= document["buyPoint"] as String,
         )
         return dto
     }
