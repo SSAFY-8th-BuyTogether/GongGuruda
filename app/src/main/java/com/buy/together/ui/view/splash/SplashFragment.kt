@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.R
 import com.buy.together.databinding.FragmentSplashBinding
-import com.buy.together.restartActivity
 import com.buy.together.ui.base.BaseFragment
+import com.buy.together.ui.view.restartActivity
 import com.buy.together.ui.viewmodel.SplashViewModel
 import com.buy.together.util.CommonUtils.makeToast
 import com.buy.together.util.EventObserver
@@ -72,7 +72,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
 
     private fun notUserEvent() {  // App 내 Token 은 유효하지만 서버 Token 이 유효하지 않을 경우
         try { } catch (e: Exception) {
-            findNavController().navigate(R.id.action_global_introFragment)
+            findNavController().navigate(R.id.action_global_loginFragment)
         } finally {
             showLoginFragment()
         }

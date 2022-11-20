@@ -9,7 +9,7 @@ import com.buy.together.ui.base.BaseViewModel
 import com.buy.together.util.RegularExpression
 import kotlinx.coroutines.Dispatchers
 
-class UserViewModel : BaseViewModel() {
+open class UserViewModel : BaseViewModel() {
     private val _checkUserNameLiveData = MutableLiveData<Any>()
     val checkUserNameLiveData: LiveData<Any> get() = _checkUserNameLiveData
     private val _checkUserBirthLiveData = MutableLiveData<Any>()
@@ -24,9 +24,10 @@ class UserViewModel : BaseViewModel() {
     val checkUserPwdLiveData: LiveData<Any> get() = _checkUserPwdLiveData
     private val _checkUserPwdCheckLiveData = MutableLiveData<Any>()
     val checkUserPwdCheckLiveData: LiveData<Any> get() = _checkUserPwdCheckLiveData
+    private val _onSuccessRemoveTokenLiveData = MutableLiveData<Any>()
+    val onSuccessRemoveTokenLiveData : LiveData<Any> get() = _onSuccessRemoveTokenLiveData
 
-
-    private val user : UserDto = UserDto()
+    private val userDto : UserDto = UserDto()
     
     private fun checkForUserName(userName: String) : Boolean{
         return if (userName.isBlank() || userName.isEmpty()) {
@@ -147,7 +148,7 @@ class UserViewModel : BaseViewModel() {
         val checkBirthInfo = checkForUserBirth(userBirth)
         val checkSmsInfo = checkForUserSms(userSms)
         if (checkName && checkBirthInfo && checkSmsInfo) {
-            user.apply {
+            userDto.apply {
                 name = userName
                 birthday = userBirth
                 phone = userSms
@@ -157,21 +158,44 @@ class UserViewModel : BaseViewModel() {
         return false
     }
 
+    fun modifyPwd(userPwd: String, userPwdCheck: String) = liveData(Dispatchers.IO){
+        val checkPwdInfo = checkForUserPwd(userPwd, userPwdCheck)
+        if (checkPwdInfo) userRepository.modifyPwd(authToken, userPwd).collect(){ emit(it) }
+    }
+
+    fun modify(userDto: UserDto) = liveData(Dispatchers.IO){
+        userRepository.modify(userDto.makeToUser()).collect(){ emit(it) }
+    }
+
     fun join(userNickName:String, userId: String, userPwd: String, userPwdCheck:String, profileImg : String) = liveData(Dispatchers.IO){
         val checkPwdInfo = checkForUserPwd(userPwd, userPwdCheck)
         if (checkPwdInfo) {
-            user.apply {
+            userDto.apply {
                 nickName = userNickName
                 id = userId
                 password = userPwd
                 profile = profileImg
             }
-            userRepository.join(user).collect(){ emit(it) }
+            userRepository.join(userDto.makeToUser()).collect(){ emit(it) }
         }
     }
 
     fun logIn(userId : String, userPwd : String, fcmToken:String) = liveData(Dispatchers.IO){
         if (userId.isNotBlank() && userPwd.isNotBlank()) userRepository.logIn(userId, userPwd, fcmToken).collect(){ emit(it) }
+    }
+
+    fun logOut()= liveData(Dispatchers.IO){
+        userRepository.logOut(authToken, fcmToken).collect(){ emit(it) }
+    }
+
+    fun withDraw() = liveData(Dispatchers.IO) {
+        userRepository.withDraw(authToken).collect(){ emit(it) }
+    }
+
+    fun getUserInfo() = liveData(Dispatchers.IO){
+        userRepository.getUserInfo(authToken).collect { user ->
+            emit(user?.makeToUserDto())
+        }
     }
 
 }

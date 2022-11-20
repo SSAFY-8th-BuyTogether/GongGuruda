@@ -20,6 +20,7 @@ import com.buy.together.util.GalleryUtils
 import com.buy.together.util.RegularExpression
 import com.buy.together.util.hideKeyboard
 
+// TODO : Need Repair (글자색 적용 & 프로필)
 class JoinUserInfoFragment : BaseFragment<FragmentJoinUserInfoBinding>(FragmentJoinUserInfoBinding::bind, R.layout.fragment_join_user_info) {
     private val viewModel: UserViewModel by navGraphViewModels(R.id.joinGraph)
     private var isNickNameChecked : Boolean = false
@@ -186,10 +187,7 @@ class JoinUserInfoFragment : BaseFragment<FragmentJoinUserInfoBinding>(FragmentJ
             }
             etUserPwdCheck.addTextChangedListener {
                 if (it.toString().trim() != getUserPwd()) setErrorMsg(msg = "비밀번호와 동일하지 않습니다.")
-                else {
-                    Log.d("체크", "setTextChangeListener: 체크 왔나요")
-                    setErrorMsg(msg = null)
-                }
+                else setErrorMsg(msg = null)
             }
         }
     }

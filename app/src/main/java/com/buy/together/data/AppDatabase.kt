@@ -1,4 +1,4 @@
-package com.buy.together
+package com.buy.together.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

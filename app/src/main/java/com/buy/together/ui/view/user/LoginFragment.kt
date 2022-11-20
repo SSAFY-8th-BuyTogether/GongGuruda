@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.buy.together.Application
 import com.buy.together.Application.Companion.sharedPreferences
 import com.buy.together.R
 import com.buy.together.data.model.network.firestore.FireStoreInfo
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentLoginBinding
-import com.buy.together.restartActivity
 import com.buy.together.ui.base.BaseFragment
+import com.buy.together.ui.view.restartActivity
 import com.buy.together.ui.viewmodel.UserViewModel
 import com.buy.together.util.CommonUtils.makeToast
 import com.buy.together.util.hideKeyboard

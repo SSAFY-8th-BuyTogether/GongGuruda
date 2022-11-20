@@ -29,6 +29,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.gun0912.tedpermission.PermissionListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 private const val UPDATE_INTERVAL = 1000
@@ -122,7 +126,7 @@ class AddressMapFragment() : BaseBottomSheetDialogFragment<FragmentAddressMapBin
             it.addMarker(markerOptions)
             it.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
         }
-        binding.tvAddress.text = AddressUtils.getGeoFromPoints(requireContext(), location.latitude, location.longitude)
+        context?.let {context ->  binding.tvAddress.text = AddressUtils.getGeoFromPoints(context, location.latitude, location.longitude) }
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------

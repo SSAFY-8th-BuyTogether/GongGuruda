@@ -1,7 +1,6 @@
 package com.buy.together.data.repository
 
 import android.content.Context
-import android.util.Log
 import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.network.Address
 import com.buy.together.data.model.network.firestore.FireStoreInfo
@@ -38,9 +37,31 @@ class AddressRepository {
 
     private val fireStore = FirebaseFirestore.getInstance()
 
-    fun getAddressList(userId : String) :  Flow<List<Address?>?> {
+    fun getAddress(userId : String) :  Flow<List<Address?>?> {
         return observeCollection(fireStore.collection(FireStoreInfo.USER).document(userId)
-            .collection(FireStoreInfo.ADDRESS).orderBy(FireStoreInfo.ADDRESS_DATETIME, Query.Direction.DESCENDING))
+            .collection(FireStoreInfo.ADDRESS)
+            .whereEqualTo(FireStoreInfo.ADDRESS_SELECTED, true).limit(1)
+        )
+    }
+
+    fun getAddressList(userId : String) : Flow<List<Address?>?> {
+        return observeCollection(fireStore.collection(FireStoreInfo.USER).document(userId)
+            .collection(FireStoreInfo.ADDRESS)
+            .whereEqualTo(FireStoreInfo.ADDRESS_SELECTED, false)
+            .orderBy(FireStoreInfo.ADDRESS_DATETIME, Query.Direction.DESCENDING)
+        )
+    }
+
+    fun changeSelectedAddress(userId : String, oldAddress : Address, newAddress : Address) = flow {
+        emit(FireStoreResponse.Loading())
+        val setUnselectedQuery = fireStore.collection(FireStoreInfo.USER).document(userId)
+            .collection(FireStoreInfo.ADDRESS).document(oldAddress.id)
+        setUnselectedQuery.set(oldAddress)
+        val setSelectedQuery = fireStore.collection(FireStoreInfo.USER).document(userId)
+            .collection(FireStoreInfo.ADDRESS).document(newAddress.id)
+        emit(FireStoreResponse.Success(setSelectedQuery.set(newAddress).await()))
+    }.catch{
+        emit(FireStoreResponse.Failure("주소 설정 중 에러가 발생했습니다.\n잠시 후 다시 시도해주세요."))
     }
 
     fun addAddressToServer(userId : String, dto: AddressDto)= flow {

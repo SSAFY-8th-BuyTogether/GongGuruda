@@ -14,7 +14,6 @@ import com.buy.together.ui.base.BaseBottomSheetDialogFragment
 import com.buy.together.ui.viewmodel.AddressViewModel
 import com.buy.together.util.AddressUtils
 import com.buy.together.util.CommonUtils.makeToast
-import com.buy.together.util.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -47,10 +46,9 @@ class AddressSearchFragment() : BaseBottomSheetDialogFragment<FragmentAddressSea
     private inner class BridgeInterface(){
         @JavascriptInterface
         fun processDATA(data : String){
-            // TODO : 다이어로그로 추가할 건지 의향 물어보는 플로우 추가하기.
             val latLng = AddressUtils.getPointsFromGeo(this@AddressSearchFragment.requireContext(), data)
             val addressDto = AddressDto(
-                address = AddressUtils.getSelectedAddress(data),
+                address = AddressUtils.getRepresentAddress(data),
                 addressDetail = data
             ).apply {
                 latLng?.let {

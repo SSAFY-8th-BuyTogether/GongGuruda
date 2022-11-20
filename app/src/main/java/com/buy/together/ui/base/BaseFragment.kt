@@ -2,21 +2,17 @@ package com.buy.together.ui.base
 
 import android.app.Dialog
 import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LayoutRes
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.buy.together.restartActivity
-import com.buy.together.util.CommonUtils.makeToast
 import com.buy.together.util.CustomDialog
 import com.buy.together.util.CustomDialogBasicOneButton
 import com.buy.together.util.CustomDialogBasicTwoButton
@@ -38,7 +34,7 @@ abstract class BaseFragment<B : ViewBinding>(private val bind: (View) -> B, @Lay
         super.onDestroyView()
     }
 
-    fun showCustomToast(message: String) {
+    fun showToast(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
