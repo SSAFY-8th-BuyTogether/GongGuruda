@@ -12,13 +12,14 @@ import com.buy.together.data.dto.usercollection.UserBoard
 import com.buy.together.data.dto.usercollection.UserComment
 import com.buy.together.data.dto.usercollection.UserParticipate
 import com.buy.together.data.repository.BoardRepository
+import com.buy.together.ui.base.BaseViewModel
 import com.buy.together.util.GalleryUtils.insertImage
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.*
 
 private const val TAG = "BoardViewModel_싸피"
-class BoardViewModel : ViewModel() {
+class BoardViewModel : BaseViewModel() {
     private var repository = BoardRepository()
     val categoryListKr = arrayListOf("전체","식품","문구","생활용품","기타")
 
