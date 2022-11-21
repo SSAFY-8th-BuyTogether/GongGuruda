@@ -23,6 +23,7 @@ class BoardViewModel : BaseViewModel() {
 
     var category : String = "" //main -> boardCategory
     var boardDto : BoardDto? = null //main, boardCategory -> board
+    var selectedAddress : String = "" //선택된 주소
 
     // 카테고리별 데이터 가져오기
     fun getBoardList(category : String) = liveData(Dispatchers.IO){ //TODO : 코루틴, 지역 내에 게시글만 가져오기, 정렬

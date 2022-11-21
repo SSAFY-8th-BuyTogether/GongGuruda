@@ -9,12 +9,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.buy.together.R
+import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.databinding.ItemImageBinding
 
 private const val TAG = "ImageAdpater_싸피"
-class ImageAdpater (var content : Context, var ImageList : ArrayList<Uri>) : RecyclerView.Adapter<ImageAdpater.ImageHolder>() {
-    private lateinit var binding : ItemImageBinding
-    inner class ImageHolder(view : View) : RecyclerView.ViewHolder(view){
+class ImageAdpater (var content : Context) : RecyclerView.Adapter<ImageAdpater.ImageHolder>() {
+    val ImageList : ArrayList<Uri> = arrayListOf()
+
+    inner class ImageHolder(private val binding : ItemImageBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(position: Int,dto: Uri){
             Glide.with(content)
                 .load(dto)
@@ -26,11 +28,14 @@ class ImageAdpater (var content : Context, var ImageList : ArrayList<Uri>) : Rec
 
             binding.ibImageClose.setOnClickListener{
                 Log.d(TAG, "clcked: ${ImageList[position]}")
-                ImageList.removeAt(position)
+                val index = ImageList.indexOf(dto)
+                ImageList.removeAt(index)
+                Log.d(TAG, "bindInfo: ${index}")
+                Log.d(TAG, "삭제 한 후 결과: ${ImageList}")
                 notifyDataSetChanged()
-                Log.d(TAG, "finish remove: ${ImageList[position]}")
-                Log.d(TAG, "bindInfo: ${ImageList.size}, position : ${position}")
-                Log.d(TAG, "bindInfo: ${ImageList}")
+//                Log.d(TAG, "finish remove: ${ImageList[position]}")
+//                Log.d(TAG, "bindInfo: ${ImageList.size}, position : ${position}")
+//                Log.d(TAG, "bindInfo: ${ImageList}")
                 itemClickListener.onClick(it,ImageList.size)
             }
         }
@@ -42,8 +47,7 @@ class ImageAdpater (var content : Context, var ImageList : ArrayList<Uri>) : Rec
     lateinit var itemClickListener: ItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageAdpater.ImageHolder {
-        binding = ItemImageBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return ImageHolder(binding.root)
+        return ImageHolder(ItemImageBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: ImageHolder, position: Int) {

@@ -28,7 +28,6 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     private var mention : String? = null
 
     override fun initView() {
-        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
         initAdapter()
         initData()
     }
@@ -125,6 +124,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     }
 
     private fun initData(){
+        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
         binding.llMentionLayout.visibility = View.GONE
         if(viewModel.boardDto == null){
             return

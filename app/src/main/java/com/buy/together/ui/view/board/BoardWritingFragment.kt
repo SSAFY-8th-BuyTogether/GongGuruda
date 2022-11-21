@@ -62,7 +62,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         binding.spinnerCategory.adapter = spinnerAdapter
 
         //imageAdapter
-        imageAdapter = ImageAdpater(requireContext(),arrayListOf())
+        imageAdapter = ImageAdpater(requireContext())
         imageAdapter.itemClickListener = object : ImageAdpater.ItemClickListener {
             override fun onClick(view: View, size: Int) {
                 if (size == 0) {
@@ -151,6 +151,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             it?.let { userDto ->
                 board.writerProfile = userDto.profile
                 viewModel.saveImage(board,imageAdapter.ImageList)
+
             }
             viewModel.ImgLiveData.observe(viewLifecycleOwner){
                 board.images = it

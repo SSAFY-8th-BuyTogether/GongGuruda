@@ -28,7 +28,6 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
         binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
         initAdapter()
         initListener()
-
     }
 
     fun initAdapter(){
@@ -37,6 +36,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
         binding.rvBoard.addItemDecoration(decoration)
         binding.rvBoard.adapter = boardAdapter
 
+        showLoadingDialog(requireContext())
         if(viewModel.category == "전체"){
             getDataAll()
         }else{
@@ -79,15 +79,15 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
                 is FireStoreResponse.Success -> {
                     viewModel.removeBoard(dto).observe(viewLifecycleOwner){ _response ->
                         when(_response){
-                            is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                            is FireStoreResponse.Loading -> {  }
                             is FireStoreResponse.Success -> {
-                                dismissLoadingDialog()
                                 if(viewModel.category == "전체"){
                                     getDataAll()
                                 }else{
                                     getData()
                                 }
                                 Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                                dismissLoadingDialog()
                             }
                             is FireStoreResponse.Failure -> {
                                 Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -95,7 +95,6 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
                             }
                         }
                     }
-                    dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -108,14 +107,16 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
     private fun getData(){
         viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Loading -> { }
                 is FireStoreResponse.Success -> {
                     val list = mutableListOf<BoardDto>()
                     response.data.forEach{
-                        list.add(viewModel.makeBoard(it))
+                        val meetPoint = it["meetPoint"] as String?
+                        if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress)) {
+                            list.add(viewModel.makeBoard(it))
+                        }
                     }
-                    boardAdapter.boardDtoList = list
-                    boardAdapter.notifyDataSetChanged()
+                    boardAdapter.setList(list as ArrayList<BoardDto>)
                     if(list.isEmpty()){
                         setEmptyLayout()
                     }
@@ -141,22 +142,23 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
         var count = 0
         viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Loading -> { }
                 is FireStoreResponse.Success -> {
                     response.data.forEach{
-                        list.add(viewModel.makeBoard(it))
+                        val meetPoint = it["meetPoint"] as String?
+                        if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress)) {
+                            list.add(viewModel.makeBoard(it))
+                        }
                     }
                     count++
                     if(count == viewModel.categoryListKr.size -1){
                         list.sortBy { it.deadLine }
-                        boardAdapter.boardDtoList = mutableListOf()
-                        boardAdapter.boardDtoList = list
-                        boardAdapter.notifyDataSetChanged()
+                        boardAdapter.setList(list as ArrayList<BoardDto>)
                         if(list.isEmpty()){
                             setEmptyLayout()
                         }
+                        dismissLoadingDialog()
                     }
-                    dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()

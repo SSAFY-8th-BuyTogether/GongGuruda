@@ -1,6 +1,7 @@
 package com.buy.together.ui.adapter
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +14,18 @@ import com.buy.together.databinding.ItemBoardBinding
 import com.buy.together.util.CommonUtils
 
 class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
-    private lateinit var binding : ItemBoardBinding
-    var boardDtoList : List<BoardDto> = mutableListOf()
+    var boardDtoList : ArrayList<BoardDto> = arrayListOf()
 
-    inner class BoardHolder(view : View) : RecyclerView.ViewHolder(view){
+    fun setList(list : ArrayList<BoardDto>) {
+        boardDtoList.clear()
+        boardDtoList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    inner class BoardHolder(private val binding : ItemBoardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(position: Int, dto : BoardDto){
             binding.apply {
+                Log.d("싸피", "bindInfo: =======================\n ${dto}")
                 val userId = Application.sharedPreferences.getAuthToken()
                 if(dto.writer == userId){
                     ibOptionButton.visibility = View.VISIBLE
@@ -53,8 +60,7 @@ class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
     lateinit var itemClickListener: ItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardHolder {
-        binding = ItemBoardBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return BoardHolder(binding.root)
+        return BoardHolder(ItemBoardBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: BoardHolder, position: Int) {
