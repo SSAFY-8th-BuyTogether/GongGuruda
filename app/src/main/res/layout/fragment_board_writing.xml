@@ -31,19 +31,17 @@
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <ImageButton
                 android:id="@+id/ib_camera"
+                android:visibility="invisible"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
-
                 android:src="@drawable/ic_camera"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toStartOf="@+id/ib_gallery"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <ImageButton
                 android:id="@+id/ib_gallery"
                 android:layout_width="0dp"
@@ -52,10 +50,8 @@
                 android:src="@drawable/ic_insert_photo"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintBottom_toBottomOf="@+id/ib_camera"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ib_camera" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
 

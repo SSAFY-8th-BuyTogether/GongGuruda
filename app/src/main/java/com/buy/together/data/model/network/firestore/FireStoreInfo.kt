@@ -14,6 +14,7 @@ class FireStoreInfo {
         const val USER_COMMENT = "Comment"
         const val USER_PARTICIPATE = "Participate"
         const val USER_WRITE_COMMENT_TIME = "time"
+        const val USER_PARTICIPATE_TIME = "time"
 
         const val ADDRESS = "Address"
         const val ADDRESS_DATETIME = "dateTime"

@@ -14,7 +14,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 
 class MyWriteCommentFragment : BaseFragment<FragmentMyWriteCommentBinding>(FragmentMyWriteCommentBinding::bind, R.layout.fragment_my_write_comment) {
-    private val viewModel: MyPageViewModel by viewModels()
     private lateinit var viewPagerAdapter : MyWriteCommentViewPageAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

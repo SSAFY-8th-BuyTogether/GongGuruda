@@ -166,7 +166,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
         }
     }
 
-    fun initListener(){
+    private fun initListener(){
         binding.ibBackButton.setOnClickListener{
             findNavController().popBackStack()
         }

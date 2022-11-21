@@ -61,7 +61,7 @@
                 android:id="@+id/img_user_profile"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 android:src="@drawable/img_profile_default"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true">
@@ -196,6 +196,18 @@
         android:paddingVertical="16dp"
         android:paddingHorizontal="20dp"
         android:text="내가 쓴 글/댓글"
+        android:textSize="14sp"
+        android:textColor="@color/blackForText"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:clickable="false"/>
+    <TextView
+        android:id="@+id/btn_myParticipate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="20dp"
+        android:text="내가 참여한 글"
         android:textSize="14sp"
         android:textColor="@color/blackForText"
         android:fontFamily="@font/notosanskr_regular_hestia"

@@ -19,4 +19,11 @@ class MyPageViewModel : UserViewModel() {
         }
     }
 
+    fun getMyParticipateInfo() = liveData(Dispatchers.IO) {
+        userRepository.getMyParticipate(authToken).collect{ participateList ->
+            val myParticipateList = participateList?.map { participate -> participate?.makeToMyParticipateDto() }
+            emit(myParticipateList)
+        }
+    }
+
 }

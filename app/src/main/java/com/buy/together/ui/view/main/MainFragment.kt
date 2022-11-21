@@ -223,9 +223,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                         tvUserSms.text = userDto.makeFormattedPhone()
                     }
                 }
-                btnMyInfoModify.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_myInfoModifyFragment) }
-                btnMyPwdModify.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_myPwdModifyFragment) }
-                btnMyWriteComment.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_myWriteCommentFragment) }
+                btnMyInfoModify.setOnClickListener { showMyInfoModifyFragment() }
+                btnMyPwdModify.setOnClickListener { showMyPwdModifyFragment() }
+                btnMyWriteComment.setOnClickListener { showMyWriteCommentFragment() }
+                btnMyParticipate.setOnClickListener { showMyParticipateFragment() }
                 btnLogout.setOnClickListener {
                     showCustomDialogBasicTwoButton("로그아웃하시겠습니까?", "취소", "로그아웃"){
                         myPageViewModel.logOut().observe(viewLifecycleOwner){ response ->
@@ -293,6 +294,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     private fun showBoardWritingFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardWritingFragment) }
     private fun showBoardCategoryFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardCategoryFragment) }
     private fun showBoardFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardFragment) }
+    private fun showMyInfoModifyFragment() { findNavController().navigate(R.id.action_mainFragment_to_myInfoModifyFragment) }
+    private fun showMyPwdModifyFragment() { findNavController().navigate(R.id.action_mainFragment_to_myPwdModifyFragment) }
+    private fun showMyWriteCommentFragment(){ findNavController().navigate(R.id.action_mainFragment_to_myWriteCommentFragment) }
+    private fun showMyParticipateFragment(){ findNavController().navigate(R.id.action_mainFragment_to_myParticipateFragment) }
 
     private fun removeUserInfo() {
         sharedPreferences.removeAuthToken()
