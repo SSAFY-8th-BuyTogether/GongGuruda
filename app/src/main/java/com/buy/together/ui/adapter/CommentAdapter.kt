@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.buy.together.Application
 import com.buy.together.data.dto.CommentDto
 import com.buy.together.databinding.ItemCommentBinding
@@ -35,6 +36,11 @@ class CommentAdapter() : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
                 }
                 clCommentLayout.setOnClickListener{
                     itemClickListener.onClick(it,comment)
+                }
+                if(comment.writerProfile != null){
+                    Glide.with(itemView)
+                        .load(comment.writerProfile)
+                        .into(ivWriterProfile)
                 }
             }
         }

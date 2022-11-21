@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.buy.together.Application.Companion.sharedPreferences
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.model.domain.AddressDto
@@ -39,7 +38,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
         addressViewModel.getAddress().observe(viewLifecycleOwner){
             if (!(it == null || it.isEmpty())) setAddressView((it as ArrayList<AddressDto>)[0])
         }
@@ -55,7 +53,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         initMyPageNavi()
         initAdapter()
         initListener()
-        initData()
+        if(binding.tvAddress.text == getString(R.string.tv_address_unselected)){
+            setEmpty()
+        }else{
+            initData()
+        }
         requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
             if(requestKey == "getAddress" && result["address"] != null){
                 val addressDto : AddressDto = result["address"] as AddressDto
@@ -78,6 +80,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                 showBoardWritingFragment()
             }
             llCategoryLayout.apply{
+
                 ibImgAll.setOnClickListener{
                     onclickCategory("전체")
                 }
@@ -109,6 +112,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     }
 
     private fun initData(){
+        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
         viewModel.getBoardList(viewModel.categoryListKr[1]).observe(viewLifecycleOwner){ response ->
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
@@ -122,8 +126,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                     boardAdapter.boardDtoList = list
                     boardAdapter.notifyDataSetChanged()
                     if(list.isEmpty()){
-                        binding.layoutEmpty.tvEmptyView.text = "게시글이"
-                        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.VISIBLE
+                        setEmpty()
                     }
                     dismissLoadingDialog()
                 }
@@ -132,6 +135,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                     dismissLoadingDialog()
                 }
             }
+        }
+    }
+
+    private fun setEmpty(){
+        binding.layoutEmpty.apply {
+            tvEmptyView.text = "게시글이"
+            layoutAddressEmptyView.visibility = View.VISIBLE
         }
     }
 
@@ -271,6 +281,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         }
     }
     private fun onclickCategory(type : String){
+//        if(binding.tvAddress.text == getString(R.string.tv_address_unselected)){
+//            showCustomDialogBasicOneButton("먼저 주소를 등록해주세요")
+//            return
+//        }
         viewModel.category = type
         showBoardCategoryFragment()
     }

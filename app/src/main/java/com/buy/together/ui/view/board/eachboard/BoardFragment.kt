@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
@@ -200,6 +201,12 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
                 btnParticipate.visibility = View.GONE
             }else{
                 btnParticipate.visibility = View.VISIBLE
+            }
+            //profile
+            if(dto.writerProfile!= null){
+                Glide.with(requireContext())
+                    .load(dto.writerProfile)
+                    .into(ivWriterProfile)
             }
 
             //participator

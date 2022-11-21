@@ -74,7 +74,7 @@ class BoardViewModel : BaseViewModel() {
             id= boardDto.id,
             title= boardDto.title,
             category= boardDto.category,
-            content= boardDto.content,
+            content= boardDto.title,
             time= Timestamp.now(),
         )
         repository.insertBoardToUser(userId,userBoard).collect{emit(it)}
@@ -85,7 +85,7 @@ class BoardViewModel : BaseViewModel() {
             id= boardDto.id,
             title= boardDto.title,
             category= boardDto.category,
-            content= boardDto.content,
+            content= boardDto.title,
             time= Timestamp.now(),
         )
         repository.deleteBoardFromUser(userId,userBoard).collect{emit(it)}
@@ -112,7 +112,7 @@ class BoardViewModel : BaseViewModel() {
             id= boardDto.id,
             title= boardDto.title,
             category= boardDto.category,
-            content= boardDto.content,
+            content= boardDto.title,
             time= Timestamp.now(),
         )
         if(flag){
