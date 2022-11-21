@@ -316,6 +316,11 @@
         android:name="com.buy.together.ui.view.board.eachboard.BoardFragment"
         android:label="fragment_board"
         tools:layout="@layout/fragment_board" >
+        <argument
+            android:name="myWriteCommentDto"
+            app:argType="com.buy.together.data.model.domain.MyWriteCommentDto"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <action
             android:id="@+id/action_boardFragment_to_commentFragment"
             app:destination="@id/commentFragment" />
@@ -356,6 +361,12 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_myWriteCommentFragment_to_boardFragment"
-            app:destination="@id/boardFragment" />
+            app:destination="@id/boardFragment" >
+            <argument
+                android:name="myWriteCommentDto"
+                app:argType="com.buy.together.data.model.domain.MyWriteCommentDto"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </action>
     </fragment>
 </navigation>

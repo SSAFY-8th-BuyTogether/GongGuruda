@@ -10,12 +10,13 @@ class FireStoreInfo {
         const val USER_PHONE = "phone"
         const val USER_NICKNAME = "nickName"
         const val USER_FCM_TOKENS = "devices"
+        const val USER_WRITE = "Board"
+        const val USER_COMMENT = "Comment"
+        const val USER_PARTICIPATE = "Participate"
+        const val USER_WRITE_COMMENT_TIME = "time"
 
         const val ADDRESS = "Address"
-        const val ADDRESS_ID = "id"
-        const val ADDRESS_ADDRESS = "address"
         const val ADDRESS_DATETIME = "dateTime"
-        const val ADDRESS_POINT = "point"
         const val ADDRESS_SELECTED = "selected"
     }
 }

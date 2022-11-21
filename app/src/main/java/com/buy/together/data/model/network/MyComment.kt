@@ -11,6 +11,6 @@ data class MyComment(
     var content : String = "",
     var time : Timestamp = Timestamp.now(),
 ){
-    fun makeToMyWriteCommentDto() = MyWriteCommentDto(MyWriteCommentDto.TYPE.WRITE,
+    fun makeToMyWriteCommentDto() = MyWriteCommentDto(MyWriteCommentDto.TYPE.COMMENT,
         id, boardId, boardTitle, category, content, time.seconds)
 }

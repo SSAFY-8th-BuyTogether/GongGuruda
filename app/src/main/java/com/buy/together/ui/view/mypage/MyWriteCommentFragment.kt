@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.R
 import com.buy.together.databinding.FragmentMyWriteCommentBinding
-import com.buy.together.ui.adapter.MyWriteCommentAdapter
+import com.buy.together.ui.adapter.MyWriteCommentViewPageAdapter
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.MyPageViewModel
 import com.google.android.material.tabs.TabLayout
@@ -15,7 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MyWriteCommentFragment : BaseFragment<FragmentMyWriteCommentBinding>(FragmentMyWriteCommentBinding::bind, R.layout.fragment_my_write_comment) {
     private val viewModel: MyPageViewModel by viewModels()
-    private lateinit var viewPagerAdapter : MyWriteCommentAdapter
+    private lateinit var viewPagerAdapter : MyWriteCommentViewPageAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,7 +27,7 @@ class MyWriteCommentFragment : BaseFragment<FragmentMyWriteCommentBinding>(Fragm
 
     private fun initViewPager() {
         binding.run {
-            viewPagerAdapter  = MyWriteCommentAdapter(requireActivity())
+            viewPagerAdapter  = MyWriteCommentViewPageAdapter(requireActivity())
             vpMyWriteComment.adapter = viewPagerAdapter
             tlMyWriteComment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) { vpMyWriteComment.setCurrentItem(tab!!.position, false) }

@@ -6,11 +6,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardBinding
 import com.buy.together.ui.adapter.PagerImageAdapter
@@ -19,15 +21,16 @@ import com.buy.together.ui.view.restartActivity
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.util.AddressUtils
 import com.buy.together.util.CommonUtils
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.lang.Math.abs
 
 private const val TAG = "BoardFragment_싸피"
-class BoardFragment : BaseFragment<FragmentBoardBinding>(
-    FragmentBoardBinding::bind, R.layout.fragment_board
-){
+class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::bind, R.layout.fragment_board){
+    private val navArgs : BoardFragmentArgs by navArgs()
     private val viewModel: BoardViewModel by activityViewModels()
 
     private lateinit var mapMeetFragment : SupportMapFragment
@@ -53,10 +56,6 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
 
     private fun initAdapter(){
         Log.d(TAG, "initAdapter: dto : ${viewModel.boardDto?.images?.isEmpty()}")
-        if(viewModel.boardDto == null){
-            backPress()
-            return
-        }
         binding.vpImages.adapter = PagerImageAdapter(viewModel.boardDto?.images ?: listOf())
         binding.vpImages.orientation = ViewPager2.ORIENTATION_HORIZONTAL
     }
@@ -103,11 +102,8 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
                 Log.d(TAG, "makeDialog: userId가 없음")
                 Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
                 restartActivity()
-            }else if (boardDto == null) {
-                Log.d(TAG, "makeDialog: boardId가 없음")
-                backPress()
             }else{
-                saveData(userID,btnText,boardDto)
+                boardDto?.let { saveData(userID,btnText,it) }
             }
         }
     }
@@ -138,6 +134,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
                 }
                 is FireStoreResponse.Failure -> {
                     dismissLoadingDialog()
+                    Log.d("체크", "실패 1 =")
                     backPress()
                 }
             }
@@ -145,8 +142,12 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
     }
 
     private fun initData(){
+        if (navArgs.myWriteCommentDto!=null) {
+            viewModel.boardDto = BoardDto(category =navArgs.myWriteCommentDto!!.category, id = navArgs.myWriteCommentDto!!.boardId)
+        }
         val dto = viewModel.boardDto
         if(dto == null){
+            Log.d("체크", "dto = $dto: ")
             backPress()
             return
         }
@@ -156,8 +157,10 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
                 is FireStoreResponse.Success -> {
                     val dto_ = viewModel.makeBoard(response.data)
                     makeView(dto_)
+                    dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
+                    Log.d("체크", "실패 2 = $dto: ")
                     dismissLoadingDialog()
                     backPress()
                 }
@@ -165,7 +168,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
         }
     }
 
-    fun makeView(dto : BoardDto){
+    private fun makeView(dto : BoardDto){
         binding.apply {
             tvLeftPerson.visibility = View.GONE
             tvWriterName.text = dto.writer
@@ -223,17 +226,12 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
                 }
             }
         }
-        dismissLoadingDialog()
     }
 
     //Map
     private fun setMeetMap(map : GoogleMap){
         val dto = viewModel.boardDto
-        if(dto == null){
-            backPress()
-            return
-        }
-        if(dto.meetPoint == null) return
+        if(dto?.meetPoint == null) return
         val place : LatLng = AddressUtils.getPointsFromGeo(requireContext(), dto.meetPoint!!) ?: return
         val marker = MarkerOptions().position(place)
         map.addMarker(marker)
@@ -249,11 +247,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
 
     private fun setBuyMap(map : GoogleMap){
         val dto = viewModel.boardDto
-        if(dto == null){
-            backPress()
-            return
-        }
-        if(dto.buyPoint == null) return
+        if(dto?.buyPoint == null) return
         val place : LatLng = AddressUtils.getPointsFromGeo(requireContext(), dto.buyPoint!!) ?: return
         val marker = MarkerOptions().position(place)
         map.addMarker(marker)

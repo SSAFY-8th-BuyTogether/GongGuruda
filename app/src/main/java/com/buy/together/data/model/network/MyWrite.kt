@@ -10,6 +10,6 @@ data class MyWrite(
     var content : String = "",
     var time : Timestamp = Timestamp.now(),
 ){
-    fun makeToMyWriteCommentDto() = MyWriteCommentDto(MyWriteCommentDto.TYPE.COMMENT,
-        id, category = category, content = content, time = time.seconds)
+    fun makeToMyWriteCommentDto() = MyWriteCommentDto(MyWriteCommentDto.TYPE.WRITE,
+        boardId = id, boardTitle = title, category = category, content = content, time = time.seconds)
 }
