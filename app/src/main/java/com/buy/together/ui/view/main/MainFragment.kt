@@ -2,11 +2,13 @@ package com.buy.together.ui.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.GravityCompat
 import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -53,14 +55,14 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         initMyPageNavi()
         initAdapter()
         initListener()
-        if(binding.tvAddress.text == getString(R.string.tv_address_unselected)){
+        if(viewModel.selectedAddress.isEmpty()){
             setEmpty()
-        }else{
-            initData()
         }
         requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
             if(requestKey == "getAddress" && result["address"] != null){
                 val addressDto : AddressDto = result["address"] as AddressDto
+                viewModel.selectedAddress = addressDto.address
+                Log.d(TAG, "onViewCreated: address : ${viewModel.selectedAddress}")
                 binding.tvAddress.text = "${addressDto.address} ▾"
                 initData()
             }
@@ -77,6 +79,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     private fun initListener(){
         binding.apply {
             fabWriteBoard.setOnClickListener{
+                if(binding.tvAddress.text == getString(R.string.tv_address_unselected)){
+                    showCustomDialogBasicOneButton("먼저 주소를 등록해주세요")
+                    return@setOnClickListener
+                }
                 showBoardWritingFragment()
             }
             llCategoryLayout.apply{
@@ -108,27 +114,74 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                     popUpMenu(view, dto)
                 }
             }
+            svSearchTitle.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    Log.d(TAG, "onQueryTextSubmit: search ${p0!!}")
+                    return true
+                }
+            })
         }
     }
 
     private fun initData(){
+        Log.d(TAG, "initData: initdata")
         binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
+        showLoadingDialog(requireContext())
         viewModel.getBoardList(viewModel.categoryListKr[1]).observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Loading -> {  }
                 is FireStoreResponse.Success -> {
                     val list = mutableListOf<BoardDto>()
                     response.data.forEach{
-                        if((it["meetPoint"] as String).contains("구미시")){ //TODO : 현재 위치 받아오기
+                        val meetPoint = it["meetPoint"] as String?
+                        if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress)) {
                             list.add(viewModel.makeBoard(it))
                         }
                     }
-                    boardAdapter.boardDtoList = list
-                    boardAdapter.notifyDataSetChanged()
+                    boardAdapter.setList(list as ArrayList<BoardDto>)
+                    dismissLoadingDialog()
                     if(list.isEmpty()){
                         setEmpty()
                     }
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
                     dismissLoadingDialog()
+                }
+            }
+        }
+    }
+
+    private fun searchData(keyword : String){
+        val list = mutableListOf<BoardDto>()
+        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
+        var count = 0
+        viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { }
+                is FireStoreResponse.Success -> {
+                    response.data.forEach{
+                        val meetPoint = it["meetPoint"] as String?
+                        val title = it["title"] as String
+                        if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress)) {
+                            if(title.contains(keyword)){
+                                list.add(viewModel.makeBoard(it))
+                            }
+                        }
+                    }
+                    count++
+                    if(count == viewModel.categoryListKr.size -1){
+                        list.sortBy { it.deadLine }
+                        boardAdapter.setList(list as ArrayList<BoardDto>)
+                        if(list.isEmpty()){
+                            setEmpty()
+                        }
+                        dismissLoadingDialog()
+                    }
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
@@ -164,24 +217,24 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
             return
         }
         viewModel.removeBoardFromUser(userId,dto).observe(viewLifecycleOwner){ response ->
+            showLoadingDialog(requireContext())
             when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Loading -> {  }
                 is FireStoreResponse.Success -> {
                     viewModel.removeBoard(dto).observe(viewLifecycleOwner){ _response ->
                         when(_response){
-                            is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                            is FireStoreResponse.Loading -> {  }
                             is FireStoreResponse.Success -> {
                                 dismissLoadingDialog()
                                 initData()
                                 Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
                             }
                             is FireStoreResponse.Failure -> {
-                                Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
                                 dismissLoadingDialog()
+                                Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
-                    dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -266,7 +319,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     }
     private fun setAddressView(addressDto: AddressDto){
         binding.tvAddress.text = String.format(getString(R.string.tv_address_selected), AddressUtils.getSelectedAddress(addressDto.addressDetail))
-        // TODO : 아름 -> 주소 등록 여부에 따른 글 출력 뷰 조절.
+        if(viewModel.selectedAddress != addressDto.address){
+            initData()
+        }
+        viewModel.selectedAddress = addressDto.address
     }
     private fun setAlarmView(isSet : Boolean, itemList : ArrayList<AddressDto> = arrayListOf()){
         if (isSet){
@@ -281,10 +337,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         }
     }
     private fun onclickCategory(type : String){
-//        if(binding.tvAddress.text == getString(R.string.tv_address_unselected)){
-//            showCustomDialogBasicOneButton("먼저 주소를 등록해주세요")
-//            return
-//        }
+        if(binding.tvAddress.text == getString(R.string.tv_address_unselected)){
+            showCustomDialogBasicOneButton("먼저 주소를 등록해주세요")
+            return
+        }
         viewModel.category = type
         showBoardCategoryFragment()
     }

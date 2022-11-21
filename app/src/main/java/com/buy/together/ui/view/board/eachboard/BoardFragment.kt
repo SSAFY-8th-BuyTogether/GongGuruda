@@ -155,8 +155,8 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
-                    val dto_ = viewModel.makeBoard(response.data)
-                    makeView(dto_)
+                    viewModel.boardDto = viewModel.makeBoard(response.data)
+                    makeView(viewModel.boardDto!!)
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
