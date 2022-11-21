@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/layout_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="@{@string/tv_myWriteCommentParticipate_title(itemDto.title)}"
+            android:text="@{@string/tv_myPage_toBoard_title(itemDto.title)}"
             android:layout_marginTop="5dp"
             android:textSize="14sp"
             android:textColor="@color/black_50"

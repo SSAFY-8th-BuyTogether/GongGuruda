@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_navi_alarm"
+    android:id="@+id/layout_alarm"
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_width="match_parent"
@@ -10,8 +10,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_join_state">
+        android:layout_width="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,7 +48,7 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
-        android:visibility="visible">
+        android:visibility="gone">
         <ImageView
             android:id="@+id/img_alarm_empty"
             android:layout_width="wrap_content"
@@ -74,7 +73,7 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:background="@color/grayForBackground"
-        android:visibility="gone"
+        android:visibility="visible"
         android:nestedScrollingEnabled="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_alarm" />

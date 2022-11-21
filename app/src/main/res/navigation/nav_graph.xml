@@ -230,7 +230,13 @@
         </action>
         <action
             android:id="@+id/action_mainFragment_to_boardFragment"
-            app:destination="@id/boardFragment" />
+            app:destination="@id/boardFragment" >
+            <argument
+                android:name="boardDto"
+                app:argType="com.buy.together.data.model.domain.BoardDto"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </action>
         <action
             android:id="@+id/action_mainFragment_to_myInfoModifyFragment"
             app:destination="@id/myInfoModifyFragment"

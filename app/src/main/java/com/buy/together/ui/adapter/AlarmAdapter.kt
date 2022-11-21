@@ -5,31 +5,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.buy.together.data.model.domain.AddressDto
+import com.buy.together.data.model.domain.AlarmDto
 import com.buy.together.databinding.ItemAddressBinding
+import com.buy.together.databinding.ItemAlarmBinding
 
 class AlarmAdapter() : RecyclerView.Adapter<AlarmAdapter.Holder>() {
 
-    private val itemList : ArrayList<AddressDto> = arrayListOf()
+    private val itemList : ArrayList<AlarmDto> = arrayListOf()
 
-    fun setListData(dataList: ArrayList<AddressDto>){
+    fun setListData(dataList: ArrayList<AlarmDto>){
         itemList.clear()
         itemList.addAll(dataList)
         notifyDataSetChanged()
     }
 
 
-    inner class Holder(private val binding: ItemAddressBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bindInfo(position: Int, address: AddressDto){
-            binding.apply {
-                tvAddressItem.text = address.addressDetail
-                tvAddressItem.setOnClickListener { itemClickListener.onClickItem(it, position, itemList[position]) }
-                btnAddressItemDelete.setOnClickListener { itemClickListener.onClickRemove(it, position, itemList[position]) }
-            }
+    inner class Holder(private val binding: ItemAlarmBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bindInfo(position: Int, alarmDto: AlarmDto){
+            binding.itemDto = alarmDto
+            binding.layoutItemAlarm.setOnClickListener { itemClickListener.onClickItem(it, position, itemList[position])  }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return  Holder(ItemAddressBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return  Holder(ItemAlarmBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
@@ -43,8 +42,7 @@ class AlarmAdapter() : RecyclerView.Adapter<AlarmAdapter.Holder>() {
     override fun getItemCount(): Int = itemList.size
 
     interface ItemClickListener{
-        fun onClickItem(view: View, position: Int, addressDto: AddressDto)
-        fun onClickRemove(view: View, position: Int, addressDto: AddressDto)
+        fun onClickItem(view: View, position: Int, alarmDto: AlarmDto)
     }
 
     private lateinit var itemClickListener: ItemClickListener
