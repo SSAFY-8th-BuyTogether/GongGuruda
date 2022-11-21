@@ -20,6 +20,7 @@ import com.buy.together.databinding.FragmentBoardWritingBinding
 import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
+import com.buy.together.ui.viewmodel.MyPageViewModel
 import com.buy.together.util.GalleryUtils.getGallery
 import java.util.*
 
@@ -29,6 +30,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     FragmentBoardWritingBinding::bind, R.layout.fragment_board_writing
 ) {
     private val viewModel : BoardViewModel by activityViewModels()
+    private val myPageViewModel : MyPageViewModel by activityViewModels()
     private lateinit var spinnerAdapter: ArrayAdapter<String>
     private lateinit var imageAdapter: ImageAdpater
     private var selectedTime: Long? = null
@@ -145,20 +147,24 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         }
         val board = setBoardDto(userId)
         showLoadingDialog(requireContext())
-        viewModel.saveImage(board,imageAdapter.ImageList)
-        viewModel.ImgLiveData.observe(viewLifecycleOwner){
-            board.images = it
-            dismissLoadingDialog()
-            viewModel.saveBoard(board).observe(viewLifecycleOwner){ response ->
-                when(response){
-                    is FireStoreResponse.Loading ->{ showLoadingDialog(requireContext())}
-                    is FireStoreResponse.Success -> {
-                        sendUser(userId,board)
-                        dismissLoadingDialog()
-                    }
-                    is FireStoreResponse.Failure -> {
-                        Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
-                        dismissLoadingDialog()
+        myPageViewModel.getUserInfo().observe(viewLifecycleOwner){
+            it?.let { userDto ->
+                board.writerProfile = userDto.profile
+                viewModel.saveImage(board,imageAdapter.ImageList)
+            }
+            viewModel.ImgLiveData.observe(viewLifecycleOwner){
+                board.images = it
+                dismissLoadingDialog()
+                viewModel.saveBoard(board).observe(viewLifecycleOwner){ response ->
+                    when(response){
+                        is FireStoreResponse.Loading ->{ showLoadingDialog(requireContext())}
+                        is FireStoreResponse.Success -> {
+                            sendUser(userId,board)
+                        }
+                        is FireStoreResponse.Failure -> {
+                            Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                            dismissLoadingDialog()
+                        }
                     }
                 }
             }
@@ -168,10 +174,9 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     fun sendUser(userId: String,boardDto: BoardDto){
         viewModel.saveBoardToUser(userId,boardDto).observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
+                is FireStoreResponse.Loading -> { }
                 is FireStoreResponse.Success -> {
                     sendParticipator(userId,boardDto)
-                    dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
@@ -185,9 +190,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         viewModel.insertUserParticipate(userId,boardDto,true)
             .observe(viewLifecycleOwner) { response_ ->
                 when (response_) {
-                    is FireStoreResponse.Loading -> {
-                        showLoadingDialog(requireContext())
-                    }
+                    is FireStoreResponse.Loading -> {}
                     is FireStoreResponse.Success -> {
                         Toast.makeText(requireContext(),"성공적으로 저장되었습니다.",Toast.LENGTH_SHORT).show()
                         dismissLoadingDialog()
@@ -218,8 +221,8 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             participator = arrayListOf(userId),
             images= listOf(),
             maxPeople = if(maxPeople.isEmpty()) null else maxPeople.toInt(),
-            meetPoint= if(meetPoint.isEmpty()) "" else meetPoint,
-            buyPoint = if(meetPoint.isEmpty()) "" else buyPoint
+            meetPoint= if(meetPoint.isEmpty()) null else meetPoint,
+            buyPoint = if(buyPoint.isEmpty()) null else buyPoint
         )
         return board
     }

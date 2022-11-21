@@ -1,6 +1,5 @@
 package com.buy.together.ui.view.mypage
 
-
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels

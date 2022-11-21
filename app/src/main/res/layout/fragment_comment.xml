@@ -38,6 +38,15 @@
         app:layout_constraintBottom_toTopOf="@+id/ll_mention_layout"
         app:layout_constraintTop_toBottomOf="@id/divier_comment" />
 
+    <include
+        android:id="@+id/layout_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/ll_mention_layout"
+        app:layout_constraintTop_toBottomOf="@id/divier_comment"
+        layout="@layout/layout_empty_view"/>
+
     <LinearLayout
         android:id="@+id/ll_mention_layout"
         android:layout_width="match_parent"
@@ -45,7 +54,7 @@
         android:orientation="horizontal"
         android:background="@color/colorPrimary"
         android:weightSum="12"
-        app:layout_constraintBottom_toTopOf="@+id/ll_bottom_layout">
+        app:layout_constraintBottom_toTopOf="@+id/cl_bottom_layout">
 
         <TextView
             android:id="@+id/tv_mention"
@@ -68,7 +77,7 @@
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/ll_bottom_layout"
+        android:id="@+id/cl_bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@color/colorPrimary"

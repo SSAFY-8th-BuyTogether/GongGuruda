@@ -6,7 +6,6 @@ import com.buy.together.data.model.network.MyComment
 import com.google.firebase.Timestamp
 import kotlinx.parcelize.Parcelize
 
-
 @Parcelize
 data class MyWriteCommentDto(
     var type : TYPE = TYPE.WRITE,

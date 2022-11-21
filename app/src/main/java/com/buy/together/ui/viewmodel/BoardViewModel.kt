@@ -4,13 +4,11 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.dto.CommentDto
 import com.buy.together.data.dto.usercollection.UserBoard
 import com.buy.together.data.dto.usercollection.UserComment
-import com.buy.together.data.dto.usercollection.UserParticipate
 import com.buy.together.data.repository.BoardRepository
 import com.buy.together.ui.base.BaseViewModel
 import com.buy.together.util.GalleryUtils.insertImage
@@ -76,7 +74,7 @@ class BoardViewModel : BaseViewModel() {
             id= boardDto.id,
             title= boardDto.title,
             category= boardDto.category,
-            content= boardDto.content,
+            content= boardDto.title,
             time= Timestamp.now(),
         )
         repository.insertBoardToUser(userId,userBoard).collect{emit(it)}
@@ -87,7 +85,7 @@ class BoardViewModel : BaseViewModel() {
             id= boardDto.id,
             title= boardDto.title,
             category= boardDto.category,
-            content= boardDto.content,
+            content= boardDto.title,
             time= Timestamp.now(),
         )
         repository.deleteBoardFromUser(userId,userBoard).collect{emit(it)}
@@ -110,9 +108,12 @@ class BoardViewModel : BaseViewModel() {
     }
 
     fun insertUserParticipate(userId: String, boardDto: BoardDto,flag : Boolean) = liveData(Dispatchers.IO) {
-        val participate = UserParticipate(
+        val participate = UserBoard(
             id= boardDto.id,
+            title= boardDto.title,
             category= boardDto.category,
+            content= boardDto.title,
+            time= Timestamp.now(),
         )
         if(flag){
             repository.insertParticipator(userId,participate).collect{emit(it)}
@@ -173,9 +174,9 @@ class BoardViewModel : BaseViewModel() {
             participator = document["participator"] as List<String>,
             images= document["images"] as List<String>,
             maxPeople= (document["maxPeople"] as Long?)?.toInt(),
-            meetPoint= document["meetPoint"] as String,
+            meetPoint= document["meetPoint"] as String?,
             meetTime= document["meetTime"] as Long?,
-            buyPoint= document["buyPoint"] as String,
+            buyPoint= document["buyPoint"] as String?,
         )
         return dto
     }
