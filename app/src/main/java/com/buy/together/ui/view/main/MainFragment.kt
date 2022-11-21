@@ -120,7 +120,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                 }
 
                 override fun onQueryTextSubmit(p0: String?): Boolean {
-                    Log.d(TAG, "onQueryTextSubmit: search ${p0!!}")
+                    if(p0 != null){
+                        Log.d(TAG, "onQueryTextSubmit: search ${p0}")
+                        searchData(p0)
+                        svSearchTitle.setQuery("",false)
+                    }
                     return true
                 }
             })
@@ -160,9 +164,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         val list = mutableListOf<BoardDto>()
         binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
         var count = 0
-        viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
+        viewModel.getBoardList("전체").observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> { }
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
                     response.data.forEach{
                         val meetPoint = it["meetPoint"] as String?
@@ -180,8 +184,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                         if(list.isEmpty()){
                             setEmpty()
                         }
-                        dismissLoadingDialog()
                     }
+                    dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
@@ -320,9 +324,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     }
     private fun setAddressView(addressDto: AddressDto){
         binding.tvAddress.text = String.format(getString(R.string.tv_address_selected), AddressUtils.getSelectedAddress(addressDto.addressDetail))
-        if(viewModel.selectedAddress != addressDto.address){
-            initData()
-        }
+        initData()
         viewModel.selectedAddress = addressDto.address
     }
     private fun setAlarmView(isSet : Boolean, itemList : ArrayList<AddressDto> = arrayListOf()){
