@@ -99,12 +99,9 @@ class JoinUserInfoFragment : BaseFragment<FragmentJoinUserInfoBinding>(FragmentJ
         }
     }
     
-    private val imageLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
+    private val imageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val imageUri: Uri? = result.data?.data
-            Log.d("싸피", "uri : $imageUri")
             if (imageUri != null) {
                 profileImage = imageUri
                 Glide.with(requireActivity())

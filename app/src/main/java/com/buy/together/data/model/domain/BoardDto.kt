@@ -1,4 +1,4 @@
-package com.buy.together.data.dto
+package com.buy.together.data.model.domain
 
 data class BoardDto (
     var id: String = "",

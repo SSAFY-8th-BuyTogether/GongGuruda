@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.buy.together.Application
 import com.buy.together.R
-import com.buy.together.data.dto.CommentDto
+import com.buy.together.data.model.domain.CommentDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentCommentBinding
 import com.buy.together.ui.adapter.CommentAdapter
@@ -28,7 +28,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     private var mention : String? = null
 
     override fun initView() {
-        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
+        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
         initAdapter()
         initData()
     }
@@ -140,7 +140,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                     commentAdapter.commentList = list
                     commentAdapter.notifyDataSetChanged()
                     if(list.isEmpty()){
-                        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.VISIBLE
+                        binding.layoutEmpty.layoutEmptyView.visibility = View.VISIBLE
                         binding.layoutEmpty.tvEmptyView.text = "댓글이"
                     }
                     dismissLoadingDialog()
@@ -153,7 +153,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
         }
     }
 
-    private fun popUpMenu(view : View, dto : CommentDto ){
+    private fun popUpMenu(view : View, dto : CommentDto){
         val popupMenu = PopupMenu(requireContext(),view)
         popupMenu.menuInflater.inflate(R.menu.menu_option_comment,popupMenu.menu)
         popupMenu.setOnMenuItemClickListener{ item ->

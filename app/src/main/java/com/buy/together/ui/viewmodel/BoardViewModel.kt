@@ -5,10 +5,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import com.buy.together.data.dto.BoardDto
-import com.buy.together.data.dto.CommentDto
-import com.buy.together.data.dto.usercollection.UserBoard
-import com.buy.together.data.dto.usercollection.UserComment
+import com.buy.together.data.model.domain.BoardDto
+import com.buy.together.data.model.domain.CommentDto
+import com.buy.together.data.model.domain.usercollection.UserBoard
+import com.buy.together.data.model.domain.usercollection.UserComment
 import com.buy.together.data.repository.BoardRepository
 import com.buy.together.ui.base.BaseViewModel
 import com.buy.together.util.GalleryUtils.insertImage
@@ -107,7 +107,7 @@ class BoardViewModel : BaseViewModel() {
         repository.saveBoard(boardDto).collect{emit(it)}
     }
 
-    fun insertUserParticipate(userId: String, boardDto: BoardDto,flag : Boolean) = liveData(Dispatchers.IO) {
+    fun insertUserParticipate(userId: String, boardDto: BoardDto, flag : Boolean) = liveData(Dispatchers.IO) {
         val participate = UserBoard(
             id= boardDto.id,
             title= boardDto.title,

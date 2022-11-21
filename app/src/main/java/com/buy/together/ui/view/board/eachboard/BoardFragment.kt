@@ -11,8 +11,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.buy.together.Application
 import com.buy.together.R
-import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.model.domain.AddressDto
+import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardBinding
 import com.buy.together.ui.adapter.PagerImageAdapter
@@ -108,7 +108,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         }
     }
 
-    private fun saveData(userId:String,btnText: String, boardDto:BoardDto){
+    private fun saveData(userId:String,btnText: String, boardDto: BoardDto){
         val flag: Boolean = (btnText == requireContext().getString(R.string.btn_participate))
         viewModel.insertParticipator(boardDto,userId, flag).observe(viewLifecycleOwner){ response ->
             when(response){

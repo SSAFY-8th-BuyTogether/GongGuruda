@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.buy.together.Application
-import com.buy.together.data.dto.CommentDto
+import com.buy.together.data.model.domain.CommentDto
 import com.buy.together.databinding.ItemCommentBinding
 import com.buy.together.util.CommonUtils
 

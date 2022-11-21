@@ -13,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.Application.Companion.sharedPreferences
 import com.buy.together.R
-import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardWritingBinding
@@ -204,7 +204,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             }
     }
 
-    fun setBoardDto(userId : String) : BoardDto{
+    fun setBoardDto(userId : String) : BoardDto {
         val calendar = Calendar.getInstance()
         val maxPeople = binding.includeWritingOption.etMaxPeople.editText?.text.toString()
         val meetPoint = binding.includeWritingOption.etMeetPoint.editText?.text.toString()

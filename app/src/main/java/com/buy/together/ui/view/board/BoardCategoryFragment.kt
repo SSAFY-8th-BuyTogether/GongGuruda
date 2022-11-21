@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.buy.together.Application
 import com.buy.together.R
-import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardCategoryBinding
 import com.buy.together.ui.adapter.BoardAdapter
@@ -25,7 +25,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvCategory.text = viewModel.category
-        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
+        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
         initAdapter()
         initListener()
 
@@ -131,7 +131,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
 
     private fun setEmptyLayout(){
         binding.apply {
-            layoutEmpty.layoutAddressEmptyView.visibility = View.VISIBLE
+            layoutEmpty.layoutEmptyView.visibility = View.VISIBLE
             layoutEmpty.tvEmptyView.text = "게시글이"
         }
     }

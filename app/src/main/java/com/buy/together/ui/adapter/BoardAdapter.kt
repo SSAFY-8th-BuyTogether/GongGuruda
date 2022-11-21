@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.buy.together.Application
 import com.buy.together.R
-import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.databinding.ItemBoardBinding
 import com.buy.together.util.CommonUtils
 

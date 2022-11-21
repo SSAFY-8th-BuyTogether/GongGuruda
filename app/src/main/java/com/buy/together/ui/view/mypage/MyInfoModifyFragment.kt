@@ -1,7 +1,12 @@
 package com.buy.together.ui.view.mypage
 
+import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,12 +17,28 @@ import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentMyInfoModifyBinding
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.MyPageViewModel
+import com.buy.together.util.GalleryUtils
 import com.buy.together.util.RegularExpression
 
 class MyInfoModifyFragment : BaseFragment<FragmentMyInfoModifyBinding>(FragmentMyInfoModifyBinding::bind, R.layout.fragment_my_info_modify) {
     private val viewModel : MyPageViewModel by viewModels()
     private var isNickNameChecked : Boolean = false
     private lateinit var userDto : UserDto
+    private var profileImage : Uri = Uri.parse(GalleryUtils.baseProfile)
+
+    private val imageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val imageUri: Uri? = result.data?.data
+            if (imageUri != null) {
+                profileImage = imageUri
+                Glide.with(requireActivity())
+                    .load(imageUri)
+                    .into(binding.imgUserProfile)
+            }else{
+                Toast.makeText(requireContext(), "이미지를 가져오는데 실패했습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,6 +48,9 @@ class MyInfoModifyFragment : BaseFragment<FragmentMyInfoModifyBinding>(FragmentM
         initData()
         binding.apply {
             btnBack.setOnClickListener{ showPopFragment() }
+            imgUserProfile.setOnClickListener{
+                GalleryUtils.getGallery(requireContext(), imageLauncher)
+            }
             btnNickNameCheck.setOnClickListener {
                 if (userDto.nickName==getUserNickName()){
                     setIsNickNameChecked(true)
@@ -52,29 +76,35 @@ class MyInfoModifyFragment : BaseFragment<FragmentMyInfoModifyBinding>(FragmentM
             }
             btnSubmit.setOnClickListener{
                 if (getIsNickNameChecked()&& viewModel.checkJoinBasicInfo(getUserName(), getUserBirth(), getUserSms())){
-                    userDto.apply {
-                        nickName = getUserNickName()
-                        name = getUserName()
-                        birthday = getUserBirth()
-                        phone = getUserSms()
-                    }
-                    viewModel.modify(userDto).observe(viewLifecycleOwner){ response ->
-                            when(response){
-                                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
-                                is FireStoreResponse.Success -> {
-                                    showPopFragment()
-                                    dismissLoadingDialog()
-                                }
-                                is FireStoreResponse.Failure -> {
-                                    showCustomDialogBasicOneButton(response.errorMessage)
-                                    dismissLoadingDialog()
+                    showLoadingDialog(requireContext())
+                    GalleryUtils.changeProfileImg(viewModel.authToken, profileImage).observe(viewLifecycleOwner){ img->
+                        if(img == null){ return@observe }
+                        else{
+                            userDto.apply {
+                                nickName = getUserNickName()
+                                name = getUserName()
+                                birthday = getUserBirth()
+                                phone = getUserSms()
+                                profile = img
+                            }
+                            viewModel.modify(userDto).observe(viewLifecycleOwner){ response ->
+                                when(response){
+                                    is FireStoreResponse.Loading -> {  }
+                                    is FireStoreResponse.Success -> {
+                                        showPopFragment()
+                                        dismissLoadingDialog()
+                                    }
+                                    is FireStoreResponse.Failure -> {
+                                        showCustomDialogBasicOneButton(response.errorMessage)
+                                        dismissLoadingDialog()
+                                    }
                                 }
                             }
+                        }
                     }
                 }
             }
         }
-
     }
 
     private fun initData(){

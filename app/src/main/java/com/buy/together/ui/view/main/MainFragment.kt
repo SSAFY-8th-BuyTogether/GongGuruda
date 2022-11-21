@@ -15,7 +15,7 @@ import com.buy.together.Application.Companion.sharedPreferences
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.buy.together.R
-import com.buy.together.data.dto.BoardDto
+import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentMainBinding
@@ -112,7 +112,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     }
 
     private fun initData(){
-        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
+        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
         viewModel.getBoardList(viewModel.categoryListKr[1]).observe(viewLifecycleOwner){ response ->
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
@@ -141,7 +141,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     private fun setEmpty(){
         binding.layoutEmpty.apply {
             tvEmptyView.text = "게시글이"
-            layoutAddressEmptyView.visibility = View.VISIBLE
+            layoutEmptyView.visibility = View.VISIBLE
         }
     }
 

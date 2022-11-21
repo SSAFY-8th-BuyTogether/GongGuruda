@@ -1,10 +1,10 @@
 package com.buy.together.data.repository
 
 import android.util.Log
-import com.buy.together.data.dto.BoardDto
-import com.buy.together.data.dto.CommentDto
-import com.buy.together.data.dto.usercollection.UserBoard
-import com.buy.together.data.dto.usercollection.UserComment
+import com.buy.together.data.model.domain.BoardDto
+import com.buy.together.data.model.domain.CommentDto
+import com.buy.together.data.model.domain.usercollection.UserBoard
+import com.buy.together.data.model.domain.usercollection.UserComment
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query

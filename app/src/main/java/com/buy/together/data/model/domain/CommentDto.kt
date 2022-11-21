@@ -1,4 +1,4 @@
-package com.buy.together.data.dto
+package com.buy.together.data.model.domain
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
