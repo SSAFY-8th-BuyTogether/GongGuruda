@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.R
 import com.buy.together.data.model.domain.AddressDto
+import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.domain.MyWriteCommentDto
 import com.buy.together.databinding.FragmentMyWriteBinding
 import com.buy.together.ui.adapter.MyWriteCommentAdapter
@@ -40,7 +41,7 @@ class MyWriteFragment  : BaseFragment<FragmentMyWriteBinding>(FragmentMyWriteBin
         rvAdapter = MyWriteCommentAdapter().apply {
             setItemClickListener(object : MyWriteCommentAdapter.ItemClickListener{
                 override fun onClickItem(view: View, position: Int, writeCommentDto: MyWriteCommentDto) {
-                    findNavController().navigate(MyWriteCommentFragmentDirections.actionMyWriteCommentFragmentToBoardFragment(writeCommentDto))
+                    showBoardFragment(BoardDto(id = writeCommentDto.boardId, category = writeCommentDto.category))
                 }
             })
         }
@@ -59,4 +60,6 @@ class MyWriteFragment  : BaseFragment<FragmentMyWriteBinding>(FragmentMyWriteBin
             rvAdapter.setListData(itemList)
         }else binding.rvMyWrite.visibility = View.GONE
     }
+
+    private fun showBoardFragment(itemDto: BoardDto){ findNavController().navigate(MyWriteCommentFragmentDirections.actionMyWriteCommentFragmentToBoardFragment(itemDto)) }
 }

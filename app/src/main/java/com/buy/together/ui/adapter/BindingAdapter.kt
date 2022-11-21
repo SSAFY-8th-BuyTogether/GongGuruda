@@ -26,7 +26,7 @@ object BindingAdapter  {
     @JvmStatic
     @BindingAdapter("writeCommentContent")
     fun bindTextFromWriteCommentContent(textView: TextView, content : String){
-        textView.text = if (content.length<10) "\"$content\"" else "\"content.substring(0,10)\""
+        textView.text = if (content.length<10) "\"${content}\"" else "\"${content.substring(0,10)}\""
     }
     @JvmStatic
     @BindingAdapter("writeCommentDate")

@@ -62,16 +62,17 @@
                 android:layout_gravity="start"
                 android:text="주소입니다."
                 android:textSize="18sp" />
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_address_add"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:text="이 위치로 주소 등록"
                 android:textSize="16sp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/notosanskr_bold_hestia"
-                android:background="@color/mainColor"
+                android:background="@color/colorPrimary"
                 style="@style/Widget.MaterialComponents.Button"
                 app:cornerRadius="5dp" />
         </LinearLayout>

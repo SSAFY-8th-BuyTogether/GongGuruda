@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.buy.together.data.AppDatabase
 import com.buy.together.data.model.network.MyComment
+import com.buy.together.data.model.network.MyParticipate
 import com.buy.together.data.model.network.MyWrite
 import com.buy.together.data.model.network.User
 import com.buy.together.data.model.network.firestore.FireStoreInfo
@@ -167,6 +168,13 @@ class UserRepository private constructor(context: Context){
         return observeCollection(fireStore.collection(FireStoreInfo.USER).document(userId)
             .collection(FireStoreInfo.USER_COMMENT)
             .orderBy(FireStoreInfo.USER_WRITE_COMMENT_TIME, Query.Direction.DESCENDING)
+        )
+    }
+
+    fun getMyParticipate(userId: String) : Flow<List<MyParticipate?>?> {
+        return observeCollection(fireStore.collection(FireStoreInfo.USER).document(userId)
+            .collection(FireStoreInfo.USER_PARTICIPATE)
+            .orderBy(FireStoreInfo.USER_PARTICIPATE_TIME, Query.Direction.DESCENDING)
         )
     }
 }

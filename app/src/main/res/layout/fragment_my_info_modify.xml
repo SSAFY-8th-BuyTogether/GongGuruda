@@ -74,15 +74,15 @@
                     android:innerRadius="0dp"
                     android:shape="ring"
                     android:thicknessRatio="1.9">
+
                     <ImageView
                         android:id="@+id/img_user_profile"
-                        android:layout_height="match_parent"
                         android:layout_width="match_parent"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/img_profile_default"
+                        android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true">
-                    </ImageView>
+                        android:layout_centerHorizontal="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_profile_default"></ImageView>
                 </androidx.cardview.widget.CardView>
                 <ImageView
                     android:layout_width="32dp"

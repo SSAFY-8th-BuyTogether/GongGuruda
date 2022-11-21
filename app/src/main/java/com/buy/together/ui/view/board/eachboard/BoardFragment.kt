@@ -142,9 +142,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
     }
 
     private fun initData(){
-        if (navArgs.myWriteCommentDto!=null) {
-            viewModel.boardDto = BoardDto(category =navArgs.myWriteCommentDto!!.category, id = navArgs.myWriteCommentDto!!.boardId)
-        }
+        navArgs.boardDto?.let { viewModel.boardDto = it }
         val dto = viewModel.boardDto
         if(dto == null){
             Log.d("체크", "dto = $dto: ")

@@ -252,6 +252,13 @@
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_myParticipateFragment"
+            app:destination="@id/myParticipateFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
     </fragment>
     <navigation
         android:id="@+id/addressGraph"
@@ -317,8 +324,8 @@
         android:label="fragment_board"
         tools:layout="@layout/fragment_board" >
         <argument
-            android:name="myWriteCommentDto"
-            app:argType="com.buy.together.data.model.domain.MyWriteCommentDto"
+            android:name="boardDto"
+            app:argType="com.buy.together.data.model.domain.BoardDto"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -363,8 +370,23 @@
             android:id="@+id/action_myWriteCommentFragment_to_boardFragment"
             app:destination="@id/boardFragment" >
             <argument
-                android:name="myWriteCommentDto"
-                app:argType="com.buy.together.data.model.domain.MyWriteCommentDto"
+                android:name="boardDto"
+                app:argType="com.buy.together.data.model.domain.BoardDto"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/myParticipateFragment"
+        android:name="com.buy.together.ui.view.mypage.MyParticipateFragment"
+        android:label="fragment_my_participate"
+        tools:layout="@layout/fragment_my_participate" >
+        <action
+            android:id="@+id/action_myParticipateFragment_to_boardFragment"
+            app:destination="@id/boardFragment" >
+            <argument
+                android:name="boardDto"
+                app:argType="com.buy.together.data.model.domain.BoardDto"
                 app:nullable="true"
                 android:defaultValue="@null" />
         </action>

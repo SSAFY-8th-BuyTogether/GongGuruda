@@ -1,5 +1,9 @@
 package com.buy.together.data.model.domain
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class BoardDto (
     var id: String = "",
     var title : String = "",
@@ -17,4 +21,4 @@ data class BoardDto (
     var meetPoint : String? = null,
     var meetTime : Long? = null,
     var buyPoint : String? = null,
-) : java.io.Serializable
+) : Parcelable

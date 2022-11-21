@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.buy.together.R
 import com.buy.together.data.model.domain.AddressDto
+import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.domain.MyWriteCommentDto
 import com.buy.together.databinding.FragmentMyCommentBinding
 import com.buy.together.ui.adapter.MyWriteCommentAdapter
@@ -44,7 +45,7 @@ class MyCommentFragment : BaseFragment<FragmentMyCommentBinding>(FragmentMyComme
         rvAdapter = MyWriteCommentAdapter().apply {
             setItemClickListener(object : MyWriteCommentAdapter.ItemClickListener{
                 override fun onClickItem(view: View, position: Int, writeCommentDto: MyWriteCommentDto) {
-                    findNavController().navigate(MyWriteCommentFragmentDirections.actionMyWriteCommentFragmentToBoardFragment(writeCommentDto))
+                    showBoardFragment(BoardDto(id=writeCommentDto.boardId, category = writeCommentDto.category))
                 }
             })
         }
@@ -54,7 +55,7 @@ class MyCommentFragment : BaseFragment<FragmentMyCommentBinding>(FragmentMyComme
     private fun setEmptyView(isSet : Boolean){
         if (isSet){
             binding.layoutMyCommentEmptyView.layoutEmptyView.visibility = View.VISIBLE
-            binding.layoutMyCommentEmptyView.tvEmptyView.text = "작성하신 댓글"
+            binding.layoutMyCommentEmptyView.tvEmptyView.text = "작성하신 댓글이"
         }else binding.layoutMyCommentEmptyView.layoutEmptyView.visibility = View.GONE
     }
     private fun setRVView(isSet : Boolean, itemList : ArrayList<MyWriteCommentDto> = arrayListOf()){
@@ -63,4 +64,6 @@ class MyCommentFragment : BaseFragment<FragmentMyCommentBinding>(FragmentMyComme
             rvAdapter.setListData(itemList)
         }else binding.rvMyComment.visibility = View.GONE
     }
+
+    private fun showBoardFragment(itemDto: BoardDto){ findNavController().navigate(MyWriteCommentFragmentDirections.actionMyWriteCommentFragmentToBoardFragment(itemDto)) }
 }
