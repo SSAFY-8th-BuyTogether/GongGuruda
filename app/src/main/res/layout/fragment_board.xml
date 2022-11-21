@@ -10,7 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/ll_bottom_layout"
+        app:layout_constraintBottom_toTopOf="@+id/cl_bottom_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -281,50 +281,52 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_bottom_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:weightSum="12"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/ib_comment"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:background="@color/transparent"
-            android:layout_weight="5"
-            android:paddingTop="14dp"
+            android:gravity="center"
             android:padding="12dp"
-            android:src="@drawable/ic_chat"/>
+            android:layout_marginStart="8dp"
+            android:paddingTop="14dp"
+            android:src="@drawable/ic_chat"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/tv_price"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textStyle="bold"
             android:gravity="center"
-            android:layout_weight="3"
             android:textSize="26sp"
-            tools:text="3000원"/>
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btn_participate"
+            app:layout_constraintStart_toEndOf="@+id/ib_comment"
+            tools:text="3000원" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_participate"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="4"
             android:layout_margin="6dp"
-            android:textSize="16sp"
             android:backgroundTint="@color/colorAccent"
             android:gravity="center"
             android:text="@string/btn_participate"
-            />
-    </LinearLayout>
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

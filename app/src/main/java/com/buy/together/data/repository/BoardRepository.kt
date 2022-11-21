@@ -5,7 +5,6 @@ import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.dto.CommentDto
 import com.buy.together.data.dto.usercollection.UserBoard
 import com.buy.together.data.dto.usercollection.UserComment
-import com.buy.together.data.dto.usercollection.UserParticipate
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -77,7 +76,7 @@ class BoardRepository {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }
 
-    fun insertParticipator(userId: String, participate: UserParticipate)= flow{
+    fun insertParticipator(userId: String, participate: UserBoard)= flow{
         val query = userDB.document(userId)
             .collection("Participate")
             .document(participate.id)
@@ -87,7 +86,7 @@ class BoardRepository {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }
 
-    fun deleteParticipator(userId: String, participate: UserParticipate)= flow{
+    fun deleteParticipator(userId: String, participate: UserBoard)= flow{
         val query = userDB.document(userId)
             .collection("Participate")
             .document(participate.id)

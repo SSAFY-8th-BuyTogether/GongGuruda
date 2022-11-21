@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.buy.together.Application.Companion.sharedPreferences
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
 import com.buy.together.data.model.domain.AddressDto
@@ -54,7 +53,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         initMyPageNavi()
         initAdapter()
         initListener()
-        initData()
+        if(binding.tvAddress.text == getString(R.string.tv_address_unselected)){
+            setEmpty()
+        }else{
+            initData()
+        }
         requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
             if(requestKey == "getAddress" && result["address"] != null){
                 val addressDto : AddressDto = result["address"] as AddressDto
@@ -77,6 +80,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                 showBoardWritingFragment()
             }
             llCategoryLayout.apply{
+
                 ibImgAll.setOnClickListener{
                     onclickCategory("전체")
                 }
@@ -108,6 +112,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     }
 
     private fun initData(){
+        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
         viewModel.getBoardList(viewModel.categoryListKr[1]).observe(viewLifecycleOwner){ response ->
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
@@ -120,6 +125,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                     }
                     boardAdapter.boardDtoList = list
                     boardAdapter.notifyDataSetChanged()
+                    if(list.isEmpty()){
+                        setEmpty()
+                    }
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
@@ -127,6 +135,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                     dismissLoadingDialog()
                 }
             }
+        }
+    }
+
+    private fun setEmpty(){
+        binding.layoutEmpty.apply {
+            tvEmptyView.text = "게시글이"
+            layoutAddressEmptyView.visibility = View.VISIBLE
         }
     }
 
@@ -143,7 +158,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     }
 
     private fun deleteComment(dto : BoardDto){
-        val userId : String? = Application.sharedPreferences.getAuthToken()
+        val userId : String? = sharedPreferences.getAuthToken()
         if(userId == null) {
             Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
             return
@@ -266,6 +281,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         }
     }
     private fun onclickCategory(type : String){
+//        if(binding.tvAddress.text == getString(R.string.tv_address_unselected)){
+//            showCustomDialogBasicOneButton("먼저 주소를 등록해주세요")
+//            return
+//        }
         viewModel.category = type
         showBoardCategoryFragment()
     }

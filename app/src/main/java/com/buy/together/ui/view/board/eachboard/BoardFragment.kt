@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.buy.together.Application
 import com.buy.together.R
 import com.buy.together.data.dto.BoardDto
@@ -190,11 +191,22 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
             //button
             val userId : String? = Application.sharedPreferences.getAuthToken()
             if(dto.participator.contains(userId)){
-                binding.btnParticipate.text = requireContext().getString(R.string.btn_cancel)
-                binding.btnParticipate.backgroundTintList = requireContext().getColorStateList(R.color.black_50)
+                btnParticipate.text = requireContext().getString(R.string.btn_cancel)
+                btnParticipate.backgroundTintList = requireContext().getColorStateList(R.color.black_50)
             }else{
-                binding.btnParticipate.text = requireContext().getString(R.string.btn_participate)
-                binding.btnParticipate.backgroundTintList = requireContext().getColorStateList(R.color.colorAccent)
+                btnParticipate.text = requireContext().getString(R.string.btn_participate)
+                btnParticipate.backgroundTintList = requireContext().getColorStateList(R.color.colorAccent)
+            }
+            if(userId == dto.writer){
+                btnParticipate.visibility = View.GONE
+            }else{
+                btnParticipate.visibility = View.VISIBLE
+            }
+            //profile
+            if(dto.writerProfile!= null){
+                Glide.with(requireContext())
+                    .load(dto.writerProfile)
+                    .into(ivWriterProfile)
             }
 
             //participator
@@ -227,6 +239,11 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
         map.addMarker(marker)
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(place, 15f)
         map.moveCamera(cameraUpdate)
+        map.uiSettings.apply {
+            isScrollGesturesEnabled = false
+            isZoomControlsEnabled = false
+            isZoomGesturesEnabled = false
+        }
         googleMeetMap = map
     }
 
@@ -242,6 +259,11 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(
         map.addMarker(marker)
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(place, 15f)
         map.moveCamera(cameraUpdate)
+        map.uiSettings.apply {
+            isScrollGesturesEnabled = false
+            isZoomControlsEnabled = false
+            isZoomGesturesEnabled = false
+        }
         googleBuyMap = map
     }
 
