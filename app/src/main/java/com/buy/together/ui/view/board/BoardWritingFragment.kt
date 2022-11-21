@@ -154,7 +154,6 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                     is FireStoreResponse.Loading ->{ showLoadingDialog(requireContext())}
                     is FireStoreResponse.Success -> {
                         sendUser(userId,board)
-                        dismissLoadingDialog()
                     }
                     is FireStoreResponse.Failure -> {
                         Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
@@ -168,10 +167,9 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     fun sendUser(userId: String,boardDto: BoardDto){
         viewModel.saveBoardToUser(userId,boardDto).observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
+                is FireStoreResponse.Loading -> { }
                 is FireStoreResponse.Success -> {
                     sendParticipator(userId,boardDto)
-                    dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
@@ -218,8 +216,8 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             participator = arrayListOf(userId),
             images= listOf(),
             maxPeople = if(maxPeople.isEmpty()) null else maxPeople.toInt(),
-            meetPoint= if(meetPoint.isEmpty()) "" else meetPoint,
-            buyPoint = if(meetPoint.isEmpty()) "" else buyPoint
+            meetPoint= if(meetPoint.isEmpty()) null else meetPoint,
+            buyPoint = if(buyPoint.isEmpty()) null else buyPoint
         )
         return board
     }

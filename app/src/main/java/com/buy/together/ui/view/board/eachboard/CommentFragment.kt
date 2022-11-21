@@ -26,6 +26,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     private var mention : String? = null
 
     override fun initView() {
+        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
         initAdapter()
         initData()
     }
@@ -131,6 +132,10 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                     }
                     commentAdapter.commentList = list
                     commentAdapter.notifyDataSetChanged()
+                    if(list.isEmpty()){
+                        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.VISIBLE
+                        binding.layoutEmpty.tvEmptyView.text = "댓글이"
+                    }
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {

@@ -39,6 +39,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
         addressViewModel.getAddress().observe(viewLifecycleOwner){
             if (!(it == null || it.isEmpty())) setAddressView((it as ArrayList<AddressDto>)[0])
         }
@@ -120,6 +121,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                     }
                     boardAdapter.boardDtoList = list
                     boardAdapter.notifyDataSetChanged()
+                    if(list.isEmpty()){
+                        binding.layoutEmpty.tvEmptyView.text = "게시글이"
+                        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.VISIBLE
+                    }
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
@@ -143,7 +148,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     }
 
     private fun deleteComment(dto : BoardDto){
-        val userId : String? = Application.sharedPreferences.getAuthToken()
+        val userId : String? = sharedPreferences.getAuthToken()
         if(userId == null) {
             Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
             return

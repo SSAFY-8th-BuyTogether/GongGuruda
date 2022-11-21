@@ -25,6 +25,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvCategory.text = viewModel.category
+        binding.layoutEmpty.layoutAddressEmptyView.visibility = View.GONE
         initAdapter()
         initListener()
 
@@ -104,7 +105,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
         }
     }
 
-    fun getData(){
+    private fun getData(){
         viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
@@ -115,6 +116,9 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
                     }
                     boardAdapter.boardDtoList = list
                     boardAdapter.notifyDataSetChanged()
+                    if(list.isEmpty()){
+                        setEmptyLayout()
+                    }
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
@@ -125,7 +129,14 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
         }
     }
 
-    fun getDataAll(){
+    private fun setEmptyLayout(){
+        binding.apply {
+            layoutEmpty.layoutAddressEmptyView.visibility = View.VISIBLE
+            layoutEmpty.tvEmptyView.text = "게시글이"
+        }
+    }
+
+    private fun getDataAll(){
         val list = mutableListOf<BoardDto>()
         var count = 0
         viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
@@ -141,6 +152,9 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
                         boardAdapter.boardDtoList = mutableListOf()
                         boardAdapter.boardDtoList = list
                         boardAdapter.notifyDataSetChanged()
+                        if(list.isEmpty()){
+                            setEmptyLayout()
+                        }
                     }
                     dismissLoadingDialog()
                 }
