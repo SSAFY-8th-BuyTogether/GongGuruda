@@ -11,7 +11,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.buy.together.Application
 import com.buy.together.R
-import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardBinding
@@ -114,27 +113,12 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
-                    viewModel.insertUserParticipate(userId,boardDto,flag)
-                        .observe(viewLifecycleOwner) { response_ ->
-                            when (response_) {
-                                is FireStoreResponse.Loading -> {
-                                    showLoadingDialog(requireContext())
-                                }
-                                is FireStoreResponse.Success -> {
-                                    dismissLoadingDialog()
-                                    initData()
-                                }
-                                is FireStoreResponse.Failure -> {
-                                    Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
-                                    dismissLoadingDialog()
-                                }
-                            }
-                        }
                     dismissLoadingDialog()
+                    Toast.makeText(requireContext(),"적용되었습니다.",Toast.LENGTH_SHORT).show()
+                    initData()
                 }
                 is FireStoreResponse.Failure -> {
                     dismissLoadingDialog()
-                    Log.d("체크", "실패 1 =")
                     backPress()
                 }
             }
@@ -145,7 +129,6 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         navArgs.boardDto?.let { viewModel.boardDto = it }
         val dto = viewModel.boardDto
         if(dto == null){
-            Log.d("체크", "dto = $dto: ")
             backPress()
             return
         }
@@ -158,7 +141,6 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
-                    Log.d("체크", "실패 2 = $dto: ")
                     dismissLoadingDialog()
                     backPress()
                 }
