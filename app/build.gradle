@@ -106,6 +106,4 @@ dependencies {
     //permission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
 
-    //board image slide library
-    implementation 'com.github.smarteist:autoimageslider:1.4.0'
 }

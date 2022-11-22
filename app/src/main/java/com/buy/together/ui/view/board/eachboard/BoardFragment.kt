@@ -25,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.tabs.TabLayoutMediator
 import java.lang.Math.abs
 
 private const val TAG = "BoardFragment_싸피"
@@ -57,32 +58,34 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         Log.d(TAG, "initAdapter: dto : ${viewModel.boardDto?.images?.isEmpty()}")
         binding.vpImages.adapter = PagerImageAdapter(viewModel.boardDto?.images ?: listOf())
         binding.vpImages.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        TabLayoutMediator(binding.intoTabLayout,binding.vpImages)
+        {tab, position ->}.attach()
     }
 
     private fun initListener(){
-        // 이미지
-        binding.ablBoardAppbarlayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+        binding.apply {
+            // 이미지
+            ablBoardAppbarlayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) { //접혔을 때
-                binding.vpImages.apply{
-                    visibility = View.INVISIBLE
-                }
+                vpImages.visibility = View.INVISIBLE
+                intoTabLayout.visibility = View.INVISIBLE
             } else { //펴졌을 때
-                binding.vpImages.apply{
-                    visibility = View.VISIBLE
-                }
+                vpImages.visibility = View.VISIBLE
+                intoTabLayout.visibility = View.VISIBLE
             }
         }
-        //뒤로 가기 버튼
-        binding.ibBackButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        //참여하기 버튼 클릭
-        binding.btnParticipate.setOnClickListener {
-            makeDialog()
-        }
-        //댓글 버튼 클릭
-        binding.ibComment.setOnClickListener {
-            showCommentFragment()
+            //뒤로 가기 버튼
+            ibBackButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            //참여하기 버튼 클릭
+            btnParticipate.setOnClickListener {
+                makeDialog()
+            }
+            //댓글 버튼 클릭
+            ibComment.setOnClickListener {
+                showCommentFragment()
+            }
         }
     }
 
