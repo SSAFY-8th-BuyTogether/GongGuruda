@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.push.service.FirebaseCloudMessageDataService;
 import com.ssafy.push.service.FirebaseCloudMessageService;
 
 @RestController
@@ -19,6 +20,9 @@ public class TokenController {
 
     @Autowired
     FirebaseCloudMessageService service;
+    
+    @Autowired
+    FirebaseCloudMessageDataService dataService;
     
     @PostMapping("/token")
     public String registToken(String token) {
@@ -37,6 +41,12 @@ public class TokenController {
     public void sendMessageTo(String token, String title, String body) throws IOException {
     	logger.info("sendMessageTo : token:{}, title:{}, body:{}", token, title, body);
         service.sendMessageTo(token, title, body);
+    }
+    
+    @PostMapping("/fcm")
+    public Boolean sendFCM(String token, String title, String body) throws IOException {
+    	logger.info("sendMessageTo : token:{}, title:{}, body:{}", token, title, body);
+    	return dataService.sendDataMessageTo(token, title, body);
     }
 }
 

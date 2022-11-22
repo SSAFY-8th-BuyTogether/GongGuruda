@@ -94,23 +94,28 @@ public class FirebaseCloudMessageDataService {
      * @param body
      * @throws IOException
      */
-    public void sendDataMessageTo(String targetToken, String title, String body) throws IOException {
-        String message = makeDataMessage(targetToken, title, body);
-        logger.info("message : {}", message);
-        OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(requestBody)
-                // 전송 토큰 추가
-                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
-                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
-                .build();
+    public Boolean sendDataMessageTo(String targetToken, String title, String body) throws IOException {
+    	try {
+            String message = makeDataMessage(targetToken, title, body);
+            logger.info("message : {}", message);
+            OkHttpClient client = new OkHttpClient();
+            RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(requestBody)
+                    // 전송 토큰 추가
+                    .addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())
+                    .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                    .build();
 
-        Response response = client.newCall(request).execute();
+            Response response = client.newCall(request).execute();
 
-        System.out.println(response.body().string());
-//        logger.info("message : {}", message);
+            System.out.println(response.body().string());
+//            logger.info("message : {}", message);
+            return true;
+		} catch (Exception e) {
+			return false;
+		}
     }
 
 
