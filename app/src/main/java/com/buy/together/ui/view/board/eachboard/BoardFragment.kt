@@ -11,7 +11,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.buy.together.Application
 import com.buy.together.R
-import com.buy.together.data.model.domain.AddressDto
 import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardBinding
@@ -26,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.tabs.TabLayoutMediator
 import java.lang.Math.abs
 
 private const val TAG = "BoardFragment_싸피"
@@ -58,32 +58,34 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         Log.d(TAG, "initAdapter: dto : ${viewModel.boardDto?.images?.isEmpty()}")
         binding.vpImages.adapter = PagerImageAdapter(viewModel.boardDto?.images ?: listOf())
         binding.vpImages.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        TabLayoutMediator(binding.intoTabLayout,binding.vpImages)
+        {tab, position ->}.attach()
     }
 
     private fun initListener(){
-        // 이미지
-        binding.ablBoardAppbarlayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+        binding.apply {
+            // 이미지
+            ablBoardAppbarlayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) { //접혔을 때
-                binding.vpImages.apply{
-                    visibility = View.INVISIBLE
-                }
+                vpImages.visibility = View.INVISIBLE
+                intoTabLayout.visibility = View.INVISIBLE
             } else { //펴졌을 때
-                binding.vpImages.apply{
-                    visibility = View.VISIBLE
-                }
+                vpImages.visibility = View.VISIBLE
+                intoTabLayout.visibility = View.VISIBLE
             }
         }
-        //뒤로 가기 버튼
-        binding.ibBackButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        //참여하기 버튼 클릭
-        binding.btnParticipate.setOnClickListener {
-            makeDialog()
-        }
-        //댓글 버튼 클릭
-        binding.ibComment.setOnClickListener {
-            showCommentFragment()
+            //뒤로 가기 버튼
+            ibBackButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            //참여하기 버튼 클릭
+            btnParticipate.setOnClickListener {
+                makeDialog()
+            }
+            //댓글 버튼 클릭
+            ibComment.setOnClickListener {
+                showCommentFragment()
+            }
         }
     }
 
@@ -114,27 +116,12 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
             when(response){
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
-                    viewModel.insertUserParticipate(userId,boardDto,flag)
-                        .observe(viewLifecycleOwner) { response_ ->
-                            when (response_) {
-                                is FireStoreResponse.Loading -> {
-                                    showLoadingDialog(requireContext())
-                                }
-                                is FireStoreResponse.Success -> {
-                                    dismissLoadingDialog()
-                                    initData()
-                                }
-                                is FireStoreResponse.Failure -> {
-                                    Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
-                                    dismissLoadingDialog()
-                                }
-                            }
-                        }
                     dismissLoadingDialog()
+                    Toast.makeText(requireContext(),"적용되었습니다.",Toast.LENGTH_SHORT).show()
+                    initData()
                 }
                 is FireStoreResponse.Failure -> {
                     dismissLoadingDialog()
-                    Log.d("체크", "실패 1 =")
                     backPress()
                 }
             }
@@ -145,7 +132,6 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         navArgs.boardDto?.let { viewModel.boardDto = it }
         val dto = viewModel.boardDto
         if(dto == null){
-            Log.d("체크", "dto = $dto: ")
             backPress()
             return
         }
@@ -158,7 +144,6 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
-                    Log.d("체크", "실패 2 = $dto: ")
                     dismissLoadingDialog()
                     backPress()
                 }
