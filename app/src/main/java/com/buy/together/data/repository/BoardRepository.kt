@@ -163,7 +163,7 @@ class BoardRepository {
             .collection("Comment")
             .document(comment.id)
 
-        if(writer != comment.writer){ //본인 제외
+        if(writer != comment.writer && comment.mention == null){ //본인 제외, mention 없을 때만
             val alarm = Alarm(category,comment) //Alarm - 글작성자에게
             userDB.document(writer)
                 .collection("Alarm").document(alarm.id).set(alarm).await()
