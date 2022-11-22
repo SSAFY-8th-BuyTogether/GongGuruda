@@ -4,10 +4,14 @@ import android.Manifest
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.buy.together.data.model.domain.AddressGeoDto
 import com.google.android.gms.maps.model.LatLng
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import java.io.IOException
 import java.util.*
 
 object AddressUtils {
@@ -27,17 +31,24 @@ object AddressUtils {
 
     fun getPointsFromLatLng(latLng: LatLng) : Pair<Double, Double> =  latLng.latitude to latLng.longitude
 
-    fun getGeoFromPoints(context:Context, lat:Double, lng:Double) : String? {
-        return try {
-            val geocoder =  Geocoder(context, Locale.getDefault())
-            val addressList: MutableList<Address> = geocoder.getFromLocation(lat, lng,1)
-            if (addressList.isNotEmpty()) {
-                val address = addressList[0].getAddressLine(0)
-                if (address.contains("대한민국")) address.split("대한민국 ")[1]
-                else addressList[0].getAddressLine(0)
-            }
-            else null
-        }catch (e : Exception){ null }
+    fun getGeoFromPoints(context:Context, lat:Double, lng:Double) : AddressGeoDto {
+        val addressList: List<Address>?
+        Log.d("체크", "${lat}, $lng: ")
+        try {
+            val geocoder =  Geocoder(context, Locale.KOREA)
+            addressList = geocoder.getFromLocation(lat, lng,1)
+        } catch (ioException: IOException) {
+            return AddressGeoDto(false, AddressGeoDto.GeoAddress.NETWORK_ERROR)
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            return AddressGeoDto(false, AddressGeoDto.GeoAddress.GPS_ERROR)
+        }
+        Log.d("체크", "${addressList}: ")
+        return if (addressList == null || addressList.isEmpty()) AddressGeoDto(false, AddressGeoDto.GeoAddress.ENCODING_ERROR)
+        else{
+            val address = addressList[0].getAddressLine(0)
+            if (address.contains("대한민국")) AddressGeoDto(true, AddressGeoDto.GeoAddress.ADDRESS, address.split("대한민국 ")[1])
+            else AddressGeoDto(true, AddressGeoDto.GeoAddress.ADDRESS, addressList[0].getAddressLine(0).toString())
+        }
     }
 
     fun getPointsFromGeo(context:Context, address: String) : LatLng? {
