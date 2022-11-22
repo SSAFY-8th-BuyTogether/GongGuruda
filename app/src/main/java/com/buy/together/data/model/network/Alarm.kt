@@ -1,6 +1,7 @@
 package com.buy.together.data.model.network
 
 import com.buy.together.data.model.domain.BoardDto
+import com.buy.together.data.model.domain.CommentDto
 import com.google.firebase.Timestamp
 
 data class Alarm(
@@ -20,6 +21,16 @@ data class Alarm(
         referId = boardDto.id,
         referTitle= boardDto.title,
         type= "WRITE"
+    )
+
+    constructor(category: String,commentDto: CommentDto):this(
+        category = category,
+        dateTime = Timestamp.now(),
+        id = "ALARM_${Timestamp.now().seconds}_${commentDto.writer}",
+        referContent = commentDto.content,
+        referId = commentDto.id,
+        referTitle= commentDto.boardTitle,
+        type= "COMMENT"
     )
 
 }

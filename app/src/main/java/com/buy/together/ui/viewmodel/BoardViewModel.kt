@@ -1,15 +1,11 @@
 package com.buy.together.ui.viewmodel
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.liveData
 import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.domain.CommentDto
-import com.buy.together.data.model.domain.usercollection.UserComment
 import com.buy.together.data.repository.BoardRepository
 import com.buy.together.ui.base.BaseViewModel
-import com.buy.together.util.GalleryUtils.insertImage
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.*
 
@@ -38,23 +34,7 @@ class BoardViewModel : BaseViewModel() {
 
     //게시글 저장
     fun saveBoard(boardDto : BoardDto, imgs : ArrayList<Uri>) = liveData(Dispatchers.IO){
-        if(imgs.isNotEmpty()){
-            CoroutineScope(Dispatchers.IO).launch {
-                val list = arrayListOf<String>()
-                for(i in 0..imgs.size-1){ //이미지 저장
-                    insertImage("IMAGE_${boardDto.id}_${i}.png",imgs[i]){
-                        list.add(it.toString())
-                        Log.d(TAG, "이미지 저장 성공~~~~~~~~~~$i\n image : ${list}")
-                        if (list.size == imgs.size) {
-                            Log.d(TAG, "모든 이미지 완료 ${list}")
-                            boardDto.images = list
-                        }
-                    }
-                }
-            }
-        }
-        Log.d(TAG, "saveBoard: 이미지 완료")
-        repository.saveBoard(boardDto).collect{emit(it)}
+        repository.saveBoard(boardDto, imgs).collect{emit(it)}
     }
 
     fun removeBoard(userId: String, boardDto: BoardDto) = liveData(Dispatchers.IO) {
@@ -85,31 +65,6 @@ class BoardViewModel : BaseViewModel() {
 
     fun removeComment(category: String, comment: CommentDto) = liveData(Dispatchers.IO) {
         repository.deleteComment(category,comment).collect{emit(it)}
-    }
-
-    fun saveCommentToUser(userId: String, category: String, commentDto: CommentDto) = liveData(Dispatchers.IO) {
-        val userComment = UserComment(
-            id= commentDto.id,
-            boardId = commentDto.boardId,
-            boardTitle= commentDto.boardTitle,
-            category= category,
-            content= commentDto.content,
-            time= Timestamp.now(),
-        )
-        repository.insertCommentToUser(userId, userComment).collect{emit(it)}
-    }
-
-    fun removeCommentFromUser(userId: String, category: String, commentDto: CommentDto) = liveData(Dispatchers.IO) {
-        val userComment = UserComment(
-            id= commentDto.id,
-            boardId= commentDto.boardId,
-            boardTitle= commentDto.boardTitle,
-            category= category,
-            content= commentDto.content,
-            time= Timestamp.now(),
-
-        )
-        repository.deleteCommentFromUser(userId, userComment).collect{emit(it)}
     }
 
     fun makeBoard(document : DocumentSnapshot) : BoardDto { //TODO : Board내로 옮기기

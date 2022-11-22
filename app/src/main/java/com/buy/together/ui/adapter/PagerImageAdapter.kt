@@ -8,23 +8,32 @@ import com.buy.together.databinding.ItemViewpagerImageBinding
 
 class PagerImageAdapter(var imageList : List<String>) :
     RecyclerView.Adapter<PagerImageAdapter.PagerViewHolder>() {
-    private lateinit var binding : ItemViewpagerImageBinding
-    inner class  PagerViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(parent){
-        fun bindInfo(image : String){
+    inner class  PagerViewHolder(val binding: ItemViewpagerImageBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bindInfo(position : Int,image : String){
             Glide.with(itemView)
                 .load(image)
                 .into(binding.ivImageItem)
+            if(position <= imageList.size){
+                val endPosition = if(position + 2 > imageList.size){
+                    imageList.size
+                }else{
+                    position + 2
+                }
+                imageList.subList(position,endPosition).forEach{
+                    Glide.with(itemView)
+                        .load(it).preload()
+                }
+            }
         }
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
-        binding = ItemViewpagerImageBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return PagerViewHolder(binding.root)
+        return PagerViewHolder(ItemViewpagerImageBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
-        holder.bindInfo(imageList[position])
+        holder.bindInfo(position, imageList[position])
     }
 
     override fun getItemCount(): Int = imageList.size

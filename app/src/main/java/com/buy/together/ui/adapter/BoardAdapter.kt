@@ -1,7 +1,6 @@
 package com.buy.together.ui.adapter
 
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,6 @@ class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
     inner class BoardHolder(private val binding : ItemBoardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(position: Int, dto : BoardDto){
             binding.apply {
-                Log.d("싸피", "bindInfo: =======================\n ${dto}")
                 val userId = Application.sharedPreferences.getAuthToken()
                 if(dto.writer == userId){
                     ibOptionButton.visibility = View.VISIBLE
