@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.buy.together.R
 import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.domain.AddressDto
+import com.buy.together.data.model.domain.AlarmDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentMainBinding
+import com.buy.together.ui.adapter.AlarmAdapter
 import com.buy.together.ui.adapter.BoardAdapter
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.view.MainActivity
@@ -36,6 +38,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     private val addressViewModel : AddressViewModel by viewModels()
     private val myPageViewModel : MyPageViewModel by viewModels()
     private val viewModel : BoardViewModel by activityViewModels()
+    private lateinit var alarmAdapter : AlarmAdapter
     private lateinit var boardAdapter : BoardAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -203,6 +206,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         }
     }
     private fun initAlarmNavi(){
+        alarmAdapter = AlarmAdapter().apply {
+            setItemClickListener(object : AlarmAdapter.ItemClickListener{
+                override fun onClickItem(view: View, position: Int, alarmDto: AlarmDto) {
+                    showBoardFragment(BoardDto(id=alarmDto.referId, category = alarmDto.category))
+                }
+            })
+        }
         binding.apply {
             ibNotification.setOnClickListener{
                 layoutDrawer.openDrawer(GravityCompat.END)
@@ -210,6 +220,22 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                 setMyPageView(false)
             }
             layoutNaviAlarm.btnBack.setOnClickListener { layoutDrawer.closeDrawer(GravityCompat.END) }
+            layoutNaviAlarm.rvAlarm.adapter = alarmAdapter
+        }
+        myPageViewModel.getMyAlarmInfo().observe(viewLifecycleOwner){
+            try {
+                if (it==null || it.isEmpty()){
+                    setAlarmEmptyView(true)
+                    setAlarmRVView(false)
+                }else{
+                    val itemList = it as ArrayList<AlarmDto>
+                    setAlarmEmptyView(false)
+                    setAlarmRVView(true, itemList)
+                }
+            }catch (e : Exception){
+                setAlarmEmptyView(true)
+                setAlarmRVView(false)
+            }
         }
     }
 
@@ -282,11 +308,23 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         initData(null)
         viewModel.selectedAddress = addressDto.address
     }
-    private fun setAlarmView(isSet : Boolean, itemList : ArrayList<AddressDto> = arrayListOf()){
-        if (isSet){
-            binding.layoutNaviAlarm.layoutNaviAlarm.visibility = View.VISIBLE
-            // TODO : rv값 세팅 or EmptyView 세팅
-        }else binding.layoutNaviAlarm.layoutNaviAlarm.visibility = View.GONE
+    private fun setAlarmView(isSet : Boolean){
+        if (isSet) binding.layoutNaviAlarm.layoutAlarm.visibility = View.VISIBLE
+        else binding.layoutNaviAlarm.layoutAlarm.visibility = View.GONE
+    }
+    private fun setAlarmEmptyView(isSet: Boolean){
+        binding.apply {
+            if (isSet)layoutNaviAlarm.layoutAlarmEmptyView.visibility = View.VISIBLE
+            else layoutNaviAlarm.layoutAlarmEmptyView.visibility = View.GONE
+        }
+    }
+    private fun setAlarmRVView(isSet: Boolean, itemList: ArrayList<AlarmDto> = arrayListOf()){
+        binding.apply {
+            if (isSet) {
+                layoutNaviAlarm.rvAlarm.visibility = View.VISIBLE
+                alarmAdapter.setListData(itemList)
+            }else layoutNaviAlarm.rvAlarm.visibility = View.GONE
+        }
     }
     private fun setMyPageView(isSet : Boolean){
         binding.layoutNaviMyPage.apply {
@@ -306,7 +344,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     private fun showAddressFragment(){ findNavController().navigate(MainFragmentDirections.actionMainFragmentToAddressGraph(true)) }
     private fun showBoardWritingFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardWritingFragment) }
     private fun showBoardCategoryFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardCategoryFragment) }
-    private fun showBoardFragment() { findNavController().navigate(R.id.action_mainFragment_to_boardFragment) }
+    private fun showBoardFragment(boardDto: BoardDto?=null) { findNavController().navigate(MainFragmentDirections.actionMainFragmentToBoardFragment(boardDto)) }
     private fun showMyInfoModifyFragment() { findNavController().navigate(R.id.action_mainFragment_to_myInfoModifyFragment) }
     private fun showMyPwdModifyFragment() { findNavController().navigate(R.id.action_mainFragment_to_myPwdModifyFragment) }
     private fun showMyWriteCommentFragment(){ findNavController().navigate(R.id.action_mainFragment_to_myWriteCommentFragment) }

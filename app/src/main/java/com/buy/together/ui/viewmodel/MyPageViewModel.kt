@@ -1,9 +1,18 @@
 package com.buy.together.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 
 class MyPageViewModel : UserViewModel() {
+
+    fun getMyAlarmInfo() = liveData(Dispatchers.IO) {
+        userRepository.getMyAlarmInfo(authToken).collect(){ alarmList ->
+            val myAlarmList = alarmList?.map { alarm -> alarm?.makeToAlarmDto() }
+            emit(myAlarmList)
+        }
+    }
 
     fun getMyWriteInfo() = liveData(Dispatchers.IO){
         userRepository.getMyWriteInfo(authToken).collect { writeList ->

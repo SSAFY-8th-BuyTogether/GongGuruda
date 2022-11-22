@@ -1,5 +1,7 @@
 package com.buy.together.data.model.network
 
+
+import com.buy.together.data.model.domain.AlarmDto
 import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.domain.CommentDto
 import com.google.firebase.Timestamp
@@ -32,5 +34,8 @@ data class Alarm(
         referTitle= commentDto.boardTitle,
         type= "COMMENT"
     )
-
+    
+    fun makeToAlarmDto() = AlarmDto(
+        if (type==AlarmDto.TYPE.COMMENT.name) AlarmDto.TYPE.COMMENT else AlarmDto.TYPE.WRITE,
+        id, category, referId, referTitle, referContent, dateTime.seconds)
 }
