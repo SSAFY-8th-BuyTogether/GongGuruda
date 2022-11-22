@@ -1,5 +1,6 @@
 package com.buy.together.data.model.domain.usercollection
 
+import com.buy.together.data.model.domain.BoardDto
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 
@@ -10,6 +11,14 @@ data class UserBoard(
     val content : String,
     val time : Timestamp
     ){
+
+    constructor(boardDto: BoardDto) : this(
+        id= boardDto.id,
+        title= boardDto.title,
+        category= boardDto.category,
+        content= boardDto.title,
+        time= Timestamp.now(),
+    )
 
     constructor(doc : DocumentSnapshot) : this(
         doc[COMMENT_ID] as String,

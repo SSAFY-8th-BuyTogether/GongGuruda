@@ -146,63 +146,27 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             return
         }
         val board = setBoardDto(userId)
-        showLoadingDialog(requireContext())
-        myPageViewModel.getUserInfo().observe(viewLifecycleOwner){
+        myPageViewModel.getUserInfo().observe(viewLifecycleOwner){ //profile 가져오기
             it?.let { userDto ->
                 board.writerProfile = userDto.profile
-                viewModel.saveImage(board,imageAdapter.ImageList)
-
             }
-            viewModel.ImgLiveData.observe(viewLifecycleOwner){
-                board.images = it
-                dismissLoadingDialog()
-                viewModel.saveBoard(board).observe(viewLifecycleOwner){ response ->
-                    when(response){
-                        is FireStoreResponse.Loading ->{ showLoadingDialog(requireContext())}
-                        is FireStoreResponse.Success -> {
-                            sendUser(userId,board)
-                        }
-                        is FireStoreResponse.Failure -> {
-                            Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
-                            dismissLoadingDialog()
-                        }
+            viewModel.saveBoard(board,imageAdapter.ImageList).observe(viewLifecycleOwner) { response ->
+                when (response) {
+                    is FireStoreResponse.Loading -> {
+                        showLoadingDialog(requireContext())
                     }
-                }
-            }
-        }
-    }
-
-    fun sendUser(userId: String,boardDto: BoardDto){
-        viewModel.saveBoardToUser(userId,boardDto).observe(viewLifecycleOwner){ response ->
-            when(response){
-                is FireStoreResponse.Loading -> { }
-                is FireStoreResponse.Success -> {
-                    sendParticipator(userId,boardDto)
-                }
-                is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
-                    dismissLoadingDialog()
-                }
-            }
-        }
-    }
-
-    fun sendParticipator(userId: String, boardDto : BoardDto){
-        viewModel.insertUserParticipate(userId,boardDto,true)
-            .observe(viewLifecycleOwner) { response_ ->
-                when (response_) {
-                    is FireStoreResponse.Loading -> {}
                     is FireStoreResponse.Success -> {
                         Toast.makeText(requireContext(),"성공적으로 저장되었습니다.",Toast.LENGTH_SHORT).show()
                         dismissLoadingDialog()
                         findNavController().popBackStack()
                     }
                     is FireStoreResponse.Failure -> {
-                        Toast.makeText(requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText( requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                         dismissLoadingDialog()
                     }
                 }
             }
+        }
     }
 
     fun setBoardDto(userId : String) : BoardDto {

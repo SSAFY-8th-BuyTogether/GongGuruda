@@ -67,7 +67,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                 viewModel.selectedAddress = addressDto.address
                 Log.d(TAG, "onViewCreated: address : ${viewModel.selectedAddress}")
                 binding.tvAddress.text = "${addressDto.address} ▾"
-                initData()
+                initData(null)
             }
         }
     }
@@ -123,68 +123,39 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                 }
 
                 override fun onQueryTextSubmit(p0: String?): Boolean {
-                    Log.d(TAG, "onQueryTextSubmit: search ${p0!!}")
+                    if(p0 != null){
+                        Log.d(TAG, "onQueryTextSubmit: search ${p0}")
+                        initData(p0)
+                        svSearchTitle.setQuery("",false)
+                    }
                     return true
                 }
             })
         }
     }
 
-    private fun initData(){
+    private fun initData(keyword: String?){
         Log.d(TAG, "initData: initdata")
         binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
-        showLoadingDialog(requireContext())
-        viewModel.getBoardList(viewModel.categoryListKr[1]).observe(viewLifecycleOwner){ response ->
+        viewModel.getBoardListAll().observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> {  }
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
                 is FireStoreResponse.Success -> {
                     val list = mutableListOf<BoardDto>()
                     response.data.forEach{
                         val meetPoint = it["meetPoint"] as String?
-                        if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress)) {
-                            list.add(viewModel.makeBoard(it))
-                        }
-                    }
-                    boardAdapter.setList(list as ArrayList<BoardDto>)
-                    dismissLoadingDialog()
-                    if(list.isEmpty()){
-                        setEmpty()
-                    }
-                }
-                is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
-                    dismissLoadingDialog()
-                }
-            }
-        }
-    }
-
-    private fun searchData(keyword : String){
-        val list = mutableListOf<BoardDto>()
-        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
-        var count = 0
-        viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
-            when(response){
-                is FireStoreResponse.Loading -> { }
-                is FireStoreResponse.Success -> {
-                    response.data.forEach{
-                        val meetPoint = it["meetPoint"] as String?
                         val title = it["title"] as String
                         if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress)) {
-                            if(title.contains(keyword)){
+                            if(keyword == null || title.contains(keyword)) {
                                 list.add(viewModel.makeBoard(it))
                             }
                         }
                     }
-                    count++
-                    if(count == viewModel.categoryListKr.size -1){
-                        list.sortBy { it.deadLine }
-                        boardAdapter.setList(list as ArrayList<BoardDto>)
-                        if(list.isEmpty()){
-                            setEmpty()
-                        }
-                        dismissLoadingDialog()
+                    boardAdapter.setList(list as ArrayList<BoardDto>)
+                    if(list.isEmpty()){
+                        setEmpty()
                     }
+                    dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
@@ -206,38 +177,26 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         popupMenu.menuInflater.inflate(R.menu.menu_option_comment,popupMenu.menu)
         popupMenu.setOnMenuItemClickListener{ item ->
             when(item.itemId) {
-                R.id.comment_delete -> deleteComment(dto)
+                R.id.comment_delete -> deleteBoard(dto)
             }
             true
         }
         popupMenu.show()
     }
 
-    private fun deleteComment(dto : BoardDto){
+    private fun deleteBoard(dto : BoardDto){
         val userId : String? = sharedPreferences.getAuthToken()
         if(userId == null) {
             Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
             return
         }
-        viewModel.removeBoardFromUser(userId,dto).observe(viewLifecycleOwner){ response ->
-            showLoadingDialog(requireContext())
+        viewModel.removeBoard(userId,dto).observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> {  }
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
                 is FireStoreResponse.Success -> {
-                    viewModel.removeBoard(dto).observe(viewLifecycleOwner){ _response ->
-                        when(_response){
-                            is FireStoreResponse.Loading -> {  }
-                            is FireStoreResponse.Success -> {
-                                dismissLoadingDialog()
-                                initData()
-                                Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                            }
-                            is FireStoreResponse.Failure -> {
-                                dismissLoadingDialog()
-                                Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
+                    dismissLoadingDialog()
+                    Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    initData(null)
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -346,9 +305,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     }
     private fun setAddressView(addressDto: AddressDto){
         binding.tvAddress.text = String.format(getString(R.string.tv_address_selected), AddressUtils.getSelectedAddress(addressDto.addressDetail))
-        if(viewModel.selectedAddress != addressDto.address){
-            initData()
-        }
+        initData(null)
         viewModel.selectedAddress = addressDto.address
     }
     private fun setAlarmView(isSet : Boolean){
