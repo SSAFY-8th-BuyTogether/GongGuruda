@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -65,7 +66,7 @@ class FirebaseService  : FirebaseMessagingService() {
         val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
             description = "FCM"
             enableLights(true)
-            lightColor = ContextCompat.getColor(applicationContext, getColor(R.color.mainColor))
+            lightColor = Color.GREEN
         }
         notificationManager.createNotificationChannel(channel)
     }
