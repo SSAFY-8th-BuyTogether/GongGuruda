@@ -62,4 +62,6 @@
     <string name="tv_profile_change"><u>수정하기</u></string>
     <string name="tv_myPage_toBoard_title">"&lt; 게시글 : %s &gt;"</string>
     <string name="at_sign">\u0040</string>
+    <string name="Comment">댓글</string>
+    <string name="Insert">입력</string>
 </resources>

@@ -16,6 +16,7 @@ import com.buy.together.ui.adapter.CommentAdapter
 import com.buy.together.ui.base.BaseBottomSheetDialogFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.ui.viewmodel.MyPageViewModel
+import com.buy.together.util.showKeyboard
 import com.google.firebase.Timestamp
 
 private const val TAG = "CommentFragment_싸피"
@@ -25,8 +26,10 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private lateinit var commentAdapter : CommentAdapter
     private var mention : String? = null
+    private var mentionComment : String? = null
 
     override fun initView() {
+//        showKeyboard(binding.etComment)
         initAdapter()
         initData()
     }
@@ -60,14 +63,14 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
             content= binding.etComment.text.toString(),
             time= Timestamp.now(),
         )
-        if(mention != null){
+        if(mention != null && mentionComment != null){
             comment.mention = mention
         }
         val category = viewModel.boardDto!!.category
         myPageViewModel.getUserInfo().observe(viewLifecycleOwner) {
             it?.let { userDto ->
                 comment.writerProfile = userDto.profile
-                viewModel.insertComment(category, comment).observe(viewLifecycleOwner){ response->
+                viewModel.insertComment(viewModel.boardDto!!.writer, mentionComment,category, comment).observe(viewLifecycleOwner){ response->
                     when(response){
                         is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                         is FireStoreResponse.Success -> {
@@ -99,6 +102,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                 if(userId != dto.writer) {
                     binding.llMentionLayout.visibility = View.VISIBLE
                     mention = dto.writer
+                    mentionComment = dto.content
                     binding.tvMention.text = "${getString(R.string.at_sign)}${mention}"
                 }
             }
@@ -113,6 +117,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
 
     private fun initData(){
         binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
+        binding.rvComment.visibility = View.VISIBLE
         binding.llMentionLayout.visibility = View.GONE
         if(viewModel.boardDto == null){
             return
@@ -129,6 +134,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                     commentAdapter.notifyDataSetChanged()
                     if(list.isEmpty()){
                         binding.layoutEmpty.layoutEmptyView.visibility = View.VISIBLE
+                        binding.rvComment.visibility = View.GONE
                         binding.layoutEmpty.tvEmptyView.text = "댓글이"
                     }
                     dismissLoadingDialog()

@@ -11,7 +11,7 @@
         android:id="@+id/tv_Comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="댓글"
+        android:text="@string/Comment"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:textSize="24sp"
@@ -33,7 +33,9 @@
         android:id="@+id/rv_comment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/ll_mention_layout"
         app:layout_constraintTop_toBottomOf="@id/divier_comment" />
@@ -110,7 +112,7 @@
             android:backgroundTint="@color/colorAccent"
             android:gravity="center"
             android:imeOptions="actionSend"
-            android:text="입력"
+            android:text="@string/Insert"
             android:textSize="16sp" />
     </LinearLayout>
 

@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.push.dto.FireStoreMessage;
 import com.ssafy.push.service.FirebaseCloudMessageDataService;
 import com.ssafy.push.service.FirebaseCloudMessageService;
 
@@ -44,9 +46,8 @@ public class TokenController {
     }
     
     @PostMapping("/fcm")
-    public Boolean sendFCM(String token, String title, String body) throws IOException {
-    	logger.info("sendMessageTo : token:{}, title:{}, body:{}", token, title, body);
-    	return dataService.sendDataMessageTo(token, title, body);
+    public Boolean sendFCM(@RequestBody FireStoreMessage msg) throws IOException {
+    	return dataService.broadCastDataMessage(msg);
     }
 }
 
