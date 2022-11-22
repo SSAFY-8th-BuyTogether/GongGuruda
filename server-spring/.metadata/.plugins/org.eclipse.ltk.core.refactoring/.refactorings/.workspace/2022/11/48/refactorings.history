@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename Java project &apos;mobile_firebase_server_share&apos; to &apos;GongGurumi&apos;&#x0D;&#x0A;- Original element: &apos;mobile_firebase_server_share&apos;&#x0D;&#x0A;- Renamed element: &apos;mobile_firebase_server_share&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename Java project &apos;mobile_firebase_server_share&apos;" flags="7" id="org.eclipse.jdt.ui.rename.java.project" input="=mobile_firebase_server_share" name="GongGurumi" references="true" stamp="1669077257701" version="1.0"/>
+</session>
