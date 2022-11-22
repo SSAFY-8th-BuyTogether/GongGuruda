@@ -59,8 +59,8 @@ class BoardViewModel : BaseViewModel() {
         repository.getCommentList(category,boardId).collect{emit(it)}
     }
 
-    fun insertComment(category: String, comment: CommentDto) = liveData(Dispatchers.IO) {
-        repository.insertComment(category,comment).collect{emit(it)}
+    fun insertComment(writer : String, mentionComment:String?, category: String, comment: CommentDto) = liveData(Dispatchers.IO) {
+        repository.insertComment(writer, mentionComment, category,comment).collect{emit(it)}
     }
 
     fun removeComment(category: String, comment: CommentDto) = liveData(Dispatchers.IO) {

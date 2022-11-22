@@ -7,7 +7,9 @@ import com.buy.together.data.model.domain.CommentDto
 import com.buy.together.data.model.domain.usercollection.UserBoard
 import com.buy.together.data.model.domain.usercollection.UserComment
 import com.buy.together.data.model.network.Alarm
+import com.buy.together.data.model.network.FireStoreMessage
 import com.buy.together.data.model.network.firestore.FireStoreResponse
+import com.buy.together.network.service.FirebaseMessageService
 import com.buy.together.util.GalleryUtils
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -81,14 +83,10 @@ class BoardRepository {
             .document(boardDto.id)
 
         val userBoard = UserBoard(boardDto) //User
-        userDB.document(boardDto.writer)
-            .collection("Board")
-            .document(boardDto.id).set(userBoard).await()
-
-        val alarm = Alarm(boardDto) //Alarm
         val query = userDB.document(boardDto.writer)
-            .collection("Alarm").document(alarm.id)
-        emit(FireStoreResponse.Success(query.set(alarm).await()))
+            .collection("Board")
+            .document(boardDto.id)
+        emit(FireStoreResponse.Success(query.set(userBoard).await()))
     }.catch {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }
@@ -117,6 +115,15 @@ class BoardRepository {
         val query = userDB.document(userId)// User Participate
             .collection("Participate")
             .document(usrBoard.id)
+
+        //FCM
+        val userTokenList = userDB.document(boardDto.writer).get().await()["devices"] as ArrayList<String>
+        val fcm = FireStoreMessage(userTokenList,"참가자가 생겼어요!","작성하신 글 \"${boardDto.title}\"에 ${userId}님이 참여하였습니다!")
+        CoroutineScope(Dispatchers.IO).launch{
+            FirebaseMessageService().sendFcm(fcm){
+                Log.d(TAG, "insertComment: nfc 보내기 $it")
+            }
+        }.join()
         emit(FireStoreResponse.Success(query.set(usrBoard).await()))
     }.catch {
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
@@ -146,20 +153,44 @@ class BoardRepository {
         emit(FireStoreResponse.Failure("댓글을 받아오는데 실패했습니다."))
     }
     
-    fun insertComment(category : String ,comment: CommentDto) = flow {
+    fun insertComment(writer : String, mentionComent: String? , category : String ,comment: CommentDto) = flow {
         emit(FireStoreResponse.Loading())
         boardDB.document(category).collection(category).document(comment.boardId) //comment
             .collection("Comment").document(comment.id).set(comment).await()
 
-        val dto = UserComment(category,comment) //user
-        userDB.document(comment.writer)
-            .collection("Comment")
-            .document(comment.id).set(dto).await()
-
-        val alarm = Alarm(category,comment) //Alarm
+        val dto = UserComment(category,comment) //user - 댓글 작성자
         val query = userDB.document(comment.writer)
-            .collection("Alarm").document(alarm.id)
-        emit(FireStoreResponse.Success(query.set(alarm).await()))
+            .collection("Comment")
+            .document(comment.id)
+
+        if(writer != comment.writer){ //본인 제외
+            val alarm = Alarm(category,comment) //Alarm - 글작성자에게
+            userDB.document(writer)
+                .collection("Alarm").document(alarm.id).set(alarm).await()
+            //FCM
+            val userTokenList = userDB.document(writer).get().await()["devices"] as ArrayList<String>
+            val fcm = FireStoreMessage(userTokenList,"댓글이 달렸어요!","작성하신 글 \"${comment.boardTitle}\"에 댓글이 달렸어요!")
+            CoroutineScope(Dispatchers.IO).launch{
+                FirebaseMessageService().sendFcm(fcm){
+                    Log.d(TAG, "insertComment: nfc 보내기 $it")
+                }
+            }.join()
+        }
+
+        if(comment.mention != null && mentionComent != null){ //Alarm - mention 작성자에게
+            val alarmToMention = Alarm(category,mentionComent,comment) //Alarm - 글작성자에게
+            userDB.document(comment.mention!!)
+                .collection("Alarm").document(alarmToMention.id).set(alarmToMention).await()
+            //FCM
+            val userTokenListMention = userDB.document(comment.mention!!).get().await()["devices"] as ArrayList<String>
+            val fcmMention = FireStoreMessage(userTokenListMention,"댓글이 달렸어요!","작성하신 댓글 \"${comment.boardTitle}\"에 댓글이 달렸어요!")
+            CoroutineScope(Dispatchers.IO).launch{
+                FirebaseMessageService().sendFcm(fcmMention){
+                    Log.d(TAG, "insertComment: nfc 보내기 $it")
+                }
+            }.join()
+        }
+        emit(FireStoreResponse.Success(query.set(dto).await()))
     }.catch{
         emit(FireStoreResponse.Failure("데이터를 저장하는데 실패했습니다."))
     }

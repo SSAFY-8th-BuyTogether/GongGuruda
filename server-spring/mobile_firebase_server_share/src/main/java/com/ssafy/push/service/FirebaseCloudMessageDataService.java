@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.ssafy.push.dto.FireStoreMessage;
 import com.ssafy.push.message.FcmDataMessage;
 import com.ssafy.push.message.FcmMessage.Message;
 
@@ -37,7 +38,7 @@ public class FirebaseCloudMessageDataService {
 
     public final ObjectMapper objectMapper;
 
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/ssafy-homework/messages:send";
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/test-1c6be/messages:send";
      
     /**
      * FCM에 push 요청을 보낼 때 인증을 위해 Header에 포함시킬 AccessToken 생성
@@ -45,7 +46,7 @@ public class FirebaseCloudMessageDataService {
      * @throws IOException
      */
     private String getAccessToken() throws IOException {
-    	String firebaseConfigPath = "firebase/hw_firebase_service_key.json";
+    	String firebaseConfigPath = "firebase/firebase_service_key.json";
     	//String firebaseConfigPath = "firebase/firebase_service_key.json";
 
         // GoogleApi를 사용하기 위해 oAuth2를 이용해 인증한 대상을 나타내는객체
@@ -132,12 +133,16 @@ public class FirebaseCloudMessageDataService {
     }
     
     // 등록된 모든 토큰을 이용해서 broadcasting
-    public int broadCastDataMessage(String title, String body) throws IOException {
-       for(String token: clientTokens) {
-    	   logger.debug("broadcastmessage : {},{},{}",token, title, body);
-    	   sendDataMessageTo(token, title, body);
-       }
-       return clientTokens.size();
+    public Boolean broadCastDataMessage(FireStoreMessage msg) throws IOException {
+       try {
+    	   for(String token: msg.getTokenList()) {
+        	   sendDataMessageTo(token, msg.getTitle(), msg.getBody());
+           }
+    	   return true;
+		} catch (Exception e) {
+			return false;
+		}
+      
     }
 
 
