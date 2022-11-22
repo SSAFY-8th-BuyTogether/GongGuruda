@@ -7,13 +7,13 @@ import com.buy.together.data.model.domain.CommentDto
 import com.google.firebase.Timestamp
 
 data class Alarm(
-    var category : String = "기타",
-    var dateTime : Timestamp = Timestamp.now(),
+    var type : String = "",
     var id : String = "",
-    var referContent : String = "",
+    var category : String = "기타",
     var referId : String = "",
     var referTitle : String="",
-    var type : String = "",
+    var referContent : String = "",
+    var dateTime : Timestamp = Timestamp.now(),
 ){
     constructor(boardDto: BoardDto): this(
         category = boardDto.category,
