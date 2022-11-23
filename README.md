@@ -94,7 +94,7 @@
  ┃ ┗ 📂 viewmodel
  ┣ 📂 util
  ┃ ┗ 📂 extension
- ┗ 📜 MyDailyApplication.kt
+ ┗ 📜 Application.kt
 ```
 
 
