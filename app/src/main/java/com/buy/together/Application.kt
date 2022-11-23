@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 class Application : Application() {
 
-    private val serverURL = "http://localhost:9090/"    // TODO : AWS Hosting + URL 변경
+    private val serverURL = "http://192.168.33.131:9090/"    // TODO : AWS Hosting + URL 변경
 
     companion object{
         lateinit var retrofit: Retrofit

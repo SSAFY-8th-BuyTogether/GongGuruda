@@ -2,7 +2,6 @@ package com.buy.together.data.model.network
 
 
 import com.buy.together.data.model.domain.AlarmDto
-import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.domain.CommentDto
 import com.google.firebase.Timestamp
 
@@ -15,22 +14,22 @@ data class Alarm(
     var referContent : String = "",
     var dateTime : Timestamp = Timestamp.now(),
 ){
-    constructor(boardDto: BoardDto): this(
-        category = boardDto.category,
-        dateTime = Timestamp.now(),
-        id = "ALARM_${Timestamp.now().seconds}_${boardDto.writer}",
-        referContent = boardDto.content,
-        referId = boardDto.id,
-        referTitle= boardDto.title,
-        type= "WRITE"
-    )
-
-    constructor(category: String,commentDto: CommentDto):this(
+    constructor(category: String, commentDto: CommentDto): this(
         category = category,
         dateTime = Timestamp.now(),
         id = "ALARM_${Timestamp.now().seconds}_${commentDto.writer}",
-        referContent = commentDto.content,
-        referId = commentDto.id,
+        referContent = commentDto.boardTitle,
+        referId = commentDto.boardId,
+        referTitle= commentDto.boardTitle,
+        type= "WRITE"
+    )
+
+    constructor(category: String, mentionComent : String,commentDto: CommentDto):this(
+        category = category,
+        dateTime = Timestamp.now(),
+        id = "ALARM_${Timestamp.now().seconds}_${commentDto.writer}",
+        referContent = mentionComent,
+        referId = commentDto.boardId,
         referTitle= commentDto.boardTitle,
         type= "COMMENT"
     )
