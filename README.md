@@ -39,18 +39,13 @@
     <td>DataBinding, LiveData, ViewModel, Lifecycle</td>
 </tr>
 <tr>
-    <td><b>Dependency Injection</b></td>
-    <td>Koin</td>
-</tr>
-<tr>
     <td><b>Network</b></td>
     <td>Retrofit2, OkHttp</td>
 </tr>
 <tr>
-    <td><b>Strategy</b></td>
-<td></td>
+    <td><b>Asynch Library/b></td>
+    <td>Coroutine & Flow</td>
 </tr>
-
 <tr>
     <td><b>Third Party Library</b></td>
     <td>Glide, Spinkit, TedPermission, Kakao/Google API</td>
