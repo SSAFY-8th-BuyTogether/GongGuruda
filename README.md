@@ -32,19 +32,19 @@
   </tr>
 <tr>
     <td><b>Design Pattern</b></td>
-<td></td>
+    <td>Singleton</td>
 </tr>
 <tr>
     <td><b>Jetpack Components</b></td>
-<td>DataBinding, LiveData, ViewModel, Lifecycle</td>
+    <td>DataBinding, LiveData, ViewModel, Lifecycle</td>
 </tr>
 <tr>
     <td><b>Dependency Injection</b></td>
-<td>Koin</td>
+    <td>Koin</td>
 </tr>
 <tr>
     <td><b>Network</b></td>
-<td>OkHttp, Retrofit2</td>
+    <td>Retrofit2, OkHttp</td>
 </tr>
 <tr>
     <td><b>Strategy</b></td>
@@ -53,7 +53,7 @@
 
 <tr>
     <td><b>Third Party Library</b></td>
-    <td></td>
+    <td>Glide, Spinkit, TedPermission, Kakao/Google API</td>
 
 </tr>
 <tr>
