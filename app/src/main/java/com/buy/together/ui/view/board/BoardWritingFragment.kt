@@ -129,6 +129,12 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 etPrice.requestFocus()
                 return false
             }
+            if(etPrice.editText?.text?.toString()?.length!! > 10){
+                etPrice.error = "가격은 10자리 이하여야 합니다."
+                etPrice.requestFocus()
+                return false
+            }
+            etPrice.error = null
             if(etContent.editText?.text?.isEmpty() == true){
                 Toast.makeText(requireContext(),"내용을 입력해주세요",Toast.LENGTH_SHORT).show()
                 etContent.requestFocus()

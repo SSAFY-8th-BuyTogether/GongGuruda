@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -40,11 +41,10 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.collapseToolbar.inflateMenu()
         initAdapter()
         initListener()
-        initData()
         initMap()
+        initData()
     }
 
     private fun initMap(){
@@ -66,14 +66,14 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         binding.apply {
             // 이미지
             ablBoardAppbarlayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-            if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) { //접혔을 때
-                vpImages.visibility = View.INVISIBLE
-                intoTabLayout.visibility = View.INVISIBLE
-            } else { //펴졌을 때
-                vpImages.visibility = View.VISIBLE
-                intoTabLayout.visibility = View.VISIBLE
+                if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) { //접혔을 때
+                    vpImages.visibility = View.INVISIBLE
+                    intoTabLayout.visibility = View.INVISIBLE
+                } else { //펴졌을 때
+                    vpImages.visibility = View.VISIBLE
+                    intoTabLayout.visibility = View.VISIBLE
+                }
             }
-        }
             //뒤로 가기 버튼
             ibBackButton.setOnClickListener {
                 findNavController().popBackStack()
@@ -85,6 +85,50 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
             //댓글 버튼 클릭
             ibComment.setOnClickListener {
                 showCommentFragment()
+            }
+            //메뉴 버튼
+            val userId = Application.sharedPreferences.getAuthToken()
+            if(viewModel.boardDto != null && viewModel.boardDto?.writer == userId){
+                ibOptionButton.visibility = View.VISIBLE
+            }else{
+                ibOptionButton.visibility = View.GONE
+            }
+            ibOptionButton.setOnClickListener {
+                popUpMenu(it,viewModel.boardDto!!)
+            }
+        }
+    }
+
+    private fun popUpMenu(view : View, dto : BoardDto){
+        val popupMenu = PopupMenu(requireContext(),view)
+        popupMenu.menuInflater.inflate(R.menu.menu_option_comment,popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener{ item ->
+            when(item.itemId) {
+                R.id.comment_delete -> deleteBoard(dto)
+            }
+            true
+        }
+        popupMenu.show()
+    }
+
+    private fun deleteBoard(dto : BoardDto){
+        val userId : String? = Application.sharedPreferences.getAuthToken()
+        if(userId == null) {
+            Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+            return
+        }
+        viewModel.removeBoard(userId,dto).observe(viewLifecycleOwner){ response ->
+            when(response){
+                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
+                is FireStoreResponse.Success -> {
+                    dismissLoadingDialog()
+                    Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    backPress()
+                }
+                is FireStoreResponse.Failure -> {
+                    Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    dismissLoadingDialog()
+                }
             }
         }
     }
@@ -140,6 +184,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
                     viewModel.boardDto = viewModel.makeBoard(response.data)
+                    initMap()
                     makeView(viewModel.boardDto!!)
                     dismissLoadingDialog()
                 }

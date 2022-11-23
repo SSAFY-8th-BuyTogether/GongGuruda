@@ -48,6 +48,17 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
         }
     }
 
+    private fun initListener(){
+        binding.apply {
+            ibBackButton.setOnClickListener{
+                findNavController().popBackStack()
+            }
+            fabWriteBoard.setOnClickListener{
+                showBoardWriteFragment()
+            }
+        }
+    }
+
     private fun popUpMenu(view : View, dto : BoardDto){
         val popupMenu = PopupMenu(requireContext(),view)
         popupMenu.menuInflater.inflate(R.menu.menu_option_comment,popupMenu.menu)
@@ -151,11 +162,6 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
             }
         }
     }
-
-    private fun initListener(){
-        binding.ibBackButton.setOnClickListener{
-            findNavController().popBackStack()
-        }
-    }
     private fun showBoardFragment() {findNavController().navigate(R.id.action_boardCategoryFragment_to_boardFragment)}
+    private fun showBoardWriteFragment() {findNavController().navigate(R.id.action_boardCategoryFragment_to_boardWritingFragment)}
 }

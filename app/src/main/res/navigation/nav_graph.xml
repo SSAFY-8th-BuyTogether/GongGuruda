@@ -321,6 +321,9 @@
         android:label="fragment_category_board"
         tools:layout="@layout/fragment_board_category" >
         <action
+            android:id="@+id/action_boardCategoryFragment_to_boardWritingFragment"
+            app:destination="@id/boardWritingFragment" />
+        <action
             android:id="@+id/action_boardCategoryFragment_to_boardFragment"
             app:destination="@id/boardFragment" />
     </fragment>
