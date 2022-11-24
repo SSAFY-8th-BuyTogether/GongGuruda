@@ -32,28 +32,23 @@
   </tr>
 <tr>
     <td><b>Design Pattern</b></td>
-<td></td>
-</tr>
-<tr>
-    <td><b>Jetpack Components</b></td>
-<td>DataBinding, LiveData, ViewModel, Lifecycle</td>
-</tr>
-<tr>
-    <td><b>Dependency Injection</b></td>
-<td>Koin</td>
+    <td>Singleton</td>
 </tr>
 <tr>
     <td><b>Network</b></td>
-<td>OkHttp, Retrofit2</td>
+    <td>Retrofit2, OkHttp</td>
 </tr>
 <tr>
-    <td><b>Strategy</b></td>
-<td></td>
+    <td><b>Asynch Library</b></td>
+    <td>Coroutine & Flow</td>
 </tr>
-
+<tr>
+    <td><b>Jetpack Components</b></td>
+    <td>DataBinding, LiveData, ViewModel, Android KTX, NavArgs</td>
+</tr>
 <tr>
     <td><b>Third Party Library</b></td>
-    <td></td>
+    <td>Glide, Spinkit, TedPermission, Kakao/Google API</td>
 
 </tr>
 <tr>
@@ -94,7 +89,7 @@
  ┃ ┗ 📂 viewmodel
  ┣ 📂 util
  ┃ ┗ 📂 extension
- ┗ 📜 MyDailyApplication.kt
+ ┗ 📜 Application.kt
 ```
 
 
