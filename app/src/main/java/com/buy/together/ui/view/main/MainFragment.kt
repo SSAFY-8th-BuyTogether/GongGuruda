@@ -63,9 +63,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
         requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
             if(requestKey == "getAddress" && result["address"] != null){
                 val addressDto : AddressDto = result["address"] as AddressDto
-                viewModel.selectedAddress = addressDto.address
+                viewModel.selectedAddress = addressDto.addressDetail
                 Log.d(TAG, "onViewCreated: address : ${viewModel.selectedAddress}")
-                binding.tvAddress.text = "${addressDto.address} ▾"
+                binding.tvAddress.text = "${addressDto.addressDetail} ▾"
                 initData(null)
             }
         }
@@ -144,7 +144,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                     response.data.forEach{
                         val meetPoint = it["meetPoint"] as String?
                         val title = it["title"] as String
-                        if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress)) {
+                        if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress.split(" ")[1])) {
                             if(keyword == null || title.contains(keyword)) {
                                 list.add(viewModel.makeBoard(it))
                             }
@@ -305,7 +305,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     private fun setAddressView(addressDto: AddressDto){
         binding.tvAddress.text = String.format(getString(R.string.tv_address_selected), AddressUtils.getSelectedAddress(addressDto.addressDetail))
         initData(null)
-        viewModel.selectedAddress = addressDto.address
+        viewModel.selectedAddress = addressDto.addressDetail
     }
     private fun setAlarmView(isSet : Boolean){
         if (isSet) binding.layoutNaviAlarm.layoutAlarm.visibility = View.VISIBLE
