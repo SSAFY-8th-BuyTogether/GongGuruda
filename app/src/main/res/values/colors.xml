@@ -37,4 +37,6 @@
     <color name="pinkish_orange">#ff7146</color>
     <color name="light_orange">#FF9F82</color>
     <color name="blue">#0506F7</color>
+    <color name="button_unEnable">#2d2d2d</color>
+    <color name="button_enable">#FF000000</color>
 </resources>

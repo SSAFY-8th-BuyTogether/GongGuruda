@@ -31,7 +31,7 @@ class AddressViewModel : BaseViewModel() {
     }
 
     fun addAddress(dto: AddressDto) = liveData(Dispatchers.IO) {
-        repository.addAddressToServer(authToken, dto).collect(){ emit(it) }
+        repository.addAddressToServer(authToken, dto.makeToAddress()).collect(){ emit(it) }
     }
 
     fun deleteAddress(dto: AddressDto) = viewModelScope.launch{
