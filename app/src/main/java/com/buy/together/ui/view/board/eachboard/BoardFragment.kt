@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,7 +16,6 @@ import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardBinding
 import com.buy.together.ui.adapter.PagerImageAdapter
-import com.buy.together.ui.base.BaseBottomSheetDialogFragment
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.view.restartActivity
 import com.buy.together.ui.viewmodel.BoardViewModel
@@ -232,7 +230,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
             val userId : String? = Application.sharedPreferences.getAuthToken()
             if(dto.participator.contains(userId)){
                 btnParticipate.text = requireContext().getString(R.string.btn_cancel)
-                btnParticipate.backgroundTintList = requireContext().getColorStateList(R.color.black_50)
+                btnParticipate.backgroundTintList = requireContext().getColorStateList(R.color.gray)
             }else{
                 btnParticipate.text = requireContext().getString(R.string.btn_participate)
                 btnParticipate.backgroundTintList = requireContext().getColorStateList(R.color.colorAccent)
