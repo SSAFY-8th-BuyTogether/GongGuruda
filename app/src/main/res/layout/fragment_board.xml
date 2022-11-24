@@ -240,7 +240,7 @@
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/fcv_meet_map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:name="com.naver.maps.map.MapFragment"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:background="@color/black_50" />
@@ -276,10 +276,9 @@
                         android:layout_marginTop="6dp"
                         android:layout_marginBottom="6dp"
                         tools:text="대구시 달서구 군평로 560" />
-
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/fcv_buy_map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:name="com.naver.maps.map.MapFragment"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_marginBottom="10dp"

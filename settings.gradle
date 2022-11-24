@@ -10,7 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }  // spin-kit
+        maven { url "https://jitpack.io" }  // spin-kit & Toasty
         maven {url 'https://naver.jfrog.io/artifactory/maven/'} // map
     }
 }

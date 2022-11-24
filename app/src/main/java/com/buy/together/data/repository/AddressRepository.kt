@@ -66,11 +66,10 @@ class AddressRepository {
         emit(FireStoreResponse.Failure("주소 설정 중 에러가 발생했습니다.\n잠시 후 다시 시도해주세요."))
     }
 
-    fun addAddressToServer(userId : String, dto: AddressDto)= flow {
-        val query = fireStore.collection(FireStoreInfo.USER).document(userId)
-            .collection(FireStoreInfo.ADDRESS).document(dto.addressDetail)
+    fun addAddressToServer(userId : String, address: Address)= flow {
         emit(FireStoreResponse.Loading())
-        emit(FireStoreResponse.Success(query.set(dto.makeToAddress()).await()))
+        val query = fireStore.collection(FireStoreInfo.USER).document(userId).collection(FireStoreInfo.ADDRESS).document(address.id).set(address)
+        emit(FireStoreResponse.Success(query.await()))
     }.catch {
         emit(FireStoreResponse.Failure("주소 설정 중 에러가 발생했습니다.\n잠시 후 다시 시도해주세요."))
     }

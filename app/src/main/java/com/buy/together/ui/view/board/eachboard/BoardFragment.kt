@@ -1,5 +1,6 @@
 package com.buy.together.ui.view.board.eachboard
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,12 +21,13 @@ import com.buy.together.ui.view.restartActivity
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.util.AddressUtils
 import com.buy.together.util.CommonUtils
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.tabs.TabLayoutMediator
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.overlay.Align
+import com.naver.maps.map.overlay.Marker
 import java.lang.Math.abs
 
 private const val TAG = "BoardFragment_싸피"
@@ -33,10 +35,10 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
     private val navArgs : BoardFragmentArgs by navArgs()
     private val viewModel: BoardViewModel by activityViewModels()
 
-    private lateinit var mapMeetFragment : SupportMapFragment
-    private lateinit var googleMeetMap: GoogleMap
-    private lateinit var mapBuyFragment : SupportMapFragment
-    private lateinit var googleBuyMap: GoogleMap
+    private lateinit var mapMeetFragment : MapFragment
+    private lateinit var googleMeetMap: NaverMap
+    private lateinit var mapBuyFragment : MapFragment
+    private lateinit var googleBuyMap: NaverMap
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,9 +50,9 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
     }
 
     private fun initMap(){
-        mapMeetFragment = childFragmentManager.findFragmentById(R.id.fcv_meet_map) as SupportMapFragment
+        mapMeetFragment = childFragmentManager.findFragmentById(R.id.fcv_meet_map) as MapFragment
         mapMeetFragment.getMapAsync { setMeetMap(it)}
-        mapBuyFragment = childFragmentManager.findFragmentById(R.id.fcv_buy_map) as SupportMapFragment
+        mapBuyFragment = childFragmentManager.findFragmentById(R.id.fcv_buy_map) as MapFragment
         mapBuyFragment.getMapAsync{ setBuyMap(it) }
     }
 
@@ -212,36 +214,42 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
     }
 
     //Map
-    private fun setMeetMap(map : GoogleMap){
+    private fun setMeetMap(map : NaverMap){
         val dto = viewModel.boardDto
         if(dto?.meetPoint == null) return
         val place : LatLng = AddressUtils.getPointsFromGeo(requireContext(), dto.meetPoint!!) ?: return
-        val marker = MarkerOptions().position(place)
-        map.addMarker(marker)
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(place, 15f)
-        map.moveCamera(cameraUpdate)
+        val marker = Marker().apply {
+            position = place
+            iconTintColor = Color.GREEN
+            setCaptionAligns(Align.Top)
+        }
+        marker.map = map
+        map.moveCamera(CameraUpdate.scrollAndZoomTo(place, 15.0))
         map.uiSettings.apply {
             isScrollGesturesEnabled = false
-            isZoomControlsEnabled = false
+            isZoomControlEnabled = true
             isZoomGesturesEnabled = false
         }
         googleMeetMap = map
     }
 
-    private fun setBuyMap(map : GoogleMap){
+    private fun setBuyMap(map : NaverMap){
         val dto = viewModel.boardDto
         if(dto?.buyPoint == null) return
         val place : LatLng = AddressUtils.getPointsFromGeo(requireContext(), dto.buyPoint!!) ?: return
-        val marker = MarkerOptions().position(place)
-        map.addMarker(marker)
-        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(place, 15f)
-        map.moveCamera(cameraUpdate)
+        val marker = Marker().apply {
+            position = place
+            iconTintColor = Color.GREEN
+            setCaptionAligns(Align.Top)
+        }
+        marker.map = map
+        map.moveCamera(CameraUpdate.scrollAndZoomTo(place, 15.0))
         map.uiSettings.apply {
             isScrollGesturesEnabled = false
-            isZoomControlsEnabled = false
+            isZoomControlEnabled = true
             isZoomGesturesEnabled = false
         }
-        googleBuyMap = map
+        googleMeetMap = map
     }
 
     override fun onDestroy() {

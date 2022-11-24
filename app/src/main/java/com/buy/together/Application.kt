@@ -3,6 +3,7 @@ package com.buy.together
 import android.app.Application
 import com.buy.together.data.repository.UserRepository
 import com.buy.together.util.SharedPreferencesUtil
+import com.naver.maps.map.NaverMapSdk
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -50,6 +51,5 @@ class Application : Application() {
     private fun initRepository(){
         UserRepository.initialize(this)
     }
-
 
 }

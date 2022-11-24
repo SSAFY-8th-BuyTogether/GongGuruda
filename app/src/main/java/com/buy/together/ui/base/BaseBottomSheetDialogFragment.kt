@@ -16,6 +16,7 @@ import com.buy.together.util.CustomDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import es.dmoral.toasty.Toasty
 
 
 abstract class BaseBottomSheetDialogFragment<B : ViewBinding>(private val bindingInflater: (layoutInflater:LayoutInflater) -> B) : BottomSheetDialogFragment() {
@@ -26,7 +27,6 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding>(private val bindin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogStyle)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,7 +59,16 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding>(private val bindin
         super.onDestroyView()
     }
 
-    fun showToast(message: String) { Toast.makeText(activity, message, Toast.LENGTH_SHORT).show() }
+    fun showToast(message: String, type : ToastType?=null, iconEnable : Boolean=true) {
+        when (type){
+            ToastType.CUSTOM -> Toasty.warning(requireContext(), message, Toast.LENGTH_SHORT).show()
+            ToastType.INFO -> Toasty.info(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            ToastType.ERROR -> Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            ToastType.SUCCESS -> Toasty.success(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            ToastType.WARNING -> Toasty.warning(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            else -> Toasty.normal(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     fun showLoadingDialog(context: Context) {
         mLoadingDialog = CustomDialog(context)
@@ -71,7 +80,6 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding>(private val bindin
             mLoadingDialog.dismiss()
         }
     }
-
 
     private fun setupRatio(view : View){
         val layoutParams = view.layoutParams
@@ -87,5 +95,5 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding>(private val bindin
         return displayMetrics.heightPixels
     }
 
-
+    enum class ToastType { ERROR, SUCCESS, INFO, WARNING, BASIC, CUSTOM}
 }

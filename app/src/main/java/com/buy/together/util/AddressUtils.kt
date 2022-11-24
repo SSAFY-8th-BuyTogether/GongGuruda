@@ -5,12 +5,11 @@ import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.buy.together.data.model.domain.AddressGeoDto
-import com.google.android.gms.maps.model.LatLng
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import com.naver.maps.geometry.LatLng
 import java.io.IOException
 import java.util.*
 
@@ -33,7 +32,6 @@ object AddressUtils {
 
     fun getGeoFromPoints(context:Context, lat:Double, lng:Double) : AddressGeoDto {
         val addressList: List<Address>?
-        Log.d("체크", "${lat}, $lng: ")
         try {
             val geocoder =  Geocoder(context, Locale.KOREA)
             addressList = geocoder.getFromLocation(lat, lng,1)
@@ -42,7 +40,6 @@ object AddressUtils {
         } catch (illegalArgumentException: IllegalArgumentException) {
             return AddressGeoDto(false, AddressGeoDto.GeoAddress.GPS_ERROR)
         }
-        Log.d("체크", "${addressList}: ")
         return if (addressList == null || addressList.isEmpty()) AddressGeoDto(false, AddressGeoDto.GeoAddress.ENCODING_ERROR)
         else{
             val address = addressList[0].getAddressLine(0)
@@ -70,13 +67,15 @@ object AddressUtils {
             .check()
     }
 
-    fun showDialogForLocationServiceSetting(context: Context, action:()->Unit) {
+    fun showDialogForLocationServiceSetting(context: Context, action:()->Unit, cancelAction:()->Unit) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context).apply {
             setTitle("위치 서비스 비활성화")
             setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n")
             setCancelable(true)
             setPositiveButton("설정") { _, _ -> action() }
-            setNegativeButton("취소") { dialog, _ -> dialog.cancel() }
+            setNegativeButton("취소") { dialog, _ ->
+                cancelAction()
+                dialog.cancel() }
         }
         builder.create().show()
     }

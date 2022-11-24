@@ -16,6 +16,7 @@ import androidx.viewbinding.ViewBinding
 import com.buy.together.util.CustomDialog
 import com.buy.together.util.CustomDialogBasicOneButton
 import com.buy.together.util.CustomDialogBasicTwoButton
+import es.dmoral.toasty.Toasty
 
 // Fragment의 기본을 작성, 뷰 바인딩 활용
 abstract class BaseFragment<B : ViewBinding>(private val bind: (View) -> B, @LayoutRes layoutResId: Int) : Fragment(layoutResId) {
@@ -34,8 +35,15 @@ abstract class BaseFragment<B : ViewBinding>(private val bind: (View) -> B, @Lay
         super.onDestroyView()
     }
 
-    fun showToast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    fun showToast(message: String, type : BaseBottomSheetDialogFragment.ToastType?=null, iconEnable : Boolean=true) {
+        when (type){
+            BaseBottomSheetDialogFragment.ToastType.CUSTOM -> Toasty.warning(requireContext(), message, Toast.LENGTH_SHORT).show()
+            BaseBottomSheetDialogFragment.ToastType.INFO -> Toasty.info(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            BaseBottomSheetDialogFragment.ToastType.ERROR -> Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            BaseBottomSheetDialogFragment.ToastType.SUCCESS -> Toasty.success(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            BaseBottomSheetDialogFragment.ToastType.WARNING -> Toasty.warning(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            else -> Toasty.normal(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun showCustomDialogBasicOneButton(msg : String){
@@ -80,4 +88,6 @@ abstract class BaseFragment<B : ViewBinding>(private val bind: (View) -> B, @Lay
             mLoadingDialog.dismiss()
         }
     }
+
+    enum class ToastType { ERROR, SUCCESS, INFO, WARNING, BASIC, CUSTOM}
 }
