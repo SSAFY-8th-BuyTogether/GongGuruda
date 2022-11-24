@@ -1,6 +1,7 @@
 package com.buy.together.ui.view.board
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
@@ -112,26 +113,25 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
 
     private fun getData(){
         viewModel.getBoardList(viewModel.category).observe(viewLifecycleOwner){ response ->
-            when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
-                is FireStoreResponse.Success -> {
-                    val list = mutableListOf<BoardDto>()
-                    response.data.forEach{
-                        val meetPoint = it["meetPoint"] as String?
+            try{
+                val resList = response as ArrayList<BoardDto>?
+                if(response == null || resList?.isEmpty() == true){
+                    setEmptyLayout()
+                    return@observe
+                }else{
+                    val itemList = arrayListOf<BoardDto>()
+                    resList?.forEach{
+                        val meetPoint = it.meetPoint
                         if(meetPoint == null || meetPoint.contains(viewModel.selectedAddress)) {
-                            list.add(viewModel.makeBoard(it))
+                            itemList.add(it)
                         }
                     }
-                    boardAdapter.setList(list as ArrayList<BoardDto>)
-                    if(list.isEmpty()){
-                        setEmptyLayout()
-                    }
-                    dismissLoadingDialog()
+                    boardAdapter.setList(itemList)
                 }
-                is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
-                    dismissLoadingDialog()
-                }
+            }catch (e : Exception){
+                Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
+                Log.d("BoardCategory", "getData: ${e.message}")
+                setEmptyLayout()
             }
         }
     }

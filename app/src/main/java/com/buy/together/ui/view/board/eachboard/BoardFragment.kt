@@ -49,8 +49,11 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
 
     private fun initMap(){
         mapMeetFragment = childFragmentManager.findFragmentById(R.id.fcv_meet_map) as SupportMapFragment
-        mapMeetFragment.getMapAsync { setMeetMap(it)}
         mapBuyFragment = childFragmentManager.findFragmentById(R.id.fcv_buy_map) as SupportMapFragment
+    }
+
+    private fun setMap(){
+        mapMeetFragment.getMapAsync { setMeetMap(it) }
         mapBuyFragment.getMapAsync{ setBuyMap(it) }
     }
 
@@ -174,19 +177,21 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
 
     private fun initData(){
         navArgs.boardDto?.let { viewModel.boardDto = it }
-        val dto = viewModel.boardDto
-        if(dto == null){
+        if(viewModel.boardDto == null){
             backPress()
             return
         }
+        val dto = viewModel.boardDto!!
         viewModel.getEachBoard(dto.category,dto.id).observe(viewLifecycleOwner){ response ->
             when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                is FireStoreResponse.Loading -> {
+                    Log.d(TAG, "initData: 왜 안되냐")    
+                    showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
                     viewModel.boardDto = viewModel.makeBoard(response.data)
-                    initMap()
-                    makeView(viewModel.boardDto!!)
                     dismissLoadingDialog()
+                    makeView(viewModel.boardDto!!)
+                    setMap()
                 }
                 is FireStoreResponse.Failure -> {
                     dismissLoadingDialog()

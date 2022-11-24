@@ -56,7 +56,7 @@ class BoardViewModel : BaseViewModel() {
     }
 
     fun getComments(category: String, boardId : String) = liveData(Dispatchers.IO) {
-        repository.getCommentList(category,boardId).collect{emit(it)}
+        repository.getCommentList(category,boardId).collect{ emit(it) }
     }
 
     fun insertComment(writer : String, mentionComment:String?, category: String, comment: CommentDto) = liveData(Dispatchers.IO) {

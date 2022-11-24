@@ -16,7 +16,6 @@ import com.buy.together.ui.adapter.CommentAdapter
 import com.buy.together.ui.base.BaseBottomSheetDialogFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.ui.viewmodel.MyPageViewModel
-import com.buy.together.util.showKeyboard
 import com.google.firebase.Timestamp
 
 private const val TAG = "CommentFragment_싸피"
@@ -54,37 +53,23 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
         }
     }
 
-    fun saveComment(userId : String){
-        val comment = CommentDto(
-            id= "Comment_${System.currentTimeMillis()}_${userId}",
-            boardId= viewModel.boardDto!!.id,
-            boardTitle= viewModel.boardDto!!.title,
-            writer=  userId,
-            content= binding.etComment.text.toString(),
-            time= Timestamp.now(),
-        )
-        if(mention != null && mentionComment != null){
-            comment.mention = mention
+    private fun initData(){
+        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
+        binding.rvComment.visibility = View.VISIBLE
+        binding.llMentionLayout.visibility = View.GONE
+        if(viewModel.boardDto == null){
+            return
         }
-        val category = viewModel.boardDto!!.category
-        myPageViewModel.getUserInfo().observe(viewLifecycleOwner) {
-            it?.let { userDto ->
-                comment.writerProfile = userDto.profile
-                viewModel.insertComment(viewModel.boardDto!!.writer, mentionComment,category, comment).observe(viewLifecycleOwner){ response->
-                    when(response){
-                        is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
-                        is FireStoreResponse.Success -> {
-                            dismissLoadingDialog()
-                            binding.etComment.setText("")
-                            Toast.makeText(requireContext(),"저장되었습니다.",Toast.LENGTH_SHORT).show()
-                            initData()
-                        }
-                        is FireStoreResponse.Failure -> {
-                            dismissLoadingDialog()
-                            backPress()
-                        }
-                    }
+        viewModel.getComments(viewModel.boardDto!!.category,viewModel.boardDto!!.id).observe(viewLifecycleOwner){ response ->
+            try{
+                if(response == null || response.isEmpty()){
+                    setEmpty()
+                }else{
+                    val itemList = response as ArrayList<CommentDto>
+                    commentAdapter.setListData(itemList)
                 }
+            }catch (e:Exception){
+                setEmpty()
             }
         }
     }
@@ -115,36 +100,45 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
         binding.rvComment.addItemDecoration(decoration)
     }
 
-    private fun initData(){
-        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
-        binding.rvComment.visibility = View.VISIBLE
-        binding.llMentionLayout.visibility = View.GONE
-        if(viewModel.boardDto == null){
-            return
+    fun saveComment(userId : String){
+        val comment = CommentDto(
+            id= "Comment_${System.currentTimeMillis()}_${userId}",
+            boardId= viewModel.boardDto!!.id,
+            boardTitle= viewModel.boardDto!!.title,
+            writer=  userId,
+            content= binding.etComment.text.toString(),
+            time= Timestamp.now(),
+        )
+        if(mention != null && mentionComment != null){
+            comment.mention = mention
         }
-        viewModel.getComments(viewModel.boardDto!!.category,viewModel.boardDto!!.id).observe(viewLifecycleOwner){ response ->
-            when(response){
-                is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
-                is FireStoreResponse.Success -> {
-                    val list = arrayListOf<CommentDto>()
-                    response.data.forEach{
-                        list.add(CommentDto(it))
+        val category = viewModel.boardDto!!.category
+        myPageViewModel.getUserInfo().observe(viewLifecycleOwner) {
+            it?.let { userDto ->
+                comment.writerProfile = userDto.profile
+                viewModel.insertComment(viewModel.boardDto!!.writer, mentionComment,category, comment).observe(viewLifecycleOwner){ response->
+                    when(response){
+                        is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
+                        is FireStoreResponse.Success -> {
+                            dismissLoadingDialog()
+                            binding.etComment.setText("")
+                            Toast.makeText(requireContext(),"저장되었습니다.",Toast.LENGTH_SHORT).show()
+//                            initData()
+                        }
+                        is FireStoreResponse.Failure -> {
+                            dismissLoadingDialog()
+                            backPress()
+                        }
                     }
-                    commentAdapter.commentList = list
-                    commentAdapter.notifyDataSetChanged()
-                    if(list.isEmpty()){
-                        binding.layoutEmpty.layoutEmptyView.visibility = View.VISIBLE
-                        binding.rvComment.visibility = View.GONE
-                        binding.layoutEmpty.tvEmptyView.text = "댓글이"
-                    }
-                    dismissLoadingDialog()
-                }
-                is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "댓글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
-                    dismissLoadingDialog()
                 }
             }
         }
+    }
+
+    private fun setEmpty(){
+        binding.layoutEmpty.layoutEmptyView.visibility = View.VISIBLE
+        binding.rvComment.visibility = View.GONE
+        binding.layoutEmpty.tvEmptyView.text = "댓글이"
     }
 
     private fun popUpMenu(view : View, dto : CommentDto){
@@ -170,7 +164,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                 is FireStoreResponse.Success -> {
                     dismissLoadingDialog()
                     Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                    initData()
+//                    initData()
                 }
                 is FireStoreResponse.Failure -> {
                     Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
