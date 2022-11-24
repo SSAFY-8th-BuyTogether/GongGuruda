@@ -48,7 +48,7 @@
 </tr>
 <tr>
     <td><b>Third Party Library</b></td>
-    <td>Glide, Spinkit, TedPermission, Kakao/Google API</td>
+    <td>Glide, Spinkit, TedPermission, Toasty, Kakao/Google API</td>
 
 </tr>
 <tr>
