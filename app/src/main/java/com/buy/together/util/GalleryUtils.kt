@@ -2,6 +2,7 @@ package com.buy.together.util
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -17,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 
 object GalleryUtils {
     private val fbStore = FirebaseStorage.getInstance().reference
@@ -68,5 +70,35 @@ object GalleryUtils {
             profileImg.postValue(img[0])
         }
         return profileImg
+    }
+
+    fun getCamera(context : Context, imageLauncher : ActivityResultLauncher<Intent>) {
+        getCameraPermission(object : PermissionListener {
+            override fun onPermissionGranted() {
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                imageLauncher.launch(intent)
+            }
+            override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+                Toast.makeText(context, "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun getCameraPermission(listener: PermissionListener){
+        TedPermission.create()
+            .setPermissionListener(listener)
+            .setDeniedMessage("권한을 허용해주세요")
+            .setPermissions(android.Manifest.permission.CAMERA,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            .check()
+    }
+
+    fun getImageUri(context : Context, bitmap : Bitmap): Uri? {
+        val byte = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,byte)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver,
+            bitmap, "IMAGE_${System.currentTimeMillis()}", null)
+        return Uri.parse(path)
     }
 }

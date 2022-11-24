@@ -11,9 +11,15 @@ import com.buy.together.databinding.ItemCommentBinding
 import com.buy.together.util.CommonUtils
 
 class CommentAdapter() : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
-    private lateinit var binding : ItemCommentBinding
     var commentList: ArrayList<CommentDto> = arrayListOf()
-    inner class CommentHolder(view : View): RecyclerView.ViewHolder(view){
+
+    fun setListData(data : ArrayList<CommentDto>){
+        commentList.clear()
+        commentList.addAll(data)
+        notifyDataSetChanged()
+    }
+
+    inner class CommentHolder(val binding: ItemCommentBinding): RecyclerView.ViewHolder(binding.root){
         fun bindInfo(position: Int, comment : CommentDto){
             binding.apply{
                 val userId = Application.sharedPreferences.getAuthToken()
@@ -46,8 +52,7 @@ class CommentAdapter() : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentAdapter.CommentHolder {
-        binding = ItemCommentBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return CommentHolder(binding.root)
+        return CommentHolder(ItemCommentBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: CommentHolder, position: Int) {

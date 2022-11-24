@@ -9,13 +9,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="CustomBottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
-    </style>
     <style name="DialogAnimation">  // TODO : Need Repair
         <item name="android:windowEnterAnimation">@anim/slide_enter</item>
         <item name="android:windowExitAnimation">@anim/slide_exit</item>
