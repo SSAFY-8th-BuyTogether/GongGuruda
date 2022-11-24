@@ -17,6 +17,7 @@ import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardBinding
 import com.buy.together.ui.adapter.PagerImageAdapter
+import com.buy.together.ui.base.BaseBottomSheetDialogFragment
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.view.restartActivity
 import com.buy.together.ui.viewmodel.BoardViewModel
@@ -121,7 +122,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
     private fun deleteBoard(dto : BoardDto){
         val userId : String? = Application.sharedPreferences.getAuthToken()
         if(userId == null) {
-            Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+            showToast("알수없는 오류가 발생했습니다.",ToastType.ERROR)
             return
         }
         viewModel.removeBoard(userId,dto).observe(viewLifecycleOwner){ response ->
@@ -129,11 +130,11 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
                 is FireStoreResponse.Success -> {
                     dismissLoadingDialog()
-                    Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    showToast("삭제되었습니다.",ToastType.SUCCESS)
                     backPress()
                 }
                 is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    showToast("삭제에 실패했습니다.",ToastType.ERROR)
                     dismissLoadingDialog()
                 }
             }
@@ -153,7 +154,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
             val boardDto = viewModel.boardDto
             if(userID == null){
                 Log.d(TAG, "makeDialog: userId가 없음")
-                Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+                showToast("알수없는 오류가 발생했습니다.",ToastType.ERROR)
                 restartActivity()
             }else{
                 boardDto?.let { saveData(userID,btnText,it) }
@@ -168,7 +169,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
                     dismissLoadingDialog()
-                    Toast.makeText(requireContext(),"적용되었습니다.",Toast.LENGTH_SHORT).show()
+                    showToast("적용되었습니다.",ToastType.SUCCESS)
                     initData()
                 }
                 is FireStoreResponse.Failure -> {
@@ -340,7 +341,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
     }
 
     private fun backPress(){
-        Toast.makeText(requireContext(), "존재하지 않는 게시글입니다.",Toast.LENGTH_SHORT).show()
+        showToast("존재하지 않는 게시글입니다.",ToastType.ERROR)
         findNavController().popBackStack()
     }
 

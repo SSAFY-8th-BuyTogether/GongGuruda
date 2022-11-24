@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -54,7 +53,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 }else if(clickedAddress == 2){
                     binding.includeWritingOption.etMeetPoint.editText?.setText(addressDto.addressDetail)
                 }else{
-                    Toast.makeText(requireContext(), "오류가 발생했습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    showToast("오류가 발생했습니다. 다시 시도해주세요", ToastType.ERROR)
                 }
             }
         }
@@ -130,7 +129,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                     Log.d(TAG, "setListener: ")
                     GalleryUtils.getCamera(requireContext(),cameraListener)
                 }else{
-                    Toast.makeText(requireContext(),"카메라를 찾을 수 없습니다.",Toast.LENGTH_SHORT).show()
+                    showToast("카메라를 찾을 수 없습니다.", ToastType.ERROR)
                 }
             }
             btnOkay.setOnClickListener {
@@ -154,28 +153,28 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     fun checkAllWritten() : Boolean{
         binding.apply {
             if (etTitle.editText?.text?.isEmpty() == true) {
-                Toast.makeText(requireContext(),"제목을 입력해주세요",Toast.LENGTH_SHORT).show()
+                showToast("제목을 입력해주세요", ToastType.WARNING)
                 etTitle.requestFocus()
                 return false
             }
             if(selectedTime == null){
-                Toast.makeText(requireContext(),"날짜를 선택해주세요",Toast.LENGTH_SHORT).show()
+                showToast("날짜를 선택해주세요", ToastType.WARNING)
                 ibDeadlineButton.requestFocus()
                 return false
             }
             if(etPrice.editText?.text?.isEmpty() == true){
-                Toast.makeText(requireContext(),"가격을 입력해주세요",Toast.LENGTH_SHORT).show()
+                showToast("가격을 입력해주세요", ToastType.WARNING)
                 etPrice.requestFocus()
                 return false
             }
             if(etPrice.editText?.text?.toString()?.length!! > 10){
-                etPrice.error = "가격은 10자리 이하여야 합니다."
+                showToast("가격은 10자리 이하여야 합니다.", ToastType.WARNING)
                 etPrice.requestFocus()
                 return false
             }
             etPrice.error = null
             if(etContent.editText?.text?.isEmpty() == true){
-                Toast.makeText(requireContext(),"내용을 입력해주세요",Toast.LENGTH_SHORT).show()
+                showToast("내용을 입력해주세요", ToastType.WARNING)
                 etContent.requestFocus()
                 return false
             }
@@ -186,7 +185,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     fun sendBoardData(){
         val userId = sharedPreferences.getAuthToken()
         if(userId == null){
-            Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+            showToast("알수없는 오류가 발생했습니다.", ToastType.ERROR)
             Log.e(TAG, "userId is null====================")
             return
         }
@@ -201,12 +200,12 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                         showLoadingDialog(requireContext())
                     }
                     is FireStoreResponse.Success -> {
-                        Toast.makeText(requireContext(),"성공적으로 저장되었습니다.",Toast.LENGTH_SHORT).show()
+                        showToast("성공적으로 저장되었습니다.", ToastType.SUCCESS)
                         dismissLoadingDialog()
                         findNavController().popBackStack()
                     }
                     is FireStoreResponse.Failure -> {
-                        Toast.makeText( requireContext(),"데이터를 저장하는 중에 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                        showToast("데이터를 저장하는 중에 오류가 발생했습니다.", ToastType.ERROR)
                         dismissLoadingDialog()
                     }
                 }

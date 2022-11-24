@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.GravityCompat
 import androidx.appcompat.widget.PopupMenu
@@ -158,7 +157,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
+                    showToast("게시글을 받아올 수 없습니다", ToastType.ERROR)
                     dismissLoadingDialog()
                 }
             }
@@ -187,7 +186,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
     private fun deleteBoard(dto : BoardDto){
         val userId : String? = sharedPreferences.getAuthToken()
         if(userId == null) {
-            Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+            showToast("알수없는 오류가 발생했습니다.", ToastType.ERROR)
             return
         }
         viewModel.removeBoard(userId,dto).observe(viewLifecycleOwner){ response ->
@@ -195,11 +194,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::bind
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext())}
                 is FireStoreResponse.Success -> {
                     dismissLoadingDialog()
-                    Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    showToast("삭제되었습니다.", ToastType.SUCCESS)
                     initData(null)
                 }
                 is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    showToast("삭제에 실패했습니다.", ToastType.ERROR)
                     dismissLoadingDialog()
                 }
             }

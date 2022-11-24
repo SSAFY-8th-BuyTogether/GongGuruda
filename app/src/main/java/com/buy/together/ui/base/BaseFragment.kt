@@ -35,13 +35,13 @@ abstract class BaseFragment<B : ViewBinding>(private val bind: (View) -> B, @Lay
         super.onDestroyView()
     }
 
-    fun showToast(message: String, type : BaseBottomSheetDialogFragment.ToastType?=null, iconEnable : Boolean=true) {
+    fun showToast(message: String, type : ToastType?=null, iconEnable : Boolean=true) {
         when (type){
-            BaseBottomSheetDialogFragment.ToastType.CUSTOM -> Toasty.warning(requireContext(), message, Toast.LENGTH_SHORT).show()
-            BaseBottomSheetDialogFragment.ToastType.INFO -> Toasty.info(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
-            BaseBottomSheetDialogFragment.ToastType.ERROR -> Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
-            BaseBottomSheetDialogFragment.ToastType.SUCCESS -> Toasty.success(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
-            BaseBottomSheetDialogFragment.ToastType.WARNING -> Toasty.warning(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            ToastType.CUSTOM -> Toasty.warning(requireContext(), message, Toast.LENGTH_SHORT).show()
+            ToastType.INFO -> Toasty.info(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            ToastType.ERROR -> Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            ToastType.SUCCESS -> Toasty.success(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
+            ToastType.WARNING -> Toasty.warning(requireContext(), message, Toast.LENGTH_SHORT, iconEnable).show()
             else -> Toasty.normal(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }

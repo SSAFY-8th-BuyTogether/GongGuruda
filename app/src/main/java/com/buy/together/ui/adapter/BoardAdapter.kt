@@ -41,7 +41,7 @@ class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>() {
                 tvBoardMoney.text = CommonUtils.makeComma(dto.price)
                 tvBoardTime.text = CommonUtils.getDiffTime(dto.writeTime)
                 tvBoardDday.text = CommonUtils.getDday(dto.deadLine)
-                tvBoardAddress.text = dto.meetPoint?.split(" ", limit = 2)?.get(0) ?: "지역무관"
+                tvBoardAddress.text = dto.meetPoint?.split(" ")?.get(1) ?: "지역무관"
                 binding.clBoardLayout.setOnClickListener{
                     itemClickListener.onClick(it,boardDtoList[position])
                 }

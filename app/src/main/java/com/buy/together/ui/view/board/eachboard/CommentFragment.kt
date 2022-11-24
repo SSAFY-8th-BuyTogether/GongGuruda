@@ -14,6 +14,7 @@ import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentCommentBinding
 import com.buy.together.ui.adapter.CommentAdapter
 import com.buy.together.ui.base.BaseBottomSheetDialogFragment
+import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.ui.viewmodel.MyPageViewModel
 import com.google.firebase.Timestamp
@@ -122,7 +123,7 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                         is FireStoreResponse.Success -> {
                             dismissLoadingDialog()
                             binding.etComment.setText("")
-                            Toast.makeText(requireContext(),"저장되었습니다.",Toast.LENGTH_SHORT).show()
+                            showToast("저장되었습니다.", ToastType.SUCCESS)
 //                            initData()
                         }
                         is FireStoreResponse.Failure -> {
@@ -163,11 +164,11 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                 is FireStoreResponse.Loading -> { showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
                     dismissLoadingDialog()
-                    Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    showToast("삭제되었습니다.", ToastType.SUCCESS)
 //                    initData()
                 }
                 is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    showToast("삭제에 실패했습니다.", ToastType.ERROR)
                     dismissLoadingDialog()
                 }
             }
@@ -175,15 +176,15 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     }
 
     private fun checkNull(userId: String?) : Boolean{
-        if(viewModel.boardDto == null || userId == null) { //TODO : profileImage
-            Toast.makeText(requireContext(),"알수없는 오류가 발생했습니다.",Toast.LENGTH_SHORT).show()
+        if(viewModel.boardDto == null || userId == null) {
+            showToast("알수없는 오류가 발생했습니다.", ToastType.ERROR)
             return false
         }
         return true
     }
 
     private fun backPress(){
-        Toast.makeText(requireContext(), "존재하지 않는 게시글입니다.", Toast.LENGTH_SHORT).show()
+        showToast("존재하지 않는 게시글입니다.", ToastType.ERROR)
         findNavController().popBackStack()
     }
 }

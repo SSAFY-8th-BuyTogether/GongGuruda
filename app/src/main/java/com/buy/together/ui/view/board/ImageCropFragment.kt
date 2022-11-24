@@ -22,7 +22,7 @@ class ImageCropFragment : BaseFragment<FragmentImageCropBinding>(
 
         val img = viewModel.BitmapImage
         if(img == null){
-            Toast.makeText(requireContext(),"이미지를 가져올 수 없습니다.",Toast.LENGTH_SHORT).show()
+            showToast("이미지를 가져올 수 없습니다.", ToastType.ERROR)
             findNavController().popBackStack()
         }
         viewModel.BitmapImage = null

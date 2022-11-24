@@ -21,9 +21,7 @@ object AddressUtils {
     }
 
     fun getRepresentAddress(address:String) : String {
-        return if ("시" in address) address.split("시")[0]+"시"
-        else if ("구" in address) address.split("구")[0] + "구"
-        else address.split("군")[0] + "군"
+        return address.split(" ")[1]
     }
 
     fun getLatLngFromPoints(lat:Double, lng:Double) = LatLng(lat, lng)

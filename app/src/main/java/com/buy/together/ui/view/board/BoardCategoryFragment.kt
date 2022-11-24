@@ -15,6 +15,7 @@ import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.data.model.network.firestore.FireStoreResponse
 import com.buy.together.databinding.FragmentBoardCategoryBinding
 import com.buy.together.ui.adapter.BoardAdapter
+import com.buy.together.ui.base.BaseBottomSheetDialogFragment
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 
@@ -129,7 +130,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
                     boardAdapter.setList(itemList)
                 }
             }catch (e : Exception){
-                Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
+                showToast("게시글을 받아올 수 없습니다", ToastType.ERROR)
                 Log.d("BoardCategory", "getData: ${e.message}")
                 setEmptyLayout()
             }
@@ -156,7 +157,7 @@ class BoardCategoryFragment : BaseFragment<FragmentBoardCategoryBinding>(
                     dismissLoadingDialog()
                 }
                 is FireStoreResponse.Failure -> {
-                    Toast.makeText(requireContext(), "게시글을 받아올 수 없습니다", Toast.LENGTH_SHORT).show()
+                    showToast("게시글을 받아올 수 없습니다", ToastType.ERROR)
                     dismissLoadingDialog()
                 }
             }
