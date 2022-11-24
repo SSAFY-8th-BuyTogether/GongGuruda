@@ -9,18 +9,17 @@ import com.buy.together.data.model.domain.usercollection.UserComment
 import com.buy.together.data.model.network.Alarm
 import com.buy.together.data.model.network.FireStoreMessage
 import com.buy.together.data.model.network.firestore.FireStoreResponse
+import com.buy.together.data.model.network.firestore.observeCollection
 import com.buy.together.network.service.FirebaseMessageService
 import com.buy.together.util.GalleryUtils
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 private const val TAG = "FirestoreBoardRepositor_싸피"
 class BoardRepository {
@@ -28,14 +27,11 @@ class BoardRepository {
     private val userDB = FirebaseFirestore.getInstance().collection("User")
 
     // 카테고리별 Board 가져오기
-    fun getBoardList(category: String) = flow {
-       Log.d(TAG, "getBoardList: 카테고리 : ${category}")
-        val query = boardDB.document(category).collection(category)
-            .orderBy("deadLine",Query.Direction.ASCENDING)
-        emit(FireStoreResponse.Loading())
-        emit(FireStoreResponse.Success(query.get().await().documents))
-    }.catch {
-        emit(FireStoreResponse.Failure("게시글을 받아오는데 실패했습니다."))
+    fun getBoardList(category: String) : Flow<List<BoardDto?>?> {
+        return observeCollection(
+            boardDB.document(category).collection(category)
+                .orderBy("deadLine", Query.Direction.ASCENDING)
+        )
     }
 
     //모든 Board 가져오기
@@ -54,8 +50,8 @@ class BoardRepository {
 
     //각각의 Board 가져오기
     fun getEachBoard(category : String, id : String) = flow {
-        val query = boardDB.document(category).collection(category).whereEqualTo("id", id)
         emit(FireStoreResponse.Loading())
+        val query = boardDB.document(category).collection(category).whereEqualTo("id", id)
         emit(FireStoreResponse.Success(query.get().await().documents[0]))
     }.catch {
         emit(FireStoreResponse.Failure("존재하지 않는 게시글입니다."))
@@ -143,14 +139,11 @@ class BoardRepository {
     }.catch {
         emit(FireStoreResponse.Failure("데이터를 삭제하는데 실패했습니다."))
     }
-    
-    fun getCommentList(category: String, boardId : String) = flow {
-        val query = boardDB.document(category)
-            .collection(category).document(boardId).collection("Comment")
-        emit(FireStoreResponse.Loading())
-        emit(FireStoreResponse.Success(query.get().await().documents))
-    }.catch {
-        emit(FireStoreResponse.Failure("댓글을 받아오는데 실패했습니다."))
+
+    fun getCommentList(category: String, boardId : String) : Flow<List<CommentDto?>?> {
+        return observeCollection(
+            boardDB.document(category).collection(category).document(boardId)
+                .collection("Comment"))
     }
     
     fun insertComment(writer : String, mentionComent: String? , category : String ,comment: CommentDto) = flow {
@@ -170,11 +163,11 @@ class BoardRepository {
             //FCM
             val userTokenList = userDB.document(writer).get().await()["devices"] as ArrayList<String>
             val fcm = FireStoreMessage(userTokenList,"댓글이 달렸어요!","작성하신 글 \"${comment.boardTitle}\"에 댓글이 달렸어요!")
-            CoroutineScope(Dispatchers.IO).launch{
+            withTimeoutOrNull(1000){
                 FirebaseMessageService().sendFcm(fcm){
                     Log.d(TAG, "insertComment: nfc 보내기 $it")
                 }
-            }.join()
+            }
         }
 
         if(comment.mention != null && mentionComent != null){ //Alarm - mention 작성자에게

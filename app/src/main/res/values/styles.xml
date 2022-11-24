@@ -8,6 +8,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="DialogAnimation">  // TODO : Need Repair
         <item name="android:windowEnterAnimation">@anim/slide_enter</item>
         <item name="android:windowExitAnimation">@anim/slide_exit</item>

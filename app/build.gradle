@@ -109,5 +109,7 @@ dependencies {
 
     // cutom toast
     implementation 'com.github.GrenderG:Toasty:1.3.0'
-
+    
+    //crop
+    implementation 'com.github.CanHub:Android-Image-Cropper:4.3.0'
 }

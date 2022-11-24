@@ -95,6 +95,8 @@
             android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:layout_weight="1"
+            tools:text="test"
+            android:paddingBottom="16dp"
             android:background="@drawable/shape_category_button"
             android:imeOptions="actionNext"
             android:paddingStart="8dp"
