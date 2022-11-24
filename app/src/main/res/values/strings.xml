@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GongGurumi</string>
+    <string name="app_name">공구르다</string>
     <string name="map_api_key">AIzaSyCU5AO-vy7T0lPoHaHhpWEfxfcHBFMdon4</string>
 
     <!-- Login & Find & Join -->
