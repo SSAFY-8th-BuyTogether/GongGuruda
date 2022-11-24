@@ -185,7 +185,6 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         viewModel.getEachBoard(dto.category,dto.id).observe(viewLifecycleOwner){ response ->
             when(response){
                 is FireStoreResponse.Loading -> {
-                    Log.d(TAG, "initData: 왜 안되냐")    
                     showLoadingDialog(requireContext()) }
                 is FireStoreResponse.Success -> {
                     viewModel.boardDto = viewModel.makeBoard(response.data)

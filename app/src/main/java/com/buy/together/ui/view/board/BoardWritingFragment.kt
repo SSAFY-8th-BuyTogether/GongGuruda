@@ -2,6 +2,8 @@ package com.buy.together.ui.view.board
 
 import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +23,7 @@ import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.ui.viewmodel.MyPageViewModel
+import com.buy.together.util.GalleryUtils
 import com.buy.together.util.GalleryUtils.getGallery
 import java.util.*
 
@@ -39,7 +42,6 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setAdapter()
         setListener()
         requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
@@ -95,6 +97,14 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             ibGallery.setOnClickListener {
                 getGallery(requireContext(), imageLauncher)
             }
+            ibCamera.setOnClickListener {
+                if(requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+                    Log.d(TAG, "setListener: ")
+                    GalleryUtils.getCamera(requireContext(),cameraListener)
+                }else{
+                    Toast.makeText(requireContext(),"카메라를 찾을 수 없습니다.",Toast.LENGTH_SHORT).show()
+                }
+            }
             btnOkay.setOnClickListener {
                 if(checkAllWritten()){
                     sendBoardData()
@@ -111,6 +121,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             }
         }
     }
+
 
     fun checkAllWritten() : Boolean{
         binding.apply {
@@ -198,10 +209,13 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         return board
     }
 
+
     private val imageLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        Log.d(TAG, "hi why so serious)")
         if (result.resultCode == RESULT_OK) {
+            Log.d(TAG, "data: ${result} ")
             val imageUri: Uri? = result.data?.data
             Log.d(TAG, "uri : $imageUri")
             if (imageUri != null) {
@@ -210,6 +224,25 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                     notifyItemInserted(ImageList.size - 1)
                     Log.d(TAG, "images : ${ImageList.size}")
                     binding.rvImages.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private val cameraListener = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            if(result.data?.extras?.get("data") != null){
+                val img = result.data?.extras?.get("data") as Bitmap
+                val uri = GalleryUtils.getImageUri(requireContext(),img)
+                if(uri != null){
+                    imageAdapter.apply {
+                        ImageList.add(uri)
+                        notifyItemInserted(ImageList.size - 1)
+                        Log.d(TAG, "images : ${ImageList.size}")
+                        binding.rvImages.visibility = View.VISIBLE
+                    }
                 }
             }
         }

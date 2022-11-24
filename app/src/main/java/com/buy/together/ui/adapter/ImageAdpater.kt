@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.buy.together.R
-import com.buy.together.data.model.domain.BoardDto
 import com.buy.together.databinding.ItemImageBinding
 
 private const val TAG = "ImageAdpater_싸피"
@@ -33,9 +32,6 @@ class ImageAdpater (var content : Context) : RecyclerView.Adapter<ImageAdpater.I
                 Log.d(TAG, "bindInfo: ${index}")
                 Log.d(TAG, "삭제 한 후 결과: ${ImageList}")
                 notifyDataSetChanged()
-//                Log.d(TAG, "finish remove: ${ImageList[position]}")
-//                Log.d(TAG, "bindInfo: ${ImageList.size}, position : ${position}")
-//                Log.d(TAG, "bindInfo: ${ImageList}")
                 itemClickListener.onClick(it,ImageList.size)
             }
         }
