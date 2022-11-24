@@ -1,5 +1,6 @@
 package com.buy.together.ui.viewmodel
 
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.liveData
 import com.buy.together.data.model.domain.BoardDto
@@ -17,6 +18,11 @@ class BoardViewModel : BaseViewModel() {
     var category : String = "" //main -> boardCategory
     var boardDto : BoardDto? = null //main, boardCategory -> board
     var selectedAddress : String = "" //선택된 주소
+
+    var BitmapImage : Bitmap? = null
+    var imageUri : Uri?= null
+    var writingBoardDto: BoardDto? = null //작성하고 있는 board
+    var imageList = arrayListOf<Uri>()
 
     // 카테고리별 데이터 가져오기
     fun getBoardList(category : String) = liveData(Dispatchers.IO){

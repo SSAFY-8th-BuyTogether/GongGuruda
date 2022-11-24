@@ -106,6 +106,8 @@ dependencies {
     //permission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
 
-    //ImageCrop
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    //crop
+    implementation 'com.github.CanHub:Android-Image-Cropper:4.3.0'
+//    implementation 'io.github.ArthurHub:android-image-cropper:2.8.0'
+
 }

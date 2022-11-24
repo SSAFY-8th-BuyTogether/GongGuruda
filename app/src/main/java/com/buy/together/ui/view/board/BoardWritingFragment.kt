@@ -23,6 +23,7 @@ import com.buy.together.ui.adapter.ImageAdpater
 import com.buy.together.ui.base.BaseFragment
 import com.buy.together.ui.viewmodel.BoardViewModel
 import com.buy.together.ui.viewmodel.MyPageViewModel
+import com.buy.together.util.CommonUtils
 import com.buy.together.util.GalleryUtils
 import com.buy.together.util.GalleryUtils.getGallery
 import java.util.*
@@ -44,6 +45,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
         setListener()
+        initData()
         requireActivity().supportFragmentManager.setFragmentResultListener("getAddress",viewLifecycleOwner){ requestKey, result ->
             if(requestKey == "getAddress" && result["address"] != null){
                 val addressDto : AddressDto = result["address"] as AddressDto
@@ -55,6 +57,32 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                     Toast.makeText(requireContext(), "오류가 발생했습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    fun initData(){
+        viewModel.writingBoardDto?.let {
+            imageAdapter.setListData(viewModel.imageList)
+            selectedTime = it.meetTime
+            binding.apply {
+                etTitle.editText?.setText(it.title)
+                etPrice.editText?.setText(it.price.toString())
+                etContent.editText?.setText(it.content)
+                tvDeadline.text = CommonUtils.getDateString(it.deadLine)
+                includeWritingOption.etMaxPeople.editText?.setText(it.maxPeople.toString())
+                includeWritingOption.etMeetPoint.editText?.setText(it.meetPoint)
+                includeWritingOption.etBuyPoint.editText?.setText(it.buyPoint)
+            }
+        }
+        val img = viewModel.imageUri
+        if(img != null){
+            imageAdapter.apply {
+                ImageList.add(img)
+                notifyItemInserted(ImageList.size - 1)
+                Log.d(TAG, "images : ${ImageList.size}")
+                binding.rvImages.visibility = View.VISIBLE
+            }
+            viewModel.imageUri = null
         }
     }
 
@@ -184,6 +212,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                 }
             }
         }
+        viewModel.writingBoardDto = null
     }
 
     fun setBoardDto(userId : String) : BoardDto {
@@ -196,13 +225,19 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
             title= binding.etTitle.editText?.text.toString(),
             category= binding.spinnerCategory.selectedItem.toString(),
             deadLine =  selectedTime?:0,
-            price= binding.etPrice.editText?.text.toString().toInt(),
+            price= binding.etPrice.editText?.text.toString().let {
+                if(it.isEmpty()) 0
+                else it.toInt()
+            },
             content= binding.etContent.editText?.text.toString(),
             writeTime= calendar.timeInMillis,
             writer= userId,
             participator = arrayListOf(userId),
             images= listOf(),
-            maxPeople = if(maxPeople.isEmpty()) null else maxPeople.toInt(),
+            maxPeople = if(maxPeople.isEmpty()) null else maxPeople.let {
+                if(it.isEmpty()) 0
+                else it.toInt()
+            },
             meetPoint= if(meetPoint.isEmpty()) null else meetPoint,
             buyPoint = if(buyPoint.isEmpty()) null else buyPoint
         )
@@ -235,16 +270,22 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
         if (result.resultCode == RESULT_OK) {
             if(result.data?.extras?.get("data") != null){
                 val img = result.data?.extras?.get("data") as Bitmap
-                val uri = GalleryUtils.getImageUri(requireContext(),img)
-                if(uri != null){
-                    imageAdapter.apply {
-                        ImageList.add(uri)
-                        notifyItemInserted(ImageList.size - 1)
-                        Log.d(TAG, "images : ${ImageList.size}")
-                        binding.rvImages.visibility = View.VISIBLE
-                    }
-                }
+                viewModel.BitmapImage = img
+                tempSaveData()
+                showCropImageFragment()
             }
+        }
+    }
+
+    private fun tempSaveData(){
+        viewModel.imageList = imageAdapter.ImageList
+
+        binding.apply {
+            val boardDto = setBoardDto("")
+            if(boardDto.maxPeople == null){
+                boardDto.maxPeople = 0
+            }
+            viewModel.writingBoardDto = boardDto
         }
     }
 
@@ -259,7 +300,7 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
                             "%02d",
                             month + 1
                         )
-                    }.${String.format("%02d", date)}" //버튼 text 변경
+                    }.${String.format("%02d", date)}"
                 val calendar = Calendar.getInstance()
                 calendar.set(year, month, date)
                 selectedTime = calendar.timeInMillis
@@ -271,4 +312,5 @@ class BoardWritingFragment : BaseFragment<FragmentBoardWritingBinding>(
     }
 
     private fun showAddressFragment(){ findNavController().navigate(R.id.action_boardWritingFragment_to_addressGraph) }
+    private fun showCropImageFragment(){ findNavController().navigate(R.id.action_boardWritingFragment_to_imageCropFragment)    }
 }

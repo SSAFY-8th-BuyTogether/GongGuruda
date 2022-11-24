@@ -45,6 +45,8 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         initListener()
         initMap()
         initData()
+        viewModel.writingBoardDto = null
+        viewModel.imageList = arrayListOf()
     }
 
     private fun initMap(){
@@ -252,7 +254,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
             Log.d(TAG, "makeView: maxPeople : ${dto.maxPeople}")
             if(dto.maxPeople != null){
                 val leftPerson = dto.maxPeople!! - dto.participator.size
-                if(leftPerson < 10){
+                if(leftPerson in 1..9){
                     tvLeftPerson.visibility = View.VISIBLE
                     tvLeftPerson.text = "${leftPerson}명 남았어요!!"
                 }

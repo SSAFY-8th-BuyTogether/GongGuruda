@@ -15,6 +15,12 @@ private const val TAG = "ImageAdpater_싸피"
 class ImageAdpater (var content : Context) : RecyclerView.Adapter<ImageAdpater.ImageHolder>() {
     val ImageList : ArrayList<Uri> = arrayListOf()
 
+    fun setListData(data : ArrayList<Uri>){
+        ImageList.clear()
+        ImageList.addAll(data)
+        notifyDataSetChanged()
+    }
+
     inner class ImageHolder(private val binding : ItemImageBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(position: Int,dto: Uri){
             Glide.with(content)

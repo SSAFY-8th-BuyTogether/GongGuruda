@@ -54,8 +54,6 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
     }
 
     private fun initData(){
-        binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
-        binding.rvComment.visibility = View.VISIBLE
         binding.llMentionLayout.visibility = View.GONE
         if(viewModel.boardDto == null){
             return
@@ -65,6 +63,8 @@ class CommentFragment : BaseBottomSheetDialogFragment<FragmentCommentBinding>(
                 if(response == null || response.isEmpty()){
                     setEmpty()
                 }else{
+                    binding.layoutEmpty.layoutEmptyView.visibility = View.GONE
+                    binding.rvComment.visibility = View.VISIBLE
                     val itemList = response as ArrayList<CommentDto>
                     commentAdapter.setListData(itemList)
                 }

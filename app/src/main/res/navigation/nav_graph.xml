@@ -314,6 +314,15 @@
         <action
             android:id="@+id/action_boardWritingFragment_to_addressGraph"
             app:destination="@id/addressGraph" />
+        <action
+            android:id="@+id/action_boardWritingFragment_to_imageCropFragment"
+            app:destination="@id/imageCropFragment" >
+            <argument
+                app:argType="string"
+                android:name="image"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/boardCategoryFragment"
@@ -393,11 +402,16 @@
         <action
             android:id="@+id/action_myParticipateFragment_to_boardFragment"
             app:destination="@id/boardFragment" >
-            <argument
-                android:name="boardDto"
-                app:argType="com.buy.together.data.model.domain.BoardDto"
-                app:nullable="true"
-                android:defaultValue="@null" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/imageCropFragment"
+        android:name="com.buy.together.ui.view.board.ImageCropFragment"
+        android:label="fragment_image_crop"
+        tools:layout="@layout/fragment_image_crop" >
+        <action
+            android:id="@+id/action_imageCropFragment_to_boardWritingFragment"
+            app:destination="@id/boardWritingFragment" >
         </action>
     </fragment>
 </navigation>
