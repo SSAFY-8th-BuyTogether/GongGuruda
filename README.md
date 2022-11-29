@@ -1,7 +1,7 @@
 # ❤ GongGurumi ❤
 
-//배너자리
-
+<!--배너자리-->
+<img src="/wiki/logo_main_blue.png"  width="300px"/>
 
 - SSAFY 1학기 관통프로젝트 **Team BuyTogether**
 - 프로젝트 기간 : `2022.10.29` ~ `2021.11.25`
@@ -13,11 +13,9 @@
 
 [:one:​ Specification](#one-specification)<br>
 [:two:​ Package Structure](#two-package-structure)<br>
-[:three:​ Git & Naming Rule](#three-package-structure)<br>
+[:three:​ Git & Naming Rule](#three-Git-&-Naming Rule)<br>
 [:four:​ 핵심 기능 구현 방법 설명](#four-핵심-기능-구현-방법-설명)<br>
 [:five:​ Contributor](#five-contributor)<br>
-
-
 
 
 <br>
@@ -68,27 +66,27 @@
 ```
 📦 com.buy.together
  ┣ 📂 data
- ┃ ┗ 📂 local
+ ┃ ┗ 📂 dao
+ ┃ ┗ 📂 entity
  ┃ ┗ 📂 model
  ┃ ┃ ┣ 📂 domain
  ┃ ┃ ┗ 📂 network
  ┃ ┗ 📂 repository
  ┣ 📂 network
+ ┃ ┣ 📂 api
+ ┃ ┗ 📂 service
  ┣ 📂 ui
  ┃ ┗ 📂 adapter
  ┃ ┗ 📂 base
  ┃ ┗ 📂 view
- ┃ ┃ ┣ 📂 alarm
+ ┃ ┃ ┣ 📂 address
  ┃ ┃ ┣ 📂 board
- ┃ ┃ ┣ 📂 chat
  ┃ ┃ ┣ 📂 main
- ┃ ┃ ┣ 📂 map
  ┃ ┃ ┣ 📂 mypage
  ┃ ┃ ┣ 📂 splash
  ┃ ┃ ┗ 📂 user
  ┃ ┗ 📂 viewmodel
  ┣ 📂 util
- ┃ ┗ 📂 extension
  ┗ 📜 Application.kt
 ```
 
@@ -187,11 +185,11 @@
     </tr>
     <tr>
         <td><img src="/wiki/contributor/4z7l.png" width="300px"/></td>
-        <td><img src="/wiki/contributor/mdb1217.jpeg"  width="300px"/></td>
+        <td><img src="/wiki/areum_lee.jpg"  width="300px"/></td>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
+        <td>전체구조,유저,주소록,마이페이지,알림</td>
+        <td>홈화면,게시글,댓글,사진첩,알림</td>
     </tr>
 </tbody>
 </table>
