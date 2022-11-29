@@ -1,7 +1,7 @@
 # ❤ GongGurumi ❤
 
 <!--배너자리-->
-<img src="/wiki/logo_main_blue.png"  width="300px"/>
+<img src="/wiki/logo_main_blue.png"  width="500px"/>
 
 - SSAFY 1학기 관통프로젝트 **Team BuyTogether**
 - 프로젝트 기간 : `2022.10.29` ~ `2021.11.25`
@@ -13,7 +13,7 @@
 
 [:one:​ Specification](#one-specification)<br>
 [:two:​ Package Structure](#two-package-structure)<br>
-[:three:​ Git & Naming Rule](#three-Git-&-Naming Rule)<br>
+[:three:​ Git & Naming Rule](#three-Git-&-Naming-Rule)<br>
 [:four:​ 핵심 기능 구현 방법 설명](#four-핵심-기능-구현-방법-설명)<br>
 [:five:​ Contributor](#five-contributor)<br>
 
@@ -150,13 +150,13 @@
 
 [3. 회원가입](https://github.com/TeamMyDaily/4most-Android/wiki/5.3.-%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85)
 
-[4. 글 작성](https://github.com/TeamMyDaily/4most-Android/wiki/5.4.-%ED%82%A4%EC%9B%8C%EB%93%9C-%EC%84%A0%ED%83%9D)
+[4. 글 작성](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/%EA%B8%80%EC%9E%91%EC%84%B1)
 
-[5. 글 확인](https://github.com/TeamMyDaily/4most-Android/wiki/5.5.-%ED%82%A4%EC%9B%8C%EB%93%9C-%EC%B4%88%EA%B8%B0-%EC%84%A4%EC%A0%95)
+[5. 글 확인](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/%EA%B8%80%EB%B3%B4%EA%B8%B0)
 
-[6. 지도](https://github.com/TeamMyDaily/4most-Android/wiki/5.5.-%ED%82%A4%EC%9B%8C%EB%93%9C-%EC%B4%88%EA%B8%B0-%EC%84%A4%EC%A0%95)
+[6. 댓글](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/%EB%8C%93%EA%B8%80)
 
-[7. 채팅](https://github.com/TeamMyDaily/4most-Android/wiki/5.6.-%EA%B8%B0%EB%A1%9D)
+[7. 지도](https://github.com/TeamMyDaily/4most-Android/wiki/5.5.-%ED%82%A4%EC%9B%8C%EB%93%9C-%EC%B4%88%EA%B8%B0-%EC%84%A4%EC%A0%95)
 
 [8. 알람](https://github.com/TeamMyDaily/4most-Android/wiki/5.7.-%EB%AA%A9%ED%91%9C)
 
