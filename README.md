@@ -150,11 +150,11 @@
 
 [3. 회원가입](https://github.com/TeamMyDaily/4most-Android/wiki/5.3.-%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85)
 
-[4. 글 작성](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/%EA%B8%80%EC%9E%91%EC%84%B1)
+[4. 글 작성](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/writeBoard)
 
-[5. 글 확인](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/%EA%B8%80%EB%B3%B4%EA%B8%B0)
+[5. 글 확인](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/showBoard)
 
-[6. 댓글](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/%EB%8C%93%EA%B8%80)
+[6. 댓글](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/comment)
 
 [7. 지도](https://github.com/TeamMyDaily/4most-Android/wiki/5.5.-%ED%82%A4%EC%9B%8C%EB%93%9C-%EC%B4%88%EA%B8%B0-%EC%84%A4%EC%A0%95)
 
