@@ -158,7 +158,7 @@
 
 [7. 지도](https://github.com/TeamMyDaily/4most-Android/wiki/5.5.-%ED%82%A4%EC%9B%8C%EB%93%9C-%EC%B4%88%EA%B8%B0-%EC%84%A4%EC%A0%95)
 
-[8. 알람](https://github.com/TeamMyDaily/4most-Android/wiki/5.7.-%EB%AA%A9%ED%91%9C)
+[8. 알람](https://github.com/SSAFY-8th-BuyTogether/GongGurumi/tree/Readme/wiki/notification)
 
 [9. 마이페이지](https://github.com/TeamMyDaily/4most-Android/wiki/5.9.-%EB%A7%88%EC%9D%B4%ED%8E%98%EC%9D%B4%EC%A7%80)
 
