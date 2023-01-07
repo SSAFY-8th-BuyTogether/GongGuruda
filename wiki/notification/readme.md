@@ -13,3 +13,11 @@
 
 
 ## 실행 화면
+
+
+https://user-images.githubusercontent.com/72062916/211133763-43181e16-7f78-4ab2-9018-f407ca0b1b4c.mp4
+
+
+
+https://user-images.githubusercontent.com/72062916/211133765-ae3d4603-6d76-4b60-b409-2f422897cdfb.mp4
+
