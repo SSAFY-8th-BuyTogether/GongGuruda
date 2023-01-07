@@ -61,7 +61,7 @@ class FirebaseService  : FirebaseMessagingService() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
-        val channelName = "Client"
+        val channelName = "Client "
         val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
             description = "FCM"
             enableLights(true)
